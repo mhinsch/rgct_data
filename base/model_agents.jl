@@ -214,7 +214,7 @@ function receive_belief(self::TrustedF, other::TrustedF, par)
 	t_pcv = limit(0.000001, other.trust + unf_delta(par.error), 0.99999)
 	d_pcv = 1.0 - t_pcv
 	# use * as value might have range outside of [0, 1]
-	v_pcv = max(0.0, other.value * (1.0 + unf_delta(par.error)))
+	v_pcv = max(0.0, other.value + unf_delta(par.error))
 	
 	dist_pcv = abs(v-v_pcv) / (v + v_pcv + 0.00001)
 
