@@ -1,4 +1,5 @@
 using Util
+using Beliefs
 
 include("world_util.jl")
 
@@ -211,4 +212,4 @@ dist_eucl(x1, y1, x2, y2) = sqrt((x2-x1)^2 + (y2-y1)^2)
 accuracy(li::InfoLocation, lr::Location) = 
 	1.0 - dist_eucl(li.quality.value, li.resources.value, lr.quality, lr.resources)
 
-accuracy(li::InfoLink, lr::Link) = 1.0 - abs(li.friction.value - lr.friction)
+accuracy(li::InfoLink, lr::Link) = 1.0 - abs(li.friction.value - lr.friction)/lr.distance

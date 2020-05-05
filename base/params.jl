@@ -18,6 +18,8 @@ const VF = Vector{Float64}
 
 	"number of departures per time step"
 	rate_dep	 	:: Float64	= 20
+	"time for departures to reach full rate"
+	dep_warmup		:: Float64	= 1.0
 	"number of exits"
 	n_exits			:: Int		= 10
 	"number of starting positions"
@@ -110,6 +112,8 @@ const VF = Vector{Float64}
 	qual_weight_res	:: Float64 	= 0.1
 	"tolerance towards friction when looking for local improvement"
 	qual_tol_frict	:: Float64	= 2.0
+	"bias of choice towards higher quality"
+	qual_bias		:: Float64	= 1.0
 	"effect of low location quality on path costs"
 	path_penalty_loc :: Float64 = 1.0
 
@@ -117,8 +121,6 @@ const VF = Vector{Float64}
 	p_keep_contact 	:: Float64 	= 0.1
 	"prob. to lose contact"
 	p_drop_contact	:: Float64	= 0.1
-	"prob. to exchange info locally"
-	p_info_mingle	:: Float64	= 0.1
 	"prob. to exchange info with contacts"
 	p_info_contacts	:: Float64	= 0.1
 	"prob. to transfer info item"
@@ -135,6 +137,8 @@ const VF = Vector{Float64}
 	confuse			:: Float64	= 0.3
 	"stochastic error when transmitting information"
 	error			:: Float64 	= 0.1
+	"stochastic error when transmitting friction information"
+	error_frict			:: Float64 	= 0.5
 	"weight of opinion of arrived agents"
 	weight_arr		:: Float64	= 1.0
 end

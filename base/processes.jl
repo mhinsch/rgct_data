@@ -1,7 +1,7 @@
 
 
 @processes RRGraph sim model::Model begin
-	@poisson(sim.par.rate_dep)				~
+	@poisson(rate_dep(time_now(scheduler(sim)), sim.par))	~
 		true				=>		
 			begin 
 				resch = add_migrant!(model, sim.par)
@@ -35,7 +35,7 @@ end
 		true								=> 		
 			talk_once!(agent, sim.model.world, sim.par)
 
-	@poisson(move_rate(agent, sim.par))		~
+	@poisson(rate_move(agent, sim.par))		~
 		! in_transit(agent) && ! isempty(agent.plan)	=> 		
 			begin
 				#agent.loc.move_count += 1
