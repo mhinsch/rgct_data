@@ -108,7 +108,7 @@ end
 
 
 function run(sim, gui, t_stop, scales, parameters)
-	t = 0.0
+	t = 1.0
 	step = 1.0
 	start(sim)
 
@@ -124,7 +124,7 @@ function run(sim, gui, t_stop, scales, parameters)
 			sleep(0.03)
 		else
 			t1 = time()
-			upto!(sim.scheduler, t + 1.0)
+			upto!(sim.scheduler, t)
 			t += step
 			dt = time() - t1
 
