@@ -11,12 +11,12 @@ function run(p, stop, log_file)
 	sim = Simulation(setup_model(p), p)
 
 	t = 0.0
-	start(sim)
+	RRGraph.spawn(sim.model, sim)
 	while t < stop
-		upto!(sim.scheduler, t + 1.0)
+		RRGraph.upto!(t + 1.0)
 		t += 1.0
 		analyse_log(sim.model, log_file)
-		println(t, " ", time_now(sim.scheduler))
+		println(t, " ", RRGraph.time_now())
 		flush(stdout)
 	end
 
