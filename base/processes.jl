@@ -55,6 +55,12 @@ end
 
 				resch
 			end
+
+	@poisson(rate_mort(agent, sim.par))		~
+		in_transit(agent)					=>
+			begin
+				kill!(agent, sim)
+			end
 end
 
 	

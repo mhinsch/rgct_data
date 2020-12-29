@@ -41,11 +41,18 @@ const VF = Vector{Float64}
 	"resources at exits"
 	res_exit		:: Float64	= 1
 
+	"coordinates of high risk obstacle (line)"
+	obstacle		:: VF		= [0.1, 0.5, 0.7, 0.5]
+
 	# scale >= 1.0 required, otherwise path finding breaks
 	"how friction scales with distance"
 	dist_scale		:: VF		= [1.0, 10.0]
 	"stochastic range of friction"
 	frict_range		:: Float64	= 0.5
+	"risk on ordinary links"
+	risk_normal		:: Float64	= 0.2
+	"risk on high-risk links"
+	risk_high		:: Float64	= 0.7
 
 	"number of contacts when entering"
 	n_ini_contacts	:: Int		= 10

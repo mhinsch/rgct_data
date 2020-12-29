@@ -20,17 +20,19 @@ mutable struct InfoLink
 	l1 :: InfoLocationT{InfoLink}
 	l2 :: InfoLocationT{InfoLink}
 	friction :: TrustedF
+	risk :: TrustedF
 end
 
 const InfoLocation = InfoLocationT{InfoLink}
 
 const Unknown = InfoLocation(Nowhere, 0, TrustedF(0.0), TrustedF(0.0), [])
-const UnknownLink = InfoLink(0, Unknown, Unknown, TrustedF(0.0))
+const UnknownLink = InfoLink(0, Unknown, Unknown, TrustedF(0.0), TrustedF(0.0))
 
 
 #resources(l :: InfoLocation) = l.resources.value
 #quality(l :: InfoLocation) = l.quality.value
 friction(l :: InfoLink) = l.friction.value
+risk(l :: InfoLink) = l.risk.value
 
 
 otherside(link, loc) = loc == link.l1 ? link.l2 : link.l1
@@ -118,13 +120,14 @@ mutable struct Link
 	typ :: LINK_TYPE
 	l1 :: LocationT{Link}
 	l2 :: LocationT{Link}
+	risk :: Float64
 	friction :: Float64
 	distance :: Float64
 	count :: Int
 end
 
 
-Link(id, t, l1, l2) = Link(id, t, l1, l2, 0, 0, 0)
+Link(id, t, l1, l2) = Link(id, t, l1, l2, 0, 0, 0, 0)
 
 const Location = LocationT{Link}
 Location(p :: Pos, t, i) = Location(i, t, 0.0, 0.0, [], Link[], p, 0, 0, 0.0)
@@ -212,7 +215,9 @@ dist_eucl(x1, y1, x2, y2) = sqrt((x2-x1)^2 + (y2-y1)^2)
 accuracy(li::InfoLocation, lr::Location) = 
 	1.0 - dist_eucl(li.quality.value, li.resources.value, lr.quality, lr.resources)
 
-accuracy(li::InfoLink, lr::Link) = 1.0 - abs(li.friction.value - lr.friction)/lr.distance
+accuracy(li::InfoLink, lr::Link) = sqrt(
+	(1.0 - abs(li.friction.value - lr.friction)/lr.distance)^2 + 
+	(li.risk.value - lr.risk)^2)
 
 
 function dump(file, agent)
@@ -233,7 +238,8 @@ function dump(file, agent)
 			println(file, "\tUNKNOWN")
 			continue
 		end
-		println(file, "\t", l.id, "\t", l.friction.value, "\t", l.friction.trust)
+		println(file, "\t", l.id, "\t", l.friction.value, "\t", l.friction.trust,
+			"\t", l.risk.value, "\t", l.risk.trust)
 	end
 end
 

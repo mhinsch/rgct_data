@@ -15,6 +15,7 @@ function quality(loc :: InfoLocation, par)
 		discounted(loc.resources) * par.qual_weight_res
 end
 
+# only used for GUI
 function quality(loc :: Location, par)
 	# [0:1]
 	loc.quality + 
@@ -22,6 +23,7 @@ function quality(loc :: Location, par)
 		loc.resources * par.qual_weight_res
 end
 
+# used for model and GUI
 function costs_quality(loc, par)
 	(1.0 / par.path_penalty_loc + 2.0) / 
 		(1.0 / par.path_penalty_loc + quality(loc, par))
