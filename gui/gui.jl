@@ -114,6 +114,7 @@ function run(sim, gui, t_stop, scales, parameters)
 
 	focus_agent = nothing
 	k_draw_mode = ACCURACY
+	n_modes = length(instances(KNOWL_DRAW_MODE))
 	redraw_bg = true
 	pause = false
 
@@ -124,7 +125,7 @@ function run(sim, gui, t_stop, scales, parameters)
 			sleep(0.03)
 		else
 			t1 = time()
-			upto!(sim.scheduler, t)
+			RRGraph.upto!(t)
 			t += step
 			dt = time() - t1
 
@@ -137,9 +138,11 @@ function run(sim, gui, t_stop, scales, parameters)
 			if t_stop > 0 && t >= t_stop
 				break
 			end
-
-			println(t, " #migrants: ", length(sim.model.migrants), 
-				" #arrived: ", length(sim.model.people) - length(sim.model.migrants))
+ 
+			n_m = length(sim.model.migrants)
+			n_p = length(sim.model.people)
+			n_d = length(sim.model.deaths)
+			println(t, " #migrants: ", n_m, " #arrived: ", n_p - n_m, " #deaths: ", n_d)
 		end
 		
 		while (ev = SDL2.event()) != nothing
@@ -150,11 +153,11 @@ function run(sim, gui, t_stop, scales, parameters)
 						quit = true
 						break;
 					elseif key == SDL2.SDLK_k
-						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + 1) % 4)
+						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + 1) % n_modes)
 						println("setting knowledge draw mode: ", k_draw_mode)
 						redraw_bg = true
 					elseif key == SDL2.SDLK_j
-						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + 3) % 4)
+						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + n_modes - 1) % n_modes)
 						println("setting knowledge draw mode: ", k_draw_mode)
 						redraw_bg = true
 					elseif key == SDL2.SDLK_r && length(sim.model.migrants) > 0
@@ -172,9 +175,12 @@ function run(sim, gui, t_stop, scales, parameters)
 			end
 		end
 
-		if (focus_agent == nothing || arrived(focus_agent)) &&
-			length(sim.model.migrants) > 0
-			focus_agent = sim.model.people[end]
+		if (focus_agent == nothing || arrived(focus_agent) || dead(focus_agent)) 
+			if length(sim.model.migrants) > 0
+				focus_agent = sim.model.people[end]
+			else
+				focus_agent = nothing
+			end
 		end
 
 		t1 = time()
@@ -195,6 +201,9 @@ include("../analysis.jl")
 include("../base/simulation.jl")
 include("../base/draw.jl")
 include("../base/args.jl")
+
+using Params2Args
+using ArgParse
 
 include("../" * get_parfile())
 	
@@ -221,7 +230,7 @@ add_arg_group!(arg_settings, "simulation parameters")
 fields_as_args!(arg_settings, Params)
 
 const args = parse_args(arg_settings, as_symbols=true)
-const parameters = create_from_args(args, Params)
+const parameters = @create_from_args(args, Params)
 const t_stop = args[:stop_time] 
 
 const sim = Simulation(setup_model(parameters), parameters)

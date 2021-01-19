@@ -50,9 +50,11 @@ const VF = Vector{Float64}
 	"stochastic range of friction"
 	frict_range		:: Float64	= 0.5
 	"risk on ordinary links"
-	risk_normal		:: Float64	= 0.2
+	risk_normal		:: Float64	= 0.02
 	"risk on high-risk links"
-	risk_high		:: Float64	= 0.7
+	risk_high		:: Float64	= 0.07
+	"expected risk for newly discovered links"
+	risk_exp		:: Float64	= 0.03
 
 	"number of contacts when entering"
 	n_ini_contacts	:: Int		= 10
@@ -94,6 +96,16 @@ const VF = Vector{Float64}
 	speed_expl_move :: Float64	= 1.0
 	"rate of exploration while staying"
 	rate_explore_stay :: Float64	= 1.0
+
+	"probability to notice if contact died"
+	p_notice_death_c :: Float64	= 0.3
+	"probability to notice if migrant on same link died"
+	p_notice_death_o :: Float64 = 0.1
+	"effect on risk perception of contact death"
+	speed_risk_indir :: Float64 = 0.5
+	"effect on risk perception of observed death"
+	speed_risk_obs	:: Float64	= 0.5
+
 
 	"rate of costs applying while staying"
 	rate_costs_stay	:: Float64	= 1.0

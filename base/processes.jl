@@ -60,9 +60,7 @@ start(sim) = RRGraph.spawn(sim.model, sim)
 
 	@poisson(rate_mort(agent, sim.par))		~
 		in_transit(agent)					=>
-			begin
-				kill!(agent, sim)
-			end
+			kill!(agent, sim.model, sim.par)
 end
 
 	

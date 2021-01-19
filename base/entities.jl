@@ -124,6 +124,7 @@ mutable struct Link
 	l2 :: LocationT{Link}
 	people :: Vector{AgentT{LocationT{Link}}}
 	count :: Int
+	count_deaths :: Int
 
 	risk :: Float64
 	friction :: Float64
@@ -156,6 +157,15 @@ function end_transit!(a :: Agent, l :: Location)
 end
 
 position(agent) = in_transit(agent) ? mid(agent.link.l1.pos, agent.link.l2.pos) : agent.loc.pos
+
+dead(a) = !in_transit(a) && (a.loc == NoLoc)
+
+function set_dead!(a)
+	a.loc = NoLoc
+	a.link = NoLink
+end
+
+active(agent) = !dead(agent) && !arrived(agent)
 
 
 # get the agent's info on a location

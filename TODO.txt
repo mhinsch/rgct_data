@@ -1,27 +1,7 @@
-world
-
-* draw obstacle
-* draw risk
-* set risk for all links
-	* set higher risk for links crossing obstacle
-		* line overlap test
-
-processes
-
-* implement mortality
-	* mort_rate
-	* kill!
-* implement dead state
-	* add state
-	* make sure no activity (incl info exch.!)
-
 info
 
-* spread info on risk b/n agents
-* perceive info on risk from deaths 
-	* ???
+* different trust levels dependent on source
 * broadcast info on risk
-	* trust levels
 
 decisions
 

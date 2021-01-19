@@ -11,13 +11,14 @@ mutable struct Model
 	prior_links :: Vector{Link}
 	people :: Vector{Agent}
 	migrants :: Vector{Agent}
+	deaths :: Vector{Agent}
 end
 
 function setup_model(par)
 	Random.seed!(par.rand_seed_world)
 	world = create_world(par)
 
-	m = Model(world, Location[], Link[], Agent[], Agent[])
+	m = Model(world, Location[], Link[], Agent[], Agent[], Agent[])
 
 	for c in world.cities
 		if rand() < par.p_unknown_city
@@ -131,6 +132,36 @@ function handle_arrivals!(model::Model)
 	end
 
 	model
+end
+
+
+function kill!(agent, model, par)
+	# for now
+	@assert in_transit(agent)
+
+	agent.link.count_deaths += 1
+
+	remove_agent!(model.world, agent)
+	drop!(model.migrants, agent)
+	drop!(model.people, agent)
+
+	push!(model.deaths, agent)
+
+	ret = typeof(agent)[]
+	for a in agent.contacts
+		if active(a) && learn_death_contact!(a, agent, par)
+			push!(ret, a)
+		end
+	end
+	for a in agent.link.people
+		if learn_death_observed!(a, agent, par)
+			push!(ret, a)
+		end
+	end
+
+	set_dead!(agent)
+
+	ret
 end
 
 

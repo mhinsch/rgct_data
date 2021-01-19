@@ -102,7 +102,8 @@ function discover!(agent, link :: Link, from :: Location, par)
 	info_to = info(agent, otherside(link, from))
 	frict = link.distance * par.frict_exp[Int(link.typ)]
 	@assert frict > 0
-	info_link = InfoLink(link.id, info_from, info_to, TrustedF(frict))
+	risk = par.risk_exp
+	info_link = InfoLink(link.id, info_from, info_to, TrustedF(frict), TrustedF(risk))
 	add_info!(agent, info_link)
 	# TODO lots of redundancy, possibly join/extend
 	connect!(info_from, info_link)
@@ -187,9 +188,16 @@ function loc_belief_error(v::TrustedF, par)
 		limit(0.000001, v.trust + unf_delta(par.error), 0.99999))
 end
 
-function link_belief_error(v::TrustedF, par)
+function link_frict_belief_error(v::TrustedF, par)
 	TrustedF(
 		max(0.0, v.value + unf_delta(par.error_frict)),
+		limit(0.000001, v.trust + unf_delta(par.error), 0.99999))
+end
+
+function link_risk_belief_error(v::TrustedF, par)
+	TrustedF(
+	# potentially use separate error
+		max(0.0, v.value + unf_delta(par.error)),
 		limit(0.000001, v.trust + unf_delta(par.error), 0.99999))
 end
 
@@ -208,8 +216,10 @@ function exchange_loc_info(loc, info1, info2, a1, a2, p1, p2, par)
 
 	# both have knowledge at l, compare by trust and transfer accordingly
 	if known(info1) && known(info2)
-		res1, res2 = exchange_beliefs(info1.resources, info2.resources, x->loc_belief_error(x, par), p1, p2)
-		qual1, qual2 = exchange_beliefs(info1.quality, info2.quality, x->loc_belief_error(x, par), p1, p2)
+		res1, res2 = 
+			exchange_beliefs(info1.resources, info2.resources, x->loc_belief_error(x, par), p1, p2)
+		qual1, qual2 = 
+			exchange_beliefs(info1.quality, info2.quality, x->loc_belief_error(x, par), p1, p2)
 		info1.resources = res1
 		info1.quality = qual1
 		# only a2 can have arrived
@@ -240,10 +250,15 @@ function exchange_link_info(link, info1, info2, a1, a2, p1, p2, par)
 	
 	# both have knowledge at l, compare by trust and transfer accordingly
 	if known(info1) && known(info2)
-		frict1, frict2 = exchange_beliefs(info1.friction, info2.friction, x->link_belief_error(x, par), p1, p2)
+		frict1, frict2 = 
+			exchange_beliefs(info1.friction, info2.friction, x->link_frict_belief_error(x, par), p1, p2)
+		risk1, risk2 = 
+			exchange_beliefs(info1.risk, info2.risk, x->link_risk_belief_error(x, par), p1, p2)
 		info1.friction = frict1
+		info1.risk= risk1
 		if !arrived(a2)
 			info2.friction = frict2
+			info2.risk = risk2
 		end
 	end
 end
@@ -279,6 +294,48 @@ function exchange_info!(a1::Agent, a2::Agent, world::World, par)
 end
 
 
+function update_risk_info!(agent, link, p, speed)
+	infol = info(agent, link)
+
+	# death registers, changes risk perception
+	if known(infol) && rand() < p
+		infol.risk = update(infol.risk, 1.0, speed)
+		return true
+	end
+
+	return false
+end
+
+
+function learn_death_contact!(agent, dead, par)
+	ret = false
+
+	if (i = findfirst(isequal(dead), agent.contacts)) != nothing
+		drop_at!(agent.contacts, i)
+		ret = true
+	end
+
+	# death registers, changes risk perception
+	if update_risk_info!(agent, dead.link, par.p_notice_death_c, par.speed_risk_indir)
+		ret = true
+	end
+
+	ret
+end
+
+
+function learn_death_observed!(agent, dead, par)
+	@assert dead.link == agent.link
+
+	# death registers, changes risk perception
+	if update_risk_info!(agent, dead.link, par.p_notice_death_o, par.speed_risk_obs)
+		return true
+	end
+
+	false
+end
+
+
 maxed(agent, par) = length(agent.contacts) >= par.n_contacts_max
 
 # *********************
@@ -300,6 +357,9 @@ end
 # same as ML3
 rate_transit(agent, par) = par.move_rate + par.move_speed / agent.link.friction
 
+# link risk is probability to die during transit, translate to rate
+rate_mort(agent, par) = rate_transit(agent, par) * agent.link.risk / (1.0 - agent.link.risk)
+
 rate_contacts(agent, par) = (length(agent.loc.people)-1) * par.p_keep_contact
 
 rate_drop_contacts(agent, par) = length(agent.contacts) * par.p_drop_contact
@@ -307,6 +367,7 @@ rate_drop_contacts(agent, par) = length(agent.contacts) * par.p_drop_contact
 rate_talk(agent, par) = length(agent.contacts) * par.p_info_contacts
 
 rate_plan(agent, par) = agent.out_of_date * par.rate_plan
+
 
 
 income(loc, par) = par.ben_resources * loc.resources - par.costs_stay
@@ -411,6 +472,11 @@ function talk_once!(agent, world, par)
 	@assert ! arrived(agent)
 	other = rand(agent.contacts)
 
+	if dead(other)
+		drop!(agent.contacts, other)
+		return [agent]
+	end
+
 	exchange_info!(agent, other, world, par)
 
 	(arrived(other) ? [agent] : [agent, other])
@@ -425,6 +491,7 @@ end
 
 
 function start_move!(agent, world, par)
+	@assert ! dead(agent)
 	@assert ! arrived(agent)
 
 	next = info2real(agent.plan[end], world)

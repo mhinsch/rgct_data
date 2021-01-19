@@ -65,7 +65,7 @@ struct prop_scales
 end
 
 
-@enum KNOWL_DRAW_MODE ACCURACY FRICTION R_FRICTION TRUST
+@enum KNOWL_DRAW_MODE ACCURACY FRICTION R_FRICTION TRUST RISK
 
 
 function draw_bg!(canvas, model, scales, par, mode=FRICTION)
@@ -74,8 +74,14 @@ function draw_bg!(canvas, model, scales, par, mode=FRICTION)
 	# draw in reverse so that "by foot" links will be drawn first
 	for i in length(model.world.links):-1:1
 		link = model.world.links[i]
-		frict = mode == R_FRICTION ? (link.friction - scales.min_rf) / (scales.max_rf - scales.min_rf) :
-			(link.friction/link.distance - scales.min_f) / (scales.max_f - scales.min_f)
+		frict = 
+			if mode == R_FRICTION 
+				(link.friction - scales.min_rf) / (scales.max_rf - scales.min_rf)
+			elseif mode == RISK
+				link.risk
+			else
+				(link.friction/link.distance - scales.min_f) / (scales.max_f - scales.min_f)
+			end
 		draw_link_v!(canvas, link, frict)
 	end
 
@@ -84,6 +90,10 @@ function draw_bg!(canvas, model, scales, par, mode=FRICTION)
 		col :: UInt32 = rgb(255, (1.0-val) * 255, val * 255)
 		draw_city!(canvas, city, 2, col)
 	end
+
+	xs, ys = size(canvas)
+	x1, y1, x2, y2 = par.obstacle
+	line(canvas, scale(x1, xs), scale(y1, ys), scale(x2, xs), scale(y2, ys), rgb(120, 0, 120))
 end
 
 
@@ -134,6 +144,8 @@ function draw_rand_knowledge!(canvas, model, scales, agent=nothing, mode=ACCURAC
 				elseif mode == R_FRICTION
 				 	limit(0.0, (l.friction.value - scales.min_rf) / 
 						(scales.max_rf - scales.min_rf), 1.0)
+				elseif mode == RISK
+					l.risk.value
 				end
 			draw_link_v!(canvas, l, v) 
 		end
@@ -183,6 +195,7 @@ function draw_rand_social!(canvas, model, depth=1, agent=nothing)
 
 	push!(next, agent)
 
+	@assert !dead(agent)
 
 	for d in 1:depth
 		todo, next = next, todo
@@ -191,13 +204,18 @@ function draw_rand_social!(canvas, model, depth=1, agent=nothing)
 		v = floor(Int, d / depth * 255)
 
 		for a in todo
-			x, y = scale(a.loc.pos, canvas)
+			@assert !dead(a)
+			x, y = scale(position(a), canvas)
+			@assert 0<=x<=canvas.xsize "x inside canvas: $(position(a))"
+			@assert 0<=y<=canvas.ysize "y inside canvas: $y"
 
 			for o in a.contacts
-				if o in done
+				if (o in done) || dead(o)
 					continue
 				end
-				xo, yo = scale(o.loc.pos, canvas)
+				xo, yo = scale(position(o), canvas)
+				@assert 0<=xo<=canvas.xsize "xo inside canvas"
+				@assert 0<=yo<=canvas.ysize "yo inside canvas"
 				if d == 1
 					line(canvas, x, y, xo, yo, rgb(v, 255-v, 0))
 				else
@@ -210,7 +228,7 @@ function draw_rand_social!(canvas, model, depth=1, agent=nothing)
 
 				if d < depth
 					for o2 in o.contacts
-						if ! (o2 in done)
+						if ! (o2 in done) && !dead(o2)
 							push!(next, o2)
 						end
 					end

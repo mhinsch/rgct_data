@@ -26,6 +26,7 @@ function setup_link!(link, par)
 	link.distance = distance(link.l1, link.l2)
 	link.friction = calc_friction(link, par) * (1.0 + rand() * par.frict_range)
 	@assert link.friction > 0
+	link.risk = par.risk_normal
 end
 
 
@@ -116,6 +117,18 @@ function add_exits!(world, par)
 end
 
 		
+function add_obstacle!(world, par)
+	p1 = Pos(par.obstacle[1], par.obstacle[2])
+	p2 = Pos(par.obstacle[3], par.obstacle[4])
+
+	for l in world.links
+		if intersect(p1, p2, l.l1.pos, l.l2.pos)
+			l.risk = par.risk_high
+		end
+	end
+
+	world
+end
 
 
 function create_world(par)
@@ -123,6 +136,7 @@ function create_world(par)
 	add_cities!(world, par)
 	add_entries!(world, par)
 	add_exits!(world, par)
+	add_obstacle!(world, par)
 
 	world
 end
