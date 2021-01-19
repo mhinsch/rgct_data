@@ -9,6 +9,8 @@
 			end
 end
 
+start(sim) = RRGraph.spawn(sim.model, sim)
+
 
 @add_processes RRGraph sim agent::Agent begin
 	@poisson(sim.par.rate_costs_stay)		~ 
