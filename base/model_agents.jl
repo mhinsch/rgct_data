@@ -434,14 +434,12 @@ function start_move!(agent, world, par)
 		agent.planned += 1
 	end
 
-	set_transit!(agent, link)
-	
-	# update traffic counter
-	link.count += 1
-
 	costs_move!(agent, link, par)
-	remove_agent!(world, agent)
 
+	remove_agent!(agent.loc, agent)
+	add_agent!(link, agent)
+	start_transit!(agent, link)
+	
 	# link exploration is a consequence of direct experience, so
 	# it always happens
 	explore_at!(agent, world, link, agent.loc, par.speed_expl_move, par)
@@ -454,11 +452,12 @@ function finish_move!(agent, world, par)
 	next = info2real(agent.plan[end], world)
 	pop!(agent.plan)
 
-	add_agent!(next, agent)
+	remove_agent!(agent.link, agent)
 	end_transit!(agent, next)
+	add_agent!(next, agent)
 
 	if arrived(agent)
-		return []
+		return typeof(agent)[]
 	end
 
 	next.people
