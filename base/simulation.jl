@@ -8,4 +8,3 @@ struct Simulation{PAR}
 	par :: PAR
 end
 
-

@@ -6,26 +6,27 @@ include("world_util.jl")
 
 # a piece of knowledge an agent has about a location
 mutable struct InfoLocationT{L}
-	pos :: Pos
 	id :: Int
+	pos :: Pos
+	links :: Vector{L}
+
 	# property values the agent expects
 	resources :: TrustedF
 	quality :: TrustedF
-
-	links :: Vector{L}
 end
 
 mutable struct InfoLink
 	id :: Int
 	l1 :: InfoLocationT{InfoLink}
 	l2 :: InfoLocationT{InfoLink}
+
 	friction :: TrustedF
 	risk :: TrustedF
 end
 
 const InfoLocation = InfoLocationT{InfoLink}
 
-const Unknown = InfoLocation(Nowhere, 0, TrustedF(0.0), TrustedF(0.0), [])
+const Unknown = InfoLocation(0, Nowhere, [], TrustedF(0.0), TrustedF(0.0))
 const UnknownLink = InfoLink(0, Unknown, Unknown, TrustedF(0.0), TrustedF(0.0))
 
 
@@ -97,17 +98,17 @@ end
 mutable struct LocationT{L}
 	id :: Int
 	typ :: LOC_TYPE
-	resources :: Float64
-	quality :: Float64
-	people :: Vector{AgentT{LocationT{L}}}
+	pos :: Pos
 
 	links :: Vector{L}
-
-	pos :: Pos
+	people :: Vector{AgentT{LocationT{L}}}
 
 	count :: Int
 	cur_count :: Int
 	traffic :: Float64
+
+	resources :: Float64
+	quality :: Float64
 end
 
 
@@ -118,19 +119,22 @@ distance(l1, l2) = distance(l1.pos, l2.pos)
 mutable struct Link
 	id :: Int
 	typ :: LINK_TYPE
+
 	l1 :: LocationT{Link}
 	l2 :: LocationT{Link}
+	people :: Vector{AgentT{LocationT{Link}}}
+	count :: Int
+
 	risk :: Float64
 	friction :: Float64
 	distance :: Float64
-	count :: Int
 end
 
 
-Link(id, t, l1, l2) = Link(id, t, l1, l2, 0, 0, 0, 0)
+Link(id, t, l1, l2) = Link(id, t, l1, l2, [], 0, 0, 0, 0, 0)
 
 const Location = LocationT{Link}
-Location(p :: Pos, t, i) = Location(i, t, 0.0, 0.0, [], Link[], p, 0, 0, 0.0)
+Location(p :: Pos, t, i) = Location(i, t, p, [], [], 0, 0, 0.0, 0.0, 0.0)
 const NoLoc = Location(Nowhere, STD, 0)
 
 const NoLink = Link(0, FAST, NoLoc, NoLoc)
@@ -140,12 +144,18 @@ const Agent = AgentT{Location, Link}
 Agent(loc::Location, c :: Float64) = Agent(loc, NoLink, 0, [], [], 0, [], [], [loc], 1.0, c, [], 0)
 
 in_transit(a :: Agent) = a.link != NoLink
-set_transit!(a :: Agent, l :: Link) = a.link = l
+
+function start_transit!(a :: Agent, l :: Link)
+	a.link = l
+end
+
 function end_transit!(a :: Agent, l :: Location)
 	a.link = NoLink
 	a.loc = l
 	push!(a.path, a.loc)
 end
+
+position(agent) = in_transit(agent) ? mid(agent.link.l1.pos, agent.link.l2.pos) : agent.loc.pos
 
 
 # get the agent's info on a location
@@ -184,9 +194,7 @@ end
 World() = World([], [], [], [])
 
 
-
-remove_agent!(loc::Location, agent::Agent) = drop!(loc.people, agent)
-
+remove_agent!(l, agent) = drop!(l.people, agent)
 
 function add_agent!(loc::Location, agent::Agent) 
 	push!(loc.people, agent)
@@ -194,21 +202,41 @@ function add_agent!(loc::Location, agent::Agent)
 	loc.cur_count += 1
 end
 
-
-remove_agent!(world, agent) = remove_agent!(agent.loc, agent)
-
-
-function move!(world, agent, loc)
-	remove_agent!(world, agent)
-	agent.loc = loc
-	add_agent!(loc, agent)
+function add_agent!(link::Link, agent::Agent) 
+	push!(link.people, agent)
+	link.count += 1
 end
+
+remove_agent!(world::World, agent) = remove_agent!((in_transit(agent) ? agent.link : agent.loc), agent)
 
 
 info2real(l::InfoLocation, world) = world.cities[l.id]
 info2real(l::InfoLink, world) = world.links[l.id]
 
+
+# connect loc and link (if not already connected)
+function connect!(loc :: InfoLocation, link :: InfoLink)
+	# add location to link
+	if link.l1 != loc && link.l2 != loc
+		# link not connected yet, should have free slot
+		if !known(link.l1)
+			link.l1 = loc
+		elseif !known(link.l2)
+			link.l2 = loc
+		else
+			error("Error: Trying to connect a fully connected link!")
+		end
+	end
+
+	# add link to location
+	if ! (link in loc.links)
+		add_link!(loc, link)
+	end
+end
+
+
 dist_eucl(x1, y1, x2, y2) = sqrt((x2-x1)^2 + (y2-y1)^2)
+
 
 # TODO: should accuracy be discounted by trust value?
 
