@@ -8,9 +8,9 @@ include("world_path_util.jl")
 
 
 "Quality of location `loc` for global planning (no effect of x)."
-function quality(loc :: InfoLocation, par)
+function quality(loc :: InfoLocation, par) # [0:1]
 	# [0:1]
-	discounted(loc.quality) + 
+	discounted(loc.quality) * (1.0 - par.qual_weight_res) + 
 		# [0:1]
 		discounted(loc.resources) * par.qual_weight_res
 end
@@ -18,14 +18,14 @@ end
 # only used for GUI
 function quality(loc :: Location, par)
 	# [0:1]
-	loc.quality + 
+	loc.quality * (1.0 - par.qual_weight_res) + 
 		# [0:1]
 		loc.resources * par.qual_weight_res
 end
 
 # used for model and GUI
 function costs_quality(loc, par)
-	(1.0 / par.path_penalty_loc + 2.0) / 
+	(1.0 / par.path_penalty_loc + 1.0) / 
 		(1.0 / par.path_penalty_loc + quality(loc, par))
 end
 

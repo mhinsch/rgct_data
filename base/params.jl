@@ -130,7 +130,7 @@ const VF = Vector{Float64}
 	weight_traffic	:: Float64	= 0.001
 
 	"effect of proximity to exit on perceived quality"
-	qual_weight_x	:: Float64	= 0.5
+	qual_weight_x	:: Float64	= 0.25
 	"effect of resources on perceived quality"
 	qual_weight_res	:: Float64 	= 0.1
 	"tolerance towards friction when looking for local improvement"
