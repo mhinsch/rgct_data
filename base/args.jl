@@ -9,3 +9,14 @@ function get_parfile()
 	parfile
 end
 
+function save_params(out_name, p)
+        open(out_name, "w") do out
+                println(out, "using Parameters")
+                println(out)
+                println(out, "@with_kw struct Params")
+                for f in fieldnames(typeof(p))
+                        println(out, "\t", f, "\t::\t", fieldtype(typeof(p), f), "\t= ", getfield(p, f))
+                end
+                println(out, "end")
+        end
+end

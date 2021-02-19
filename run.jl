@@ -24,6 +24,10 @@ function run(p, stop, log_file)
 end
 
 
+using Params2Args
+using ArgParse
+
+
 include(get_parfile())
 	
 
@@ -55,7 +59,7 @@ add_arg_group!(arg_settings, "simulation parameters")
 fields_as_args!(arg_settings, Params)
 
 const args = parse_args(arg_settings, as_symbols=true)
-const p = create_from_args(args, Params)
+const p = @create_from_args(args, Params)
 
 
 save_params(args[:par_file], p)
