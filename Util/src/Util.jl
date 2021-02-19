@@ -2,32 +2,33 @@ module Util
 
 
 export drop!, drop_at!, @set_to_max!, @update!, limit, valley, sigmoid,
-	unf_delta, distance, parse, Pathfinding, StatsAccumulator, Observation
+	unf_delta, distance, Pathfinding, StatsAccumulator, Observation
 
 
-function Base.parse(t :: Type{T}, str) where {T<:Array}
-	v = t()
-	last = length(str)
-	i = 1
-
-	while i != nothing && i<=last
-		f = findnext(",", str, i)
-		if f==nothing && i<=last
-			j = last
-		else
-			j = f[1]-1
-		end
-
-		println(i, ", ", j)
-
-		if j != nothing
-			push!(v, parse(eltype(t), SubString(str, i, j)))
-		end
-		i = j+2
-	end
-
-	v
-end
+	# deprecated
+#function Base.parse(t :: Type{T}, str) where {T<:Array}
+#	v = t()
+#	last = length(str)
+#	i = 1
+#
+#	while i != nothing && i<=last
+#		f = findnext(",", str, i)
+#		if f==nothing && i<=last
+#			j = last
+#		else
+#			j = f[1]-1
+#		end
+#
+#		println(i, ", ", j)
+#
+#		if j != nothing
+#			push!(v, parse(eltype(t), SubString(str, i, j)))
+#		end
+#		i = j+2
+#	end
+#
+#	v
+#end
 
 
 

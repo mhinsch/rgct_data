@@ -17,19 +17,35 @@
 
 module Params2Args
 
-export fields_as_args!, create_from_args, @create_from_args
+export fields_as_args!, fields_as_cmdl, create_from_args, @create_from_args
 
 using ArgParse
 using REPL
 
 
-"add all fields of a type as command line arguments"
+"add all fields of a type to the command line syntax"
 function fields_as_args!(arg_settings, t :: Type)
 	fields = fieldnames(t)
 	for f in fields
 		fdoc =  REPL.stripmd(REPL.fielddoc(t, f))
 		add_arg_table!(arg_settings, ["--" * String(f)], Dict(:help => fdoc))
 	end
+end
+
+"generate command line arguments from an object"
+function fields_as_cmdl(o, ignore = [])
+	fields = fieldnames(typeof(o))
+	res = ""
+	for f in fields
+		if string(f) in ignore
+			continue
+		end
+		farg = replace(string(f), "_" => "-")
+		value = replace(string(getfield(o, f)), " " => "")
+		res *= " --" * farg * " " * value
+	end
+
+	res
 end
 
 "parse arrays of parseable types"
