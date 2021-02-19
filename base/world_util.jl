@@ -22,6 +22,5 @@ function intersect(a1, a2, b1, b2)
 		(left_of(b1, b2, a1) != left_of(b1, b2, a2))
 end
 
-
-
+contains(p1, p2, p) = p1.x <= p.x <= p2.x && p1.y <= p.y <= p2.y
 

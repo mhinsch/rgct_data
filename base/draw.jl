@@ -62,6 +62,8 @@ struct prop_scales
 	min_rf :: Float64
 	max_q :: Float64
 	min_q :: Float64
+	max_r :: Float64
+	min_r :: Float64
 end
 
 
@@ -78,7 +80,7 @@ function draw_bg!(canvas, model, scales, par, mode=FRICTION)
 			if mode == R_FRICTION 
 				(link.friction - scales.min_rf) / (scales.max_rf - scales.min_rf)
 			elseif mode == RISK
-				link.risk
+				link.risk / par.risk_high
 			else
 				(link.friction/link.distance - scales.min_f) / (scales.max_f - scales.min_f)
 			end
@@ -92,8 +94,13 @@ function draw_bg!(canvas, model, scales, par, mode=FRICTION)
 	end
 
 	xs, ys = size(canvas)
-	x1, y1, x2, y2 = par.obstacle
-	line(canvas, scale(x1, xs), scale(y1, ys), scale(x2, xs), scale(y2, ys), rgb(120, 0, 120))
+	cos = par.obstacle
+	x1, x2 = scale(cos[1], xs), scale(cos[3], xs)
+	y1, y2 = scale(cos[2], ys), scale(cos[4], ys)
+	line(canvas, x1, y1, x2, y1, rgb(120, 0, 120))
+	line(canvas, x1, y1, x1, y2, rgb(120, 0, 120))
+	line(canvas, x1, y2, x2, y2, rgb(120, 0, 120))
+	line(canvas, x2, y1, x2, y2, rgb(120, 0, 120))
 end
 
 
@@ -145,7 +152,8 @@ function draw_rand_knowledge!(canvas, model, scales, agent=nothing, mode=ACCURAC
 				 	limit(0.0, (l.friction.value - scales.min_rf) / 
 						(scales.max_rf - scales.min_rf), 1.0)
 				elseif mode == RISK
-					l.risk.value
+					limit(0.0, (l.risk.value - scales.min_r) /
+						(scales.max_r - scales.min_r), 1.0)
 				end
 			draw_link_v!(canvas, l, v) 
 		end

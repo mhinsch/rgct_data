@@ -59,6 +59,11 @@ function qual_limits(model, par)
 	maq, miq
 end
 
+function risk_limits(model)
+	maf = maximum(l -> l.risk, model.world.links)
+	mif = minimum(l -> l.risk, model.world.links)
+	maf, mif
+end
 
 
 n_arrived(model) = length(model.people) - length(model.migrants)
@@ -74,12 +79,21 @@ rate_dep(t, par) = min(t / par.dep_warmup, 1.0) * par.rate_dep + 1.0
 
 # *** entry/exit
 
+function set_risk_pars!(agent, par)
+	m = [[par.risk_sd_i, par.risk_cov_i_s] [par.risk_cov_i_s, par.risk_sd_s]]
+	i, s = rand(MvNormal(m))
+	agent.risk_i = i + par.risk_i
+	agent.risk_s = max(0.0, s + par.risk_s)
+end
+
 
 function add_migrant!(model::Model, par)
 	x = 1
 	entry = rand(model.world.entries)
 	# starts as in transit => will explore in first step
 	agent = Agent(entry, par.ini_capital)
+	set_risk_pars!(agent, par)
+
 	agent.info_loc = fill(Unknown, length(model.world.cities))
 	agent.info_link = fill(UnknownLink, length(model.world.links))
 	# explore once

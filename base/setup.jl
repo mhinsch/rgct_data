@@ -118,11 +118,19 @@ end
 
 		
 function add_obstacle!(world, par)
-	p1 = Pos(par.obstacle[1], par.obstacle[2])
-	p2 = Pos(par.obstacle[3], par.obstacle[4])
+	p_tl = Pos(par.obstacle[1], par.obstacle[2])
+	p_br = Pos(par.obstacle[3], par.obstacle[4])
+	p_bl = Pos(p_tl.x, p_br.y)
+	p_tr = Pos(p_br.x, p_tl.y)
+
 
 	for l in world.links
-		if intersect(p1, p2, l.l1.pos, l.l2.pos)
+		if contains(p_tl, p_br, l.l1.pos) ||
+			contains(p_tl, p_br, l.l2.pos) ||
+			intersect(p_tl, p_tr, l.l1.pos, l.l2.pos) ||
+			intersect(p_tl, p_bl, l.l1.pos, l.l2.pos) ||
+			intersect(p_bl, p_br, l.l1.pos, l.l2.pos) ||
+			intersect(p_tr, p_br, l.l1.pos, l.l2.pos)
 			l.risk = par.risk_high
 		end
 	end

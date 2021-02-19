@@ -24,21 +24,31 @@ function quality(loc :: Location, par)
 end
 
 # used for model and GUI
-function costs_quality(loc, par)
+function costs_quality(loc, par) # [1:1+1/pp]
 	(1.0 / par.path_penalty_loc + 1.0) / 
 		(1.0 / par.path_penalty_loc + quality(loc, par))
 end
 
 disc_friction(link) = 2 * link.friction.value - discounted(link.friction)
 
-function costs_quality(link :: InfoLink, loc :: InfoLocation, par)
-	disc_friction(link) * costs_quality(loc, par)
+function safety_score(agent, link, par) # [0:1]
+	# convert to prob. of safety
+	likely_safe = link.risk.trust * (1.0 - link.risk.value) * par.risk_scale
+	# parameterised to percentage 
+	ex = exp(agent.risk_i + agent.risk_s * likely_safe * 100.0)
+
+	ex / (1.0 + ex)
+end
+
+function costs_quality(link :: InfoLink, loc :: InfoLocation, agent, par)
+	disc_friction(link) * costs_quality(loc, par) + 
+		par.path_penalty_risk * (1.0 - safety_score(agent, link, par))
 end
 
 "Movement costs from `l1` to `l2`, taking into account `l2`'s quality."
-function costs_quality(l1::InfoLocation, l2::InfoLocation, par)
+function costs_quality(l1::InfoLocation, l2::InfoLocation, agent, par)
 	link = find_link(l1, l2)
-	costs_quality(link, l2, par)
+	costs_quality(link, l2, agent, par)
 end
 
 "Quality when looking for local improvement."
@@ -54,7 +64,7 @@ function make_plan!(agent, par)
 			[], 0
 		else
 			Pathfinding.path_Astar(info_current(agent), agent.info_target, 
-				(l1, l2)->costs_quality(l1, l2, par), path_costs_estimate, each_neighbour)
+				(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
 		end
 end
 
@@ -148,6 +158,7 @@ function explore_at!(agent, world, loc :: Location, speed, allow_indirect, par)
 
 			#info_link.friction = TrustedF(link.friction, par.trust_found_links)
 			info_link.friction = update(info_link.friction, link.friction, speed)
+			info_link.risk = update(info_link.risk, link.risk, speed * par.speed_expl_risk)
 			
 			# no info, but position is known
 			explore_at!(agent, world, otherside(link, loc), 0.0, false, par)
@@ -173,6 +184,7 @@ function explore_at!(agent, world, link :: Link, from :: Location, speed, par)
 
 	# gain information on local properties
 	inf.friction = update(inf.friction, link.friction, speed)
+	inf.risk = update(inf.risk, link.risk, speed * par.speed_expl_risk)
 
 	inf, link
 end
@@ -197,7 +209,7 @@ end
 function link_risk_belief_error(v::TrustedF, par)
 	TrustedF(
 	# potentially use separate error
-		max(0.0, v.value + unf_delta(par.error)),
+		max(0.0, v.value + unf_delta(par.error_risk)),
 		limit(0.000001, v.trust + unf_delta(par.error), 0.99999))
 end
 
@@ -402,9 +414,13 @@ function plan_costs!(agent, par)
 	for l in loc.links
 		other = otherside(l, loc)
 
-		q = known(other) ?	
-			local_quality(other, par) * par.qual_tol_frict / (par.qual_tol_frict + disc_friction(l)) :
-			0.0		# Unknown has q<0 since Nowhere == (-1.0, -1.0)
+		q = if known(other)
+				local_quality(other, par) * 
+					par.qual_tol_frict / (par.qual_tol_frict + disc_friction(l)) *
+					safety_score(agent, l, par)
+			else
+				0.0		# Unknown has q<0 since Nowhere == (-1.0, -1.0)
+			end
 
 		push!(quals, q^par.qual_bias + prev)
 		prev = quals[end]

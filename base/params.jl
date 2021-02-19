@@ -41,8 +41,8 @@ const VF = Vector{Float64}
 	"resources at exits"
 	res_exit		:: Float64	= 1
 
-	"coordinates of high risk obstacle (line)"
-	obstacle		:: VF		= [0.1, 0.5, 0.7, 0.5]
+	"coordinates of high risk obstacle (rectangle)"
+	obstacle		:: VF		= [0.4, 0.3, 0.6, 0.7]
 
 	# scale >= 1.0 required, otherwise path finding breaks
 	"how friction scales with distance"
@@ -50,11 +50,13 @@ const VF = Vector{Float64}
 	"stochastic range of friction"
 	frict_range		:: Float64	= 0.5
 	"risk on ordinary links"
-	risk_normal		:: Float64	= 0.02
+	risk_normal		:: Float64	= 0.002
 	"risk on high-risk links"
-	risk_high		:: Float64	= 0.07
+	risk_high		:: Float64	= 0.1
 	"expected risk for newly discovered links"
-	risk_exp		:: Float64	= 0.03
+	risk_exp		:: Float64	= 0.01
+	"scale between 'safe' and 'survivable'"
+	risk_scale		:: Float64	= 0.2
 
 	"number of contacts when entering"
 	n_ini_contacts	:: Int		= 10
@@ -73,6 +75,17 @@ const VF = Vector{Float64}
 	"efficiency of exploration for initial knowledge"
 	speed_expl_ini	:: Float64	= 1.0
 
+	"intercept of risk scoring function"
+	risk_i			:: Float64	= -7.64
+	"slope of risk scoring function"
+	risk_s			:: Float64	= 0.16
+	"sd of intercept of risk scoring function"
+	risk_sd_i		:: Float64	= 4.68
+	"sd of slope of risk scoring function"
+	risk_sd_s		:: Float64	= 0.08
+	"covariance between intercept and slope of risk scoring function"
+	risk_cov_i_s	:: Float64	= -0.337
+
 	"rate at which agents plan their movement after receiving info"
 	rate_plan		:: Float64	= 100.0
 
@@ -84,7 +97,7 @@ const VF = Vector{Float64}
 	frict_exp		:: VF		= [1.25, 12.5]
 	"prob. to find links when exploring"
 	p_find_links	:: Float64	= 0.5
-	"trust in detected friction for discovered links"
+	"trust in detected friction/risk for discovered links"
 	trust_found_links :: Float64 = 0.5
 	"prob. to find destinations of found links"
 	p_find_dests	:: Float64	= 0.3
@@ -94,7 +107,7 @@ const VF = Vector{Float64}
 	speed_expl_stay :: Float64	= 1.0
 	"efficiency  of exploration while moving"
 	speed_expl_move :: Float64	= 1.0
-	"rate of exploration while staying"
+	"rate (frequency) of exploration while staying"
 	rate_explore_stay :: Float64	= 1.0
 
 	"probability to notice if contact died"
@@ -102,9 +115,11 @@ const VF = Vector{Float64}
 	"probability to notice if migrant on same link died"
 	p_notice_death_o :: Float64 = 0.1
 	"effect on risk perception of contact death"
-	speed_risk_indir :: Float64 = 0.5
+	speed_risk_indir :: Float64 = 0.1
 	"effect on risk perception of observed death"
-	speed_risk_obs	:: Float64	= 0.5
+	speed_risk_obs	:: Float64	= 0.1
+	"speed of learning about risk by exploration (relative to other properties)"
+	speed_expl_risk	:: Float64	= 1.0
 
 
 	"rate of costs applying while staying"
@@ -139,6 +154,8 @@ const VF = Vector{Float64}
 	qual_bias		:: Float64	= 1.0
 	"effect of low location quality on path costs"
 	path_penalty_loc :: Float64 = 1.0
+	"effect of risk on path costs"
+	path_penalty_risk:: Float64 = 5
 
 	"prob. to add an agent to contacts"
 	p_keep_contact 	:: Float64 	= 0.1
@@ -160,8 +177,10 @@ const VF = Vector{Float64}
 	confuse			:: Float64	= 0.3
 	"stochastic error when transmitting information"
 	error			:: Float64 	= 0.1
+	"stochastic error when transmitting risk information"
+	error_risk		:: Float64 	= 0.01
 	"stochastic error when transmitting friction information"
-	error_frict			:: Float64 	= 0.5
+	error_frict		:: Float64 	= 0.5
 	"weight of opinion of arrived agents"
 	weight_arr		:: Float64	= 1.0
 end

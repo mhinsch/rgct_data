@@ -53,6 +53,8 @@ mutable struct AgentT{LOC, LINK}
 	info_target :: Vector{InfoLocation}
 	n_links :: Int
 	info_link :: Vector{InfoLink}
+	risk_s :: Float64
+	risk_i :: Float64
 	plan :: Vector{InfoLocation}
 	path :: Vector{LOC}
 	out_of_date :: Float64
@@ -142,7 +144,7 @@ const NoLink = Link(0, FAST, NoLoc, NoLoc)
 
 const Agent = AgentT{Location, Link}
 
-Agent(loc::Location, c :: Float64) = Agent(loc, NoLink, 0, [], [], 0, [], [], [loc], 1.0, c, [], 0)
+Agent(loc::Location, c :: Float64) = Agent(loc, NoLink, 0, [], [], 0, [], 1.0, 0.0, [], [loc], 1.0, c, [], 0)
 
 in_transit(a :: Agent) = a.link != NoLink
 

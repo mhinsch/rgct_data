@@ -243,11 +243,12 @@ const linkf = open(args[:link_file], "w")
 
 clear!(gui.canvas_bg)
 const scales = prop_scales(frict_limits(sim.model)..., r_frict_limits(sim.model)..., 
-	qual_limits(sim.model, parameters)...)
+	qual_limits(sim.model, parameters)..., risk_limits(sim.model)...)
 
 println("max(f): ", scales.max_f, "\t min(f): ", scales.min_f)
 println("max(real f): ", scales.max_rf, "\t min(real f): ", scales.min_rf)
 println("max(q): ", scales.max_q, "\t min(q): ", scales.min_q)
+println("max(r): ", scales.max_r, "\t min(r): ", scales.min_r)
 
 run(sim, gui, t_stop, scales, parameters)
 
