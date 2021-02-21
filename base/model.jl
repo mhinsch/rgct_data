@@ -65,6 +65,13 @@ function risk_limits(model)
 	maf, mif
 end
 
+max_costs(par, max_frict) = 
+	costs_qual_sf(
+		disc_friction(TrustedF(max_frict)), 1+par.path_penalty_loc, par.path_penalty_risk, 1.0)
+min_costs(par, min_frict) =
+	costs_qual_sf(
+		disc_friction(TrustedF(min_frict, 1.0)), 1.0, par.path_penalty_risk, 0.0)
+	
 
 n_arrived(model) = length(model.people) - length(model.migrants)
 

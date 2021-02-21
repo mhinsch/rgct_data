@@ -261,6 +261,14 @@ accuracy(li::InfoLink, lr::Link) = sqrt(
 
 
 function dump(file, agent)
+	for n in fieldnames(typeof(agent))
+		if n == :loc || n == :link || typeof(getproperty(agent, n)) <: Array
+			continue
+		end
+		println(file, string(n), ": ", getproperty(agent, n))
+		println(string(n), ": ", getproperty(agent, n))
+	end
+
 	println(file, "loc:\t", agent.loc.id)
 	println(file, "link:\t", agent.link.id)
 	println(file, "n_locs:\t", agent.n_locs)

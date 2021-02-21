@@ -64,10 +64,12 @@ struct prop_scales
 	min_q :: Float64
 	max_r :: Float64
 	min_r :: Float64
+	max_c :: Float64
+	min_c :: Float64
 end
 
 
-@enum KNOWL_DRAW_MODE ACCURACY FRICTION R_FRICTION TRUST RISK
+@enum KNOWL_DRAW_MODE ACCURACY FRICTION R_FRICTION TRUST RISK COSTS
 
 
 function draw_bg!(canvas, model, scales, par, mode=FRICTION)
@@ -104,16 +106,19 @@ function draw_bg!(canvas, model, scales, par, mode=FRICTION)
 end
 
 
-function draw_visitors!(canvas, model)
+function draw_visitors!(canvas, model, mode=FRICTION)
 	w = model.world
 
-	ma = maximum(l -> l.count, model.world.links)
+	ma = mode == RISK ? 
+		maximum(l -> l.count_deaths, model.world.links) :
+		maximum(l -> l.count, model.world.links) 
+	
 	if ma == 0
 		ma = 1
 	end
 
 	for link in model.world.links
-		val = link.count / ma
+		val = (mode == RISK ? link.count_deaths : link.count) / ma
 		draw_link_v!(canvas, link, 1.0 - val)
 	end
 
@@ -130,7 +135,7 @@ function draw_visitors!(canvas, model)
 end
 
 
-function draw_rand_knowledge!(canvas, model, scales, agent=nothing, mode=ACCURACY)
+function draw_rand_knowledge!(canvas, model, par, scales, agent=nothing, mode=ACCURACY)
 	if length(model.migrants) < 1
 		return nothing
 	end
@@ -146,14 +151,21 @@ function draw_rand_knowledge!(canvas, model, scales, agent=nothing, mode=ACCURAC
 				elseif mode == TRUST
 					l.friction.trust
 				elseif mode == FRICTION
-				 	limit(0.0, (l.friction.value/model.world.links[l.id].distance - scales.min_f) / 
-						(scales.max_f - scales.min_f), 1.0)
+				 	limit(0.0, 
+						(l.friction.value/model.world.links[l.id].distance - scales.min_f) / 
+							(scales.max_f - scales.min_f), 
+						1.0)
 				elseif mode == R_FRICTION
-				 	limit(0.0, (l.friction.value - scales.min_rf) / 
-						(scales.max_rf - scales.min_rf), 1.0)
+				 	limit(0.0, (l.friction.value - scales.min_rf) / (scales.max_rf - scales.min_rf), 1.0)
 				elseif mode == RISK
-					limit(0.0, (l.risk.value - scales.min_r) /
-						(scales.max_r - scales.min_r), 1.0)
+					safety_score(agent, l, par)
+					#limit(0.0, (l.risk.value - scales.min_r) / (scales.max_r - scales.min_r), 1.0)
+				elseif mode == COSTS
+					loc = l.l1
+					limit(0.0, 
+						(costs_quality(l, loc, agent, par) - scales.min_c) / 
+							(scales.max_c - scales.min_c), 
+						1.0)
 				end
 			draw_link_v!(canvas, l, v) 
 		end
@@ -163,10 +175,12 @@ function draw_rand_knowledge!(canvas, model, scales, agent=nothing, mode=ACCURAC
 		if known(c)
 			val = if mode == ACCURACY
 					limit(0.0, accuracy(c, model.world.cities[c.id]), 1.0)
-				else #if mode == TRUST
+				elseif mode == COSTS
+				 	limit(0.0, 
+						(costs_quality(c, par) - scales.min_q) / (scales.max_q - scales.min_q), 
+						1.0)
+				else 
 					c.quality.trust
-			#	else
-			#	 	limit(0.0, (costs_quality(c, par) - scales.min_q) / (scales.max_q - scales.min_q), 1.0)
 				end
 			col :: UInt32 = rgb(255, (1.0-val) * 255, val * 255)
 			draw_city!(canvas, c, 2, col)

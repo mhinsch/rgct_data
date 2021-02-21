@@ -85,20 +85,20 @@ function render!(gui)
 end
 
 
-function draw(model, gui, focus_agent, scales, k_draw_mode, clear=false)
+function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 	copyto!(gui.canvas, gui.canvas_bg)
 	draw_people!(gui.canvas, model)
 	update!(gui.tl, gui.canvas)
 
 	if clear
 		clear!(gui.canvas)
-		draw_visitors!(gui.canvas, model)
+		draw_visitors!(gui.canvas, model, k_draw_mode)
 		update!(gui.tr, gui.canvas)
 		count = 0
 	end
 
 	clear!(gui.canvas)
-	agent = draw_rand_knowledge!(gui.canvas, model, scales, focus_agent, k_draw_mode)
+	agent = draw_rand_knowledge!(gui.canvas, model, par, scales, focus_agent, k_draw_mode)
 	update!(gui.bl, gui.canvas)
 
 	clear!(gui.canvas)
@@ -188,7 +188,7 @@ function run(sim, gui, t_stop, scales, parameters)
 			draw_bg!(gui.canvas_bg, sim.model, scales, parameters, k_draw_mode)
 			redraw_bg = false
 		end
-		draw(sim.model, gui, focus_agent, scales, k_draw_mode, count==1)
+		draw(sim.model, sim.par, gui, focus_agent, scales, k_draw_mode, count==1)
 		count = count % 10 + 1
 		#println("dt: ", time() - t1)
 		render!(gui)
@@ -242,13 +242,16 @@ const cityf = open(args[:city_file], "w")
 const linkf = open(args[:link_file], "w")
 
 clear!(gui.canvas_bg)
-const scales = prop_scales(frict_limits(sim.model)..., r_frict_limits(sim.model)..., 
-	qual_limits(sim.model, parameters)..., risk_limits(sim.model)...)
+const rf_limits = r_frict_limits(sim.model)
+const scales = prop_scales(frict_limits(sim.model)..., rf_limits...,
+	qual_limits(sim.model, parameters)..., risk_limits(sim.model)...,
+	min_costs(parameters, rf_limits[2]), max_costs(parameters, rf_limits[1]))
 
 println("max(f): ", scales.max_f, "\t min(f): ", scales.min_f)
 println("max(real f): ", scales.max_rf, "\t min(real f): ", scales.min_rf)
 println("max(q): ", scales.max_q, "\t min(q): ", scales.min_q)
 println("max(r): ", scales.max_r, "\t min(r): ", scales.min_r)
+println("max(c): ", scales.max_c, "\t min(c): ", scales.min_c)
 
 run(sim, gui, t_stop, scales, parameters)
 
