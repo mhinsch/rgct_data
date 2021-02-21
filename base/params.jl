@@ -56,7 +56,7 @@ const VF = Vector{Float64}
 	"expected risk for newly discovered links"
 	risk_exp		:: Float64	= 0.01
 	"scale between 'safe' and 'survivable'"
-	risk_scale		:: Float64	= 0.2
+	risk_scale		:: Float64	= 10.0
 
 	"number of contacts when entering"
 	n_ini_contacts	:: Int		= 10

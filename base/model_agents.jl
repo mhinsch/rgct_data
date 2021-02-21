@@ -6,34 +6,30 @@ include("world_path_util.jl")
 # decisions
 # *********
 
+# quality, resources
+qual(q, r, w) = q * (1 - w) + r * w
+
+qual(q::T, r::T, w) where {T<:Trusted} = qual(discounted(q), discounted(r), w)
+
+# costs from quality [1:1+p]
+costs_qual(p, q) = (1/p + 1) / (1/p + q)
+
+# costs including friction and safety
+costs_qual_sf(f, cq, p, s) = f * cq + p * (1-s)
+
+disc_friction(frict) = 2 * frict.value - discounted(frict)
+
 
 "Quality of location `loc` for global planning (no effect of x)."
-function quality(loc :: InfoLocation, par) # [0:1]
-	# [0:1]
-	discounted(loc.quality) * (1.0 - par.qual_weight_res) + 
-		# [0:1]
-		discounted(loc.resources) * par.qual_weight_res
-end
-
-# only used for GUI
-function quality(loc :: Location, par)
-	# [0:1]
-	loc.quality * (1.0 - par.qual_weight_res) + 
-		# [0:1]
-		loc.resources * par.qual_weight_res
-end
+quality(loc, par) = qual(loc.quality, loc.resources, par.qual_weight_res) # [0:1]
 
 # used for model and GUI
-function costs_quality(loc, par) # [1:1+1/pp]
-	(1.0 / par.path_penalty_loc + 1.0) / 
-		(1.0 / par.path_penalty_loc + quality(loc, par))
-end
+costs_quality(loc, par)  = costs_qual(par.path_penalty_loc, quality(loc, par)) # [1:1+pp]
 
-disc_friction(link) = 2 * link.friction.value - discounted(link.friction)
 
 function safety_score(agent, link, par) # [0:1]
 	# convert to prob. of safety
-	likely_safe = link.risk.trust * (1.0 - link.risk.value) * par.risk_scale
+	likely_safe = link.risk.trust * (1.0 - link.risk.value)^par.risk_scale
 	# parameterised to percentage 
 	ex = exp(agent.risk_i + agent.risk_s * likely_safe * 100.0)
 
@@ -41,8 +37,8 @@ function safety_score(agent, link, par) # [0:1]
 end
 
 function costs_quality(link :: InfoLink, loc :: InfoLocation, agent, par)
-	disc_friction(link) * costs_quality(loc, par) + 
-		par.path_penalty_risk * (1.0 - safety_score(agent, link, par))
+	costs_qual_sf(disc_friction(link.friction), costs_quality(loc, par), 
+		par.path_penalty_risk, safety_score(agent, link, par))
 end
 
 "Movement costs from `l1` to `l2`, taking into account `l2`'s quality."
@@ -416,7 +412,7 @@ function plan_costs!(agent, par)
 
 		q = if known(other)
 				local_quality(other, par) * 
-					par.qual_tol_frict / (par.qual_tol_frict + disc_friction(l)) *
+					par.qual_tol_frict / (par.qual_tol_frict + disc_friction(l.friction)) *
 					safety_score(agent, l, par)
 			else
 				0.0		# Unknown has q<0 since Nowhere == (-1.0, -1.0)
