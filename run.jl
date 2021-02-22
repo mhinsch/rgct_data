@@ -67,6 +67,9 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 	"--scenario", "-s"
 		help = "load custom scenario code"
 		nargs = '+'
+	"--scenario-dir"
+		help = "directory to search for scenarios"
+		default = ""
 end
 
 add_arg_group!(arg_settings, "simulation parameters")
@@ -83,8 +86,15 @@ const t_stop = args[:stop_time]
 
 scenarios = Tuple{Function, Function}[]
 const scenario_files = args[:scenario]
+scendir = args[:scenario_dir]
+if scendir != ""
+	scendir *= "/"
+end
 for sfile in scenario_files
-	functions = include(sfile)
+	if sfile == "none"
+		continue
+	end
+	functions = include(scendir * sfile * ".jl")
 	push!(scenarios, functions)
 end
 
