@@ -263,10 +263,13 @@ function exchange_link_info(link, info1, info2, a1, a2, p1, p2, par)
 		risk1, risk2 = 
 			exchange_beliefs(info1.risk, info2.risk, x->link_risk_belief_error(x, par), p1, p2)
 		info1.friction = frict1
-		info1.risk= risk1
+		# TODO find a better solution
+		# really ugly but necessary for now
+		info1.risk = TrustedF(limit(0.0, risk1.value, 1.0), risk1.trust)
+
 		if !arrived(a2)
 			info2.friction = frict2
-			info2.risk = risk2
+			info2.risk = TrustedF(limit(0.0, risk2.value, 1.0), risk2.trust)
 		end
 	end
 end
