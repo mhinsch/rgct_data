@@ -6,18 +6,24 @@ include("analysis.jl")
 include("base/simulation.jl")
 include("base/args.jl")
 
-#default scenario doesn't do anything
-scenario!(scen, sim, t) = nothing
-setup_scenario(sim) = nothing
 
-function run(p, stop, log_file)
+function run(p, stop, log_file, scenarios)
 	sim = Simulation(setup_model(p), p)
-	scen = setup_scenario(sim)
+	scen_data = []
+	# setup scenarios
+	for (setup,update) in scenarios
+		dat = setup(sim)
+		push!(scen_data, (update, dat))
+	end
 
 	t = 0.0
 	RRGraph.spawn(sim.model, sim)
 	while t < stop
-		scenario!(scen, sim, t)
+		# run scenario update functions
+		for (update, dat) in scen_data
+			update(dat, sim, t)
+		end
+
 		RRGraph.upto!(t + 1.0)
 		t += 1.0
 		analyse_log(sim.model, log_file)
@@ -60,7 +66,7 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 		default = "log.txt"
 	"--scenario", "-s"
 		help = "load custom scenario code"
-		default = ""
+		nargs = '+'
 end
 
 add_arg_group!(arg_settings, "simulation parameters")
@@ -75,10 +81,11 @@ save_params(args[:par_file], p)
 
 const t_stop = args[:stop_time] 
 
-# redefines function scenario
-const scenario_file = args[:scenario]
-if scenario_file != ""
-	include(scenario_file)
+scenarios = Tuple{Function, Function}[]
+const scenario_files = args[:scenario]
+for sfile in scenario_files
+	functions = include(sfile)
+	push!(scenarios, functions)
 end
 
 const logf = open(args[:log_file], "w")
@@ -87,7 +94,7 @@ const cityf = open(args[:city_file], "w")
 const linkf = open(args[:link_file], "w")
 
 prepare_outfiles(logf, cityf, linkf)
-const sim = run(p, t_stop, logf)
+const sim = run(p, t_stop, logf, scenarios)
 
 analyse_world(sim.model, cityf, linkf)
 

@@ -111,8 +111,14 @@ end
 scenario!(sim, t) = nothing
 setup_scenario(sim) = nothing
 
-function run(sim, gui, t_stop, scales, parameters)
-	scen = setup_scenario(sim)
+function run(sim, gui, t_stop, scales, parameters, scenarios)
+	# setup scenarios
+	scen_data = []
+	for (setup,update) in scenarios
+		dat = setup(sim)
+		push!(scen_data, (update, dat))
+	end
+
 	t = 1.0
 	step = 1.0
 	start(sim)
@@ -129,7 +135,10 @@ function run(sim, gui, t_stop, scales, parameters)
 		if pause
 			sleep(0.03)
 		else
-			scenario!(scen, sim, t)
+			# run scenario update functions
+			for (update, dat) in scen_data
+				update(dat, sim, t)
+			end
 			t1 = time()
 			RRGraph.upto!(t)
 			t += step
@@ -232,7 +241,7 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 		default = "log.txt"
 	"--scenario", "-s"
 		help = "load custom scenario code"
-		default = ""
+		nargs = '+'
 end
 
 add_arg_group!(arg_settings, "simulation parameters")
@@ -242,13 +251,14 @@ const args = parse_args(arg_settings, as_symbols=true)
 const parameters = @create_from_args(args, Params)
 const t_stop = args[:stop_time] 
 
-# redefines function scenario
-const scenario_file = args[:scenario]
-if scenario_file != ""
-	include(scenario_file)
+scenarios = Tuple{Function, Function}[]
+const scenario_files = args[:scenario]
+for sfile in scenario_files
+	functions = include(sfile)
+	push!(scenarios, functions)
 end
 
-const sim = Simulation(setup_model(parameters), parameters)
+const sim = Simulation(setup_model(parameters), parameters, scenarios)
 
 const gui = setup_Gui(1024)
 
