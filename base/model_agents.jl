@@ -192,7 +192,7 @@ end
 
 function loc_belief_error(v::TrustedF, par)
 	TrustedF(
-		max(0.0, v.value + unf_delta(par.error)),
+		limit(0.0, v.value + unf_delta(par.error), 1.0),
 		limit(0.000001, v.trust + unf_delta(par.error), 0.99999))
 end
 
@@ -205,7 +205,7 @@ end
 function link_risk_belief_error(v::TrustedF, par)
 	TrustedF(
 	# potentially use separate error
-		max(0.0, v.value + unf_delta(par.error_risk)),
+		limit(0.0, v.value + unf_delta(par.error_risk), 1.0),
 		limit(0.000001, v.trust + unf_delta(par.error), 0.99999))
 end
 
