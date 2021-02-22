@@ -107,7 +107,12 @@ function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 end
 
 
+#default scenario doesn't do anything
+scenario!(sim, t) = nothing
+setup_scenario(sim) = nothing
+
 function run(sim, gui, t_stop, scales, parameters)
+	scen = setup_scenario(sim)
 	t = 1.0
 	step = 1.0
 	start(sim)
@@ -124,6 +129,7 @@ function run(sim, gui, t_stop, scales, parameters)
 		if pause
 			sleep(0.03)
 		else
+			scenario!(scen, sim, t)
 			t1 = time()
 			RRGraph.upto!(t)
 			t += step
@@ -224,6 +230,9 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 	"--log-file", "-l"
 		help = "file name for log"
 		default = "log.txt"
+	"--scenario", "-s"
+		help = "load custom scenario code"
+		default = ""
 end
 
 add_arg_group!(arg_settings, "simulation parameters")
@@ -232,6 +241,12 @@ fields_as_args!(arg_settings, Params)
 const args = parse_args(arg_settings, as_symbols=true)
 const parameters = @create_from_args(args, Params)
 const t_stop = args[:stop_time] 
+
+# redefines function scenario
+const scenario_file = args[:scenario]
+if scenario_file != ""
+	include(scenario_file)
+end
 
 const sim = Simulation(setup_model(parameters), parameters)
 

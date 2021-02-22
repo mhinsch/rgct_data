@@ -3,7 +3,7 @@ using SimpleAgentEvents
 include("model.jl")
 
 
-struct Simulation{PAR}
+mutable struct Simulation{PAR}
 	model :: Model
 	par :: PAR
 end

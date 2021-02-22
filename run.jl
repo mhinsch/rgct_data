@@ -6,13 +6,18 @@ include("analysis.jl")
 include("base/simulation.jl")
 include("base/args.jl")
 
+#default scenario doesn't do anything
+scenario!(scen, sim, t) = nothing
+setup_scenario(sim) = nothing
 
 function run(p, stop, log_file)
 	sim = Simulation(setup_model(p), p)
+	scen = setup_scenario(sim)
 
 	t = 0.0
 	RRGraph.spawn(sim.model, sim)
 	while t < stop
+		scenario!(scen, sim, t)
 		RRGraph.upto!(t + 1.0)
 		t += 1.0
 		analyse_log(sim.model, log_file)
@@ -53,6 +58,9 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 	"--log-file", "-l"
 		help = "file name for log"
 		default = "log.txt"
+	"--scenario", "-s"
+		help = "load custom scenario code"
+		default = ""
 end
 
 add_arg_group!(arg_settings, "simulation parameters")
@@ -66,6 +74,12 @@ save_params(args[:par_file], p)
 
 
 const t_stop = args[:stop_time] 
+
+# redefines function scenario
+const scenario_file = args[:scenario]
+if scenario_file != ""
+	include(scenario_file)
+end
 
 const logf = open(args[:log_file], "w")
 #const modelf = open(args[:model_file], "w")

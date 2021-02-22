@@ -116,10 +116,10 @@ function add_exits!(world, par)
 	println()
 end
 
-		
-function add_obstacle!(world, par)
-	p_tl = Pos(par.obstacle[1], par.obstacle[2])
-	p_br = Pos(par.obstacle[3], par.obstacle[4])
+
+function set_obstacle!(world, x1, y1, x2, y2, risk)
+	p_tl = Pos(x1, y1)
+	p_br = Pos(x2, y2)
 	p_bl = Pos(p_tl.x, p_br.y)
 	p_tr = Pos(p_br.x, p_tl.y)
 
@@ -131,12 +131,19 @@ function add_obstacle!(world, par)
 			intersect(p_tl, p_bl, l.l1.pos, l.l2.pos) ||
 			intersect(p_bl, p_br, l.l1.pos, l.l2.pos) ||
 			intersect(p_tr, p_br, l.l1.pos, l.l2.pos)
-			l.risk = par.risk_high
+			l.risk = risk
 		end
 	end
+end
+
+
+function add_obstacle!(world, par)
+	set_obstacle!(world, par.obstacle..., par.risk_high)
 
 	world
 end
+
+		
 
 
 function create_world(par)
