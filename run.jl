@@ -9,10 +9,10 @@ include("base/args.jl")
 
 function run(p, stop, log_file, scenarios)
 	sim = Simulation(setup_model(p), p)
-	scen_data = []
+	scen_data = Tuple{Function, Any}[]
 	# setup scenarios
-	for (setup,update) in scenarios
-		dat = setup(sim)
+	for (setup, update, pars) in scenarios
+		dat = setup(sim, pars)
 		push!(scen_data, (update, dat))
 	end
 
@@ -85,7 +85,7 @@ save_params(args[:par_file], p)
 
 const t_stop = args[:stop_time] 
 
-scenarios = Tuple{Function, Function}[]
+scenarios = Tuple{Function, Function, Vector{String}}[]
 const scenario_args = args[:scenario]
 scendir = args[:scenario_dir]
 if scendir != ""
@@ -97,10 +97,8 @@ for scenario in scenario_args
 		continue
 	end
 	pars = scenario[2:end]
-	functions = include(sfile)
-	push!(scenarios, (functions, pars))
-	functions = include(scendir * sfile * ".jl")
-	push!(scenarios, functions)
+	setup, update = include(scendir * sfile * ".jl")
+	push!(scenarios, (setup, update, pars))
 end
 
 const logf = open(args[:log_file], "w")

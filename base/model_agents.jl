@@ -71,7 +71,7 @@ end
 # ***********
 
 function discover_if_unknown!(agent, loc :: Location, par)
-	if known(agent, loc)
+	if knows(agent, loc)
 		return
 	end
 

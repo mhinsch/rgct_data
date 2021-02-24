@@ -1,6 +1,6 @@
 mutable struct Scenario_ic
 	gov_agent :: Agent
-	links :: Vector{Links}
+	links :: Vector{Link}
 	p_comm :: Float64
 	p_comm_item :: Float64
 	trust :: Float64
@@ -11,15 +11,16 @@ end
 Scenario_ic(a, p) = Scenario_ic(a, [], 0, 0, 0, 0, p)
 
 function setup_scenario_ic(sim::Simulation, pars) 
-	scen = Scenario_ic(Agent(sim.model.world.exits[1], 0), sim.par)
+	scen = Scenario_ic(Agent(sim.model.world.exits[1], 0.0), sim.par)
 	scen.gov_agent.info_loc = fill(Unknown, length(sim.model.world.cities))
 	scen.gov_agent.info_link = fill(UnknownLink, length(sim.model.world.links))
 
+	# TODO find a better solution
 	np = length(pars)
 	scen.p_comm = np >= 1 ? parse(Float64, pars[1]) : 0.5
-	scen.p_comm_item = np >= 2 ? parse(Float64, pars[1]) : 0.5
-	scen.trust = np >= 3 ? parse(Float64, pars[1]) : 0.5
-	scen.t_start = np >= 4 ? parse(Float64, pars[1]) : 0
+	scen.p_comm_item = np >= 2 ? parse(Float64, pars[2]) : 0.5
+	scen.trust = np >= 3 ? parse(Float64, pars[3]) : 0.5
+	scen.t_start = np >= 4 ? parse(Float64, pars[4]) : 0
 
 	scen
 end
@@ -32,17 +33,17 @@ function scenario_ic!(scen, sim::Simulation, t)
 	gov_agent = scen.gov_agent
 
 	# setup scenario based on current state of sim
-	if empty(scen.links)
+	if isempty(scen.links)
 		println("starting info campaign scenario: $(scen.p_comm), $(scen.p_comm_item), $(scen.trust)")
 		# temp. patch params so that gov_agent knows everything
 		setup_par = Params(sim.par, speed_expl_risk = 1.0)
 
 		for link in sim.model.world.links
-			if link.risk > par.risk_normal
+			if link.risk > sim.par.risk_normal
 				push!(scen.links, link)
 
-				discover_if_unknown!(gov_agent, link.l1, par)
-				discover_if_unknown!(gov_agent, link.l2, par)
+				discover_if_unknown!(gov_agent, link.l1, sim.par)
+				discover_if_unknown!(gov_agent, link.l2, sim.par)
 				explore_at!(gov_agent, sim.model.world, link, link.l1, 1.0, setup_par)
 			end
 		end
