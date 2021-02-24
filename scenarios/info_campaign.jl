@@ -35,8 +35,6 @@ function scenario_ic!(scen, sim::Simulation, t)
 	# setup scenario based on current state of sim
 	if isempty(scen.links)
 		println("starting info campaign scenario: $(scen.p_comm), $(scen.p_comm_item), $(scen.trust)")
-		# temp. patch params so that gov_agent knows everything
-		setup_par = Params(sim.par, speed_expl_risk = 1.0)
 
 		for link in sim.model.world.links
 			if link.risk > sim.par.risk_normal
@@ -44,7 +42,12 @@ function scenario_ic!(scen, sim::Simulation, t)
 
 				discover_if_unknown!(gov_agent, link.l1, sim.par)
 				discover_if_unknown!(gov_agent, link.l2, sim.par)
-				explore_at!(gov_agent, sim.model.world, link, link.l1, 1.0, setup_par)
+				if ! knows(gov_agent, link)
+					discover!(gov_agent, link, link.l1, sim.par)
+				end
+				info_link = info(gov_agent, link)
+				info_link.friction = TrustedF(link.friction, 0.999)
+				info_link.risk = TrustedF(link.risk, 0.999)
 			end
 		end
 	end
@@ -59,6 +62,8 @@ function scenario_ic!(scen, sim::Simulation, t)
 			if rand() > scen.p_comm
 				continue
 			end
+
+			print("I")
 			
 			for l in scen.links
 				if rand() > scen.p_comm_item

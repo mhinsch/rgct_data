@@ -107,15 +107,11 @@ function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 end
 
 
-#default scenario doesn't do anything
-scenario!(sim, t) = nothing
-setup_scenario(sim) = nothing
-
 function run(sim, gui, t_stop, scales, parameters, scenarios)
 	# setup scenarios
-	scen_data = []
-	for (setup,update) in scenarios
-		dat = setup(sim)
+	scen_data = Tuple{Function, Any}[]
+	for (setup, update, pars) in scenarios
+		dat = setup(sim, pars)
 		push!(scen_data, (update, dat))
 	end
 
@@ -242,6 +238,10 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 	"--scenario", "-s"
 		help = "load custom scenario code"
 		nargs = '+'
+		action = :append_arg
+	"--scenario-dir"
+		help = "directory to search for scenarios"
+		default = ""
 end
 
 add_arg_group!(arg_settings, "simulation parameters")
@@ -251,14 +251,23 @@ const args = parse_args(arg_settings, as_symbols=true)
 const parameters = @create_from_args(args, Params)
 const t_stop = args[:stop_time] 
 
-scenarios = Tuple{Function, Function}[]
-const scenario_files = args[:scenario]
-for sfile in scenario_files
-	functions = include(sfile)
-	push!(scenarios, functions)
+scenarios = Tuple{Function, Function, Vector{String}}[]
+const scenario_args = args[:scenario]
+scendir = args[:scenario_dir]
+if scendir != ""
+	scendir *= "/"
+end
+for scenario in scenario_args
+	sfile = scenario[1]
+	if sfile == "none"
+		continue
+	end
+	pars = scenario[2:end]
+	setup, update = include(scendir * sfile * ".jl")
+	push!(scenarios, (setup, update, pars))
 end
 
-const sim = Simulation(setup_model(parameters), parameters, scenarios)
+const sim = Simulation(setup_model(parameters), parameters)
 
 const gui = setup_Gui(1024)
 
@@ -278,7 +287,7 @@ println("max(q): ", scales.max_q, "\t min(q): ", scales.min_q)
 println("max(r): ", scales.max_r, "\t min(r): ", scales.min_r)
 println("max(c): ", scales.max_c, "\t min(c): ", scales.min_c)
 
-run(sim, gui, t_stop, scales, parameters)
+run(sim, gui, t_stop, scales, parameters, scenarios)
 
 analyse_world(sim.model, cityf, linkf)
 
