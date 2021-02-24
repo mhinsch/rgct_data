@@ -70,6 +70,13 @@ end
 # exploration
 # ***********
 
+function discover_if_unknown!(agent, loc :: Location, par)
+	if known(agent, loc)
+		return
+	end
+
+	discover!(agent, loc, par)
+end
 
 # add new location to agent (based on world info)
 # connect to existing links
