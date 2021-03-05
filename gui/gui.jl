@@ -1,109 +1,30 @@
 using SimpleDirectMediaLayer
 const SDL2 = SimpleDirectMediaLayer 
 
-push!(LOAD_PATH, replace(pwd(), "/gui" => ""))
-#import SimpleDirectMediaLayer.LoadBMP
+push!(LOAD_PATH, (pwd(), "/gui" => ""))
 using SSDL
-
-
-function setup_window(wx, wy)
-	SDL2.GL_SetAttribute(SDL2.GL_MULTISAMPLEBUFFERS, 16)
-	SDL2.GL_SetAttribute(SDL2.GL_MULTISAMPLESAMPLES, 16)
-
-	SDL2.init()
-
-	win = SDL2.CreateWindow("Routes & Rumours", Int32(0), Int32(0), Int32(wx), Int32(wy), 
-		UInt32(SDL2.WINDOW_SHOWN))
-	SDL2.SetWindowResizable(win,false)
-
-	surface = SDL2.GetWindowSurface(win)
-
-	SDL2.CreateRenderer(win, Int32(-1), UInt32(SDL2.RENDERER_ACCELERATED))
-end
-
-
-struct Panel
-	rect :: SDL2.Rect
-	texture
-	renderer
-end
-
-function Panel(renderer, size, offs_x, offs_y)
-	Panel(
-		SDL2.Rect(offs_x, offs_y, size, size),
-		SDL2.CreateTexture(renderer, SDL2.PIXELFORMAT_ARGB8888, 
-			Int32(SDL2.TEXTUREACCESS_STREAMING), Int32(size), Int32(size)),
-		renderer
-	)
-end
-
-
-function update!(p :: Panel, buf)
-	SDL2.UpdateTexture(p.texture, C_NULL, buf, Int32(p.rect.w * 4))
-end
-
-update!(p :: Panel, c :: Canvas) = update!(p, c.pixels)
-
-function render(p :: Panel)
-	SDL2.RenderCopy(p.renderer, p.texture, C_NULL, pointer_from_objref(p.rect))
-end
-
-
-struct Gui
-	tl :: Panel
-	tr :: Panel
-	bl :: Panel
-	br :: Panel
-	canvas :: Canvas
-	canvas_bg :: Canvas
-end
-
-function setup_Gui(panel_size = 1024)
-	win_size = 2 * panel_size
-
-	renderer = setup_window(win_size, win_size)
-
-	top_left = Panel(renderer, panel_size, 0, 0)
-	top_right = Panel(renderer, panel_size, panel_size, 0)
-	bot_left = Panel(renderer, panel_size, 0, panel_size)
-	bot_right = Panel(renderer, panel_size, panel_size, panel_size)
-
-	canvas = Canvas(panel_size, panel_size)
-	canvas_bg = Canvas(panel_size, panel_size)
-
-	Gui(top_left, top_right, bot_left, bot_right, canvas, canvas_bg)
-end
-
-
-function render!(gui)
-	SDL2.RenderClear(gui.tl.renderer)
-	render(gui.tl)
-	render(gui.tr)
-	render(gui.bl)
-	render(gui.br)
-    SDL2.RenderPresent(gui.tl.renderer)
-end
+using SimpleGui
 
 
 function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 	copyto!(gui.canvas, gui.canvas_bg)
 	draw_people!(gui.canvas, model)
-	update!(gui.tl, gui.canvas)
+	update!(gui.panels[1, 1], gui.canvas)
 
 	if clear
 		clear!(gui.canvas)
 		draw_visitors!(gui.canvas, model, k_draw_mode)
-		update!(gui.tr, gui.canvas)
+		update!(gui.panels[1, 2], gui.canvas)
 		count = 0
 	end
 
 	clear!(gui.canvas)
 	agent = draw_rand_knowledge!(gui.canvas, model, par, scales, focus_agent, k_draw_mode)
-	update!(gui.bl, gui.canvas)
+	update!(gui.panels[2, 1], gui.canvas)
 
 	clear!(gui.canvas)
 	draw_rand_social!(gui.canvas, model, 3, agent)
-	update!(gui.br, gui.canvas)
+	update!(gui.panels[2, 2], gui.canvas)
 end
 
 
@@ -269,7 +190,7 @@ end
 
 const sim = Simulation(setup_model(parameters), parameters)
 
-const gui = setup_Gui(1024)
+const gui = setup_Gui("risk&rumours", 1024, 1024, 2, 2)
 
 const logf = open(args[:log_file], "w")
 const cityf = open(args[:city_file], "w")
