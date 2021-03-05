@@ -83,6 +83,7 @@ end
 	@show "l1"			l.l1.id
 	@show "l2"			l.l2.id
 	@show "friction"	l.friction
+	@show "risk"		l.risk
 	@show "count"		l.count
 	@show "acc"			acc_links_per_link(l, args[:agents])
 end
