@@ -1,7 +1,7 @@
 using SimpleDirectMediaLayer
 const SDL2 = SimpleDirectMediaLayer 
 
-push!(LOAD_PATH, (pwd(), "/gui" => ""))
+push!(LOAD_PATH, pwd())
 using SSDL
 using SimpleGui
 
@@ -14,13 +14,13 @@ function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 	if clear
 		clear!(gui.canvas)
 		draw_visitors!(gui.canvas, model, k_draw_mode)
-		update!(gui.panels[1, 2], gui.canvas)
+		update!(gui.panels[2, 1], gui.canvas)
 		count = 0
 	end
 
 	clear!(gui.canvas)
 	agent = draw_rand_knowledge!(gui.canvas, model, par, scales, focus_agent, k_draw_mode)
-	update!(gui.panels[2, 1], gui.canvas)
+	update!(gui.panels[1, 2], gui.canvas)
 
 	clear!(gui.canvas)
 	draw_rand_social!(gui.canvas, model, 3, agent)
@@ -129,15 +129,15 @@ function run(sim, gui, t_stop, scales, parameters, scenarios)
 end
 
 
-include("../analysis.jl")
-include("../base/simulation.jl")
-include("../base/draw.jl")
-include("../base/args.jl")
+include("analysis.jl")
+include("base/simulation.jl")
+include("base/draw.jl")
+include("base/args.jl")
 
 using Params2Args
 using ArgParse
 
-include("../" * get_parfile())
+include(get_parfile())
 	
 
 const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
