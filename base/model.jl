@@ -14,9 +14,14 @@ mutable struct Model
 	deaths :: Vector{Agent}
 end
 
-function setup_model(par)
+function setup_model(par, map_io = nothing)
 	Random.seed!(par.rand_seed_world)
-	world = create_world(par)
+	
+	world = if map_io != nothing
+		load_world(map_io, par)
+	else
+		create_world(par)
+	end
 
 	m = Model(world, Location[], Link[], Agent[], Agent[], Agent[])
 

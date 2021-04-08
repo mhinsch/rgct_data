@@ -7,8 +7,18 @@ include("base/simulation.jl")
 include("base/args.jl")
 
 
-function run(p, stop, log_file, scenarios)
-	sim = Simulation(setup_model(p), p)
+function run(p, stop, log_file, scenarios = [], map = "")
+	world = 
+		if map != "" 
+			# load map
+			open(file -> setup_model(p, file))
+		else
+			# generate map
+			setup_model(p)
+		end
+
+	sim = Simulation(world, p)
+
 	scen_data = Tuple{Function, Any}[]
 	# setup scenarios
 	for (setup, update, pars) in scenarios
@@ -49,21 +59,27 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 		help = "at which time to stop the simulation" 
 		arg_type = Float64
 		default = 50.0
-	"--par-file", "-p"
+	"--par-out-file"
 		help = "file name for parameter output"
 		default = "params_used.jl"
 #	"--model-file"
 #		help = "file name for model data output"
 #		default = "data.txt"
-	"--city-file"
+	"--city-out-file"
 		help = "file name for city data output"
 		default = "cities.txt"
-	"--link-file"
+	"--link-out-file"
 		help = "file name for link data output"
 		default = "links.txt"
 	"--log-file", "-l"
 		help = "file name for log"
 		default = "log.txt"
+	"--map", "-m"
+		help = "load map in JSON format"
+		default = ""
+#	"--map-dir"
+#		help = "directory to search for maps"
+#		default = ""
 	"--scenario", "-s"
 		help = "load custom scenario code"
 		nargs = '+'
@@ -85,7 +101,7 @@ save_params(args[:par_file], p)
 
 const t_stop = args[:stop_time] 
 
-scenarios = Tuple{Function, Function, Vector{String}}[]
+const scenarios = Tuple{Function, Function, Vector{String}}[]
 const scenario_args = args[:scenario]
 scendir = args[:scenario_dir]
 if scendir != ""
@@ -101,13 +117,15 @@ for scenario in scenario_args
 	push!(scenarios, (setup, update, pars))
 end
 
+const map = args[:map]
+
 const logf = open(args[:log_file], "w")
 #const modelf = open(args[:model_file], "w")
 const cityf = open(args[:city_file], "w")
 const linkf = open(args[:link_file], "w")
 
 prepare_outfiles(logf, cityf, linkf)
-const sim = run(p, t_stop, logf, scenarios)
+const sim = run(p, t_stop, logf, scenarios, map)
 
 analyse_world(sim.model, cityf, linkf)
 

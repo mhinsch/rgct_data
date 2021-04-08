@@ -1,5 +1,6 @@
 using GeoGraph
 using Util
+using JSON
 
 
 function setup_city!(loc, par)
@@ -155,3 +156,48 @@ function create_world(par)
 
 	world
 end
+
+function setif!(obj, dict, prop)
+	if haskey(dict, string(prop))
+		setfield!(obj, prop, dict[string(prop)])
+	end
+end
+
+
+function load_world(io, par)
+	data = JSON.parse(io)
+
+	for js_city in data["cities"]
+		typ = haskey(js_city, "type") ? LOC_TYPE(js_city["type"]) : STD
+		city = Location(Pos(js_city["x"], js_city["y"]), typ, length(world.cities)+1)
+		setup_city!(city, par)
+		setif!(city, js_city, :resources)
+		setif!(city, js_city, :quality)
+		push!(world.cities, city)
+	end
+
+	for js_link in data["links"]
+		i = js_link["i"]
+		j = js_link["j"]
+		add_link!(world, world.cities[i], world.cities[j], FAST, par)
+		link = world.links[end]
+		setif!(link, js_link, :risk)
+		setif!(link, js_link, :friction)
+		setif!(link, js_link, :distance)
+	end
+	
+	if get(data, "needs entries", false)
+		add_entries!(world, par)
+	end
+
+	if get(data, "needs exits", false)
+		add_exits!(world, par)
+	end
+
+	if get(data, "needs obstacle", false)
+		add_obstacle!(world, par)
+	end
+
+	world
+end
+
