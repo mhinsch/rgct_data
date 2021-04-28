@@ -5,6 +5,8 @@ push!(LOAD_PATH, pwd())
 using SSDL
 using SimpleGui
 
+include("run_utils.jl")
+
 
 function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 	copyto!(gui.canvas, gui.canvas_bg)
@@ -28,14 +30,7 @@ function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 end
 
 
-function run(sim, gui, t_stop, scales, parameters, scenarios)
-	# setup scenarios
-	scen_data = Tuple{Function, Any}[]
-	for (setup, update, pars) in scenarios
-		dat = setup(sim, pars)
-		push!(scen_data, (update, dat))
-	end
-
+function run!(sim, scen_data, parameters, gui, t_stop, scales)
 	t = 1.0
 	step = 1.0
 	start(sim)
@@ -147,15 +142,18 @@ const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 		help = "at which time to stop the simulation" 
 		arg_type = Float64 
 		default = 0.0
-	"--city-file"
+	"--city-out-file"
 		help = "file name for city data output"
 		default = "cities.txt"
-	"--link-file"
+	"--link-out-file"
 		help = "file name for link data output"
 		default = "links.txt"
 	"--log-file", "-l"
 		help = "file name for log"
 		default = "log.txt"
+	"--map", "-m"
+		help = "load map in JSON format"
+		default = ""
 	"--scenario", "-s"
 		help = "load custom scenario code"
 		nargs = '+'
@@ -172,29 +170,13 @@ const args = parse_args(arg_settings, as_symbols=true)
 const parameters = @create_from_args(args, Params)
 const t_stop = args[:stop_time] 
 
-scenarios = Tuple{Function, Function, Vector{String}}[]
-const scenario_args = args[:scenario]
-scendir = args[:scenario_dir]
-if scendir != ""
-	scendir *= "/"
-end
-for scenario in scenario_args
-	sfile = scenario[1]
-	if sfile == "none"
-		continue
-	end
-	pars = scenario[2:end]
-	setup, update = include(scendir * sfile * ".jl")
-	push!(scenarios, (setup, update, pars))
-end
+const scenarios = load_scenarios(args[:scenario_dir], args[:scenario])
 
-const sim = Simulation(setup_model(parameters), parameters)
+const mapf = args[:map]
+
+const sim, scen_data = setup_simulation(parameters, scenarios, mapf)
 
 const gui = setup_Gui("risk&rumours", 1024, 1024, 2, 2)
-
-const logf = open(args[:log_file], "w")
-const cityf = open(args[:city_file], "w")
-const linkf = open(args[:link_file], "w")
 
 clear!(gui.canvas_bg)
 const rf_limits = r_frict_limits(sim.model)
@@ -208,7 +190,12 @@ println("max(q): ", scales.max_q, "\t min(q): ", scales.min_q)
 println("max(r): ", scales.max_r, "\t min(r): ", scales.min_r)
 println("max(c): ", scales.max_c, "\t min(c): ", scales.min_c)
 
-run(sim, gui, t_stop, scales, parameters, scenarios)
+const logf = open(args[:log_file], "w")
+const cityf = open(args[:city_out_file], "w")
+const linkf = open(args[:link_out_file], "w")
+prepare_outfiles(logf, cityf, linkf)
+
+run!(sim, scen_data, parameters, gui, t_stop, scales)
 
 analyse_world(sim.model, cityf, linkf)
 

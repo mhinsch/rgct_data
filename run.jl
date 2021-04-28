@@ -6,26 +6,9 @@ include("analysis.jl")
 include("base/simulation.jl")
 include("base/args.jl")
 
+include("run_utils.jl")
 
-function run(p, stop, log_file, scenarios = [], map = "")
-	world = 
-		if map != "" 
-			# load map
-			open(file -> setup_model(p, file))
-		else
-			# generate map
-			setup_model(p)
-		end
-
-	sim = Simulation(world, p)
-
-	scen_data = Tuple{Function, Any}[]
-	# setup scenarios
-	for (setup, update, pars) in scenarios
-		dat = setup(sim, pars)
-		push!(scen_data, (update, dat))
-	end
-
+function run!(sim, scen_data, p, stop, log_file) 
 	t = 0.0
 	RRGraph.spawn(sim.model, sim)
 	while t < stop
@@ -96,36 +79,25 @@ const args = parse_args(arg_settings, as_symbols=true)
 const p = @create_from_args(args, Params)
 
 
-save_params(args[:par_file], p)
+save_params(args[:par_out_file], p)
 
 
 const t_stop = args[:stop_time] 
 
-const scenarios = Tuple{Function, Function, Vector{String}}[]
-const scenario_args = args[:scenario]
-scendir = args[:scenario_dir]
-if scendir != ""
-	scendir *= "/"
-end
-for scenario in scenario_args
-	sfile = scenario[1]
-	if sfile == "none"
-		continue
-	end
-	pars = scenario[2:end]
-	setup, update = include(scendir * sfile * ".jl")
-	push!(scenarios, (setup, update, pars))
-end
+const scenarios = load_scenarios(args[:scenario_dir], args[:scenario])
 
 const map = args[:map]
 
+const sim, scen_data = setup_simulation(p, scenarios, map)
+
 const logf = open(args[:log_file], "w")
 #const modelf = open(args[:model_file], "w")
-const cityf = open(args[:city_file], "w")
-const linkf = open(args[:link_file], "w")
+const cityf = open(args[:city_out_file], "w")
+const linkf = open(args[:link_out_file], "w")
 
 prepare_outfiles(logf, cityf, linkf)
-const sim = run(p, t_stop, logf, scenarios, map)
+
+run!(sim, scen_data, p, t_stop, logf)
 
 analyse_world(sim.model, cityf, linkf)
 
