@@ -7,15 +7,19 @@ include("world_path_util.jl")
 # *********
 
 # quality, resources
-qual(q, r, w) = q * (1 - w) + r * w
+qual(quality, res, weight) = quality * (1 - weight) + res * weight
 
-qual(q::T, r::T, w) where {T<:Trusted} = qual(discounted(q), discounted(r), w)
+qual(quality::T, res::T, weight) where {T<:Trusted} = 
+	qual(discounted(quality), discounted(res), weight)
 
-# costs from quality [1:1+p]
-costs_qual(p, q) = (1/p + 1) / (1/p + q)
+
+# costs from quality [1:1+p]   (1/penalty + 1) / (1/penalty + quality)
+costs_qual(penalty, quality) = (1.0 + penalty) / (1.0 + penalty*quality)
 
 # costs including friction and safety
-costs_qual_sf(f, cq, p, s) = f * cq + p * (1-s)
+costs_qual_sf(frict, c_qual, penalty, safe) = 
+	frict * c_qual + penalty * (1-safe)
+
 
 disc_friction(frict) = 2 * frict.value - discounted(frict)
 
@@ -36,6 +40,7 @@ function safety_score(agent, link, par) # [0:1]
 	ex / (1.0 + ex)
 end
 
+# [frict : 2*frict*(1+pen) + pen_r]
 function costs_quality(link :: InfoLink, loc :: InfoLocation, agent, par)
 	costs_qual_sf(disc_friction(link.friction), costs_quality(loc, par), 
 		par.path_penalty_risk, safety_score(agent, link, par))
