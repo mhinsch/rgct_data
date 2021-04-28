@@ -23,13 +23,13 @@ const VF = Vector{Float64}
 	"number of exits"
 	n_exits			:: Int		= 10
 	"number of starting positions"
-	n_entries		:: Int		= 3
+	n_entries		:: Int		= 5
 	"where to start connecting cities to exits"
 	exit_dist		:: Float64	= 0.5
 	"where to stop connecting cities to entries"
 	entry_dist		:: Float64	= 0.1
 	"how many of the closest cities to connect to an entry"
-	n_nearest_entry	:: Int = 0
+	n_nearest_entry	:: Int = 3
 	"how many of the closest cities to connect to an exit"
 	n_nearest_exit	:: Int = 0
 	"quality of entries"
