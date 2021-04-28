@@ -167,8 +167,10 @@ end
 function load_world(io, par)
 	data = JSON.parse(io)
 
+	world = World()
+
 	for js_city in data["cities"]
-		typ = haskey(js_city, "type") ? LOC_TYPE(js_city["type"]) : STD
+		typ = haskey(js_city, "typ") ? LOC_TYPE(js_city["typ"]) : STD
 		city = Location(Pos(js_city["x"], js_city["y"]), typ, length(world.cities)+1)
 		setup_city!(city, par)
 		setif!(city, js_city, :resources)
