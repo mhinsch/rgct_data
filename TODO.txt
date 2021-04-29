@@ -1,16 +1,27 @@
+data model
+
+* risk scenario
+	* set risk for normal links
+	* set high risk for links to destinations
+	* change of risk over time (acc. to data)
+
+* interceptions?
+
+* resources/quality?
+
+* direction bonus in local decisions?
+
+* adapt movement speed to spatial scale
+	* which movement speed?
+	* 100km/day?
+
+* add Western Med
+
+
 info
 
 * different trust levels dependent on source
 * broadcast info on risk
-
-decisions
-
-* add risk to travel cost calc
-	* ???
-	* -> empirical data
-		* ???
-* add risk to local decisions
-
 
 
 * rename friction in info/location (keeps confusing me)
