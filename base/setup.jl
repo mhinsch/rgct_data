@@ -144,8 +144,6 @@ function add_obstacle!(world, par)
 	world
 end
 
-		
-
 
 function create_world(par)
 	world = World()
@@ -172,7 +170,9 @@ function load_world(io, par)
 	for js_city in data["cities"]
 		typ = haskey(js_city, "typ") ? LOC_TYPE(js_city["typ"]) : STD
 		city = Location(Pos(js_city["x"], js_city["y"]), typ, length(world.cities)+1)
+		# default setup
 		setup_city!(city, par)
+		# overwrite with values from file
 		setif!(city, js_city, :resources)
 		setif!(city, js_city, :quality)
 		push!(world.cities, city)
@@ -181,8 +181,10 @@ function load_world(io, par)
 	for js_link in data["links"]
 		i = js_link["i"]
 		j = js_link["j"]
+		# default setup
 		add_link!(world, world.cities[i], world.cities[j], FAST, par)
 		link = world.links[end]
+		# overwrite with values from file
 		setif!(link, js_link, :risk)
 		setif!(link, js_link, :friction)
 		setif!(link, js_link, :distance)
