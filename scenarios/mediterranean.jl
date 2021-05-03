@@ -11,11 +11,16 @@ mutable struct Scenario_med
 	crossings :: Vector{Link}
 	"interception count per link"
 	interc_count :: Vector{Int}
+	outfile :: IO
 end
 
 Scenario_med() = Scenario_med([])
 
-function setup_scenario_med(sim::Simulation, pars)
+@observe log_medit scen begin
+	@show "intercept"	sum(scen.interc_count)
+end
+
+function setup_scenario(::Type{Scenario_med}, sim::Simulation, pars)
 	scen = Scenario_med()
 	if length(pars) < 1
 		error("scenario data required")
@@ -33,10 +38,13 @@ function setup_scenario_med(sim::Simulation, pars)
 
 	scen.interc_count = zeros(Int, length(scen.crossings))
 
+	scen.outfile = open("med_output.txt")
+	print_header_log_medit(scen.outfile)
+
 	scen
 end
 
-function scenario_med!(scen, sim::Simulation, t)
+function update_scenario!(scen::Scenario_med, sim::Simulation, t)
 	year = floor(Int, t / 100) + 1
 
 	@assert year <= length(scen.risks)
@@ -49,6 +57,8 @@ function scenario_med!(scen, sim::Simulation, t)
 	# E(d') = (1-p_i) d + p_i * (s + (1-p_i) d + p_i * (s + ...
 	# = d + p_i/(1-p_i) s
 	exp_time = p_i/(1.0-p_i) * scen.wait
+	# expected number of interceptions
+	# n_i = n-1 = 1/(1-p_i) - 1
 	n_i = 1/(1-p_i) - 1
 
 	risk = scen.risks[year]
@@ -61,6 +71,13 @@ function scenario_med!(scen, sim::Simulation, t)
 		# calculate interceptions (cumulative)
 		scen.interc_count[i] = round(Int, n_i * l.count)
 	end
+
+	print_stats_log_medit(scen.outfile, scen)
 end
 
-(setup_scenario_med, scenario_med!)
+function finish_scenario!(scen::Scenario_med, sim::Simulation)
+	close(scen.outfile)
+end
+
+
+Scenario_med

@@ -25,16 +25,6 @@ data model
 		* how do we fit interceptions then?
 		* what about people who change their mind after interception?
 		
-		expected number of tries before success
-		n = 1/(1-p_i)
-
-		expected number of interceptions
-		n_i = n-1 = 1/(1-p_i) - 1
-
-	* add to output 
-
-
-		
 
 * waiting?
 	* should waiting be included?
