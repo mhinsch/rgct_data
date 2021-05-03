@@ -1,24 +1,56 @@
 data model
+----------
+
+* which parameters to fit?
+
+* which data, how to use?
+	* arrivals			delta over time			fit model against
+	* mortality 		% relative to arrivals	use directly
+	* interceptions		% relative to arrivals	fit model against
+	* presence			delta over time			fit model against
+	* frontex			use * factor => interc	fit factor (see parameters)
+	* NGOs				use * factor => arrival	fit factor (see parameters)
+
+* summary statistics
+	* what to compare?
+	* implement
 
 * risk scenario
-	* set risk for normal links
-	* set high risk for links to destinations
-	* change of risk over time (acc. to data)
+	* parameter p_i
+	* parameter handling
 
 * interceptions?
+	* TODO? currently death rate is ignored for this
+	* just increase friction?
+		* how do we fit interceptions then?
+		* what about people who change their mind after interception?
+		
+		expected number of tries before success
+		n = 1/(1-p_i)
+
+		expected number of interceptions
+		n_i = n-1 = 1/(1-p_i) - 1
+
+	* add to output 
+
+
+		
+
+* waiting?
+	* should waiting be included?
+	* if so, how?
+
+* return/abort?
+	* not for now, I think
 
 * resources/quality?
-
-* direction bonus in local decisions?
-
-* adapt movement speed to spatial scale
-	* which movement speed?
-	* 100km/day?
+	set all equal for now
 
 * add Western Med
 
 
 info
+----
 
 * different trust levels dependent on source
 * broadcast info on risk
