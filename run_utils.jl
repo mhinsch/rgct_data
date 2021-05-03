@@ -3,15 +3,15 @@ function load_scenarios(scen_dir, scen_args)
 	if scen_dir != ""
 		scen_dir *= "/"
 	end
-	scenarios = Tuple{Function, Function, Vector{String}}[]
+	scenarios = (Type, eltype(scen_args))[]
 	for scenario in scen_args
 		sfile = scenario[1]
 		if sfile == "none"
 			continue
 		end
 		pars = scenario[2:end]
-		setup, update = include(scen_dir * sfile * ".jl")
-		push!(scenarios, (setup, update, pars))
+		scen_type = include(scen_dir * sfile * ".jl")
+		push!(scenarios, (scen_type, pars))
 	end
 
 	scenarios
@@ -30,11 +30,11 @@ function setup_simulation(p, scenarios, map_fname)
 
 	sim = Simulation(world, p)
 
-	scen_data = Tuple{Function, Any}[]
+	scen_data = []
 	# setup scenarios
-	for (setup, update, pars) in scenarios
-		dat = setup(sim, pars)
-		push!(scen_data, (update, dat))
+	for (scen_type, pars) in scenarios
+		dat = setup_scenario(scen_type, sim, pars)
+		push!(scen_data, dat)
 	end
 
 	sim, scen_data

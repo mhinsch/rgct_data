@@ -13,10 +13,10 @@ function run!(sim, scen_data, p, stop, log_file)
 	RRGraph.spawn(sim.model, sim)
 	while t < stop
 		# run scenario update functions
-		for (update, dat) in scen_data
-			update(dat, sim, t)
+		for dat in scen_data
+			update_scenario!(dat, sim, t)
 		end
-
+		# run simulation proper
 		RRGraph.upto!(t + 1.0)
 		t += 1.0
 		analyse_log(sim.model, log_file)
@@ -100,6 +100,10 @@ prepare_outfiles(logf, cityf, linkf)
 run!(sim, scen_data, p, t_stop, logf)
 
 analyse_world(sim.model, cityf, linkf)
+
+for dat in scen_data
+	finish_scenario!(dat, sim)
+end
 
 close(logf)
 #close(modelf)
