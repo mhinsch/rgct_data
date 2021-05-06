@@ -13,17 +13,15 @@ data model
 
 * summary statistics
 	* what to compare?
+		* delta arrivals per year
+		* death rate per year
+		* delta presence per year
+		* delta interceptions per year
+		* 
 	* implement
-
-* risk scenario
-	* parameter p_i
-	* parameter handling
 
 * interceptions?
 	* TODO? currently death rate is ignored for this
-	* just increase friction?
-		* how do we fit interceptions then?
-		* what about people who change their mind after interception?
 		
 
 * waiting?
