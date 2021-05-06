@@ -48,8 +48,8 @@ function run!(sim, scen_data, parameters, gui, t_stop, scales)
 			sleep(0.03)
 		else
 			# run scenario update functions
-			for (update, dat) in scen_data
-				update(dat, sim, t)
+			for dat in scen_data
+				update_scenario!(dat, sim, t)
 			end
 			t1 = time()
 			RRGraph.upto!(t)
@@ -129,45 +129,9 @@ include("base/simulation.jl")
 include("base/draw.jl")
 include("base/args.jl")
 
-using Params2Args
-using ArgParse
 
-include(get_parfile())
-	
+const args, parameters = process_parameters()
 
-const arg_settings = ArgParseSettings("run simulation", autofix_names=true)
-
-@add_arg_table! arg_settings begin
-	"--stop-time", "-t"
-		help = "at which time to stop the simulation" 
-		arg_type = Float64 
-		default = 0.0
-	"--city-out-file"
-		help = "file name for city data output"
-		default = "cities.txt"
-	"--link-out-file"
-		help = "file name for link data output"
-		default = "links.txt"
-	"--log-file", "-l"
-		help = "file name for log"
-		default = "log.txt"
-	"--map", "-m"
-		help = "load map in JSON format"
-		default = ""
-	"--scenario", "-s"
-		help = "load custom scenario code"
-		nargs = '+'
-		action = :append_arg
-	"--scenario-dir"
-		help = "directory to search for scenarios"
-		default = ""
-end
-
-add_arg_group!(arg_settings, "simulation parameters")
-fields_as_args!(arg_settings, Params)
-
-const args = parse_args(arg_settings, as_symbols=true)
-const parameters = @create_from_args(args, Params)
 const t_stop = args[:stop_time] 
 
 const scenarios = load_scenarios(args[:scenario_dir], args[:scenario])
@@ -198,6 +162,10 @@ prepare_outfiles(logf, cityf, linkf)
 run!(sim, scen_data, parameters, gui, t_stop, scales)
 
 analyse_world(sim.model, cityf, linkf)
+
+for dat in scen_data
+	finish_scenario!(dat, sim)
+end
 
 close(logf)
 close(cityf)
