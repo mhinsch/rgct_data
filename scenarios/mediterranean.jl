@@ -70,6 +70,7 @@ function setup_scenario(::Type{Scenario_med}, sim::Simulation, scen_args, pars)
 end
 
 function update_scenario!(scen::Scenario_med, sim::Simulation, t)
+	# in case we want a longer warmup
 	year = t < scen.warmup ? 
 		1 :
 		floor(Int, (t-scen.warmup) / 100) + 2
