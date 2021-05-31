@@ -48,6 +48,9 @@ function process_parameters()
 end
 
 
+function finish_scenario!(dat, sim)
+end
+
 function load_scenarios(scen_dir, scen_args)
 	if scen_dir != ""
 		scen_dir *= "/"
