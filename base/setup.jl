@@ -176,6 +176,11 @@ function load_world(io, par)
 		setif!(city, js_city, :resources)
 		setif!(city, js_city, :quality)
 		push!(world.cities, city)
+		if city.typ == EXIT
+			push!(world.exits, city)
+		elseif city.typ == ENTRY
+			push!(world.entries, city)
+		end
 	end
 
 	for js_link in data["links"]
