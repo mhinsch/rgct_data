@@ -1,9 +1,10 @@
 mutable struct Scenario_dep
 	dep :: Vector{Float64}
 	warmup :: Float64
+	year :: Float64
 end
 
-Scenario_dep() = Scenario_dep([], 0)
+Scenario_dep() = Scenario_dep([], 0, 0)
 
 function setup_scenario(::Type{Scenario_dep}, sim::Simulation, scen_args, pars)
 	scen = Scenario_dep()
@@ -15,6 +16,9 @@ function setup_scenario(::Type{Scenario_dep}, sim::Simulation, scen_args, pars)
 			nargs = '+'
 			arg_type = Float64
 			required = true
+		"--year"
+			arg_type = Float64
+			default = 100.0
 		"--warmup"
 			arg_type = Float64
 			required = true
@@ -27,6 +31,7 @@ function setup_scenario(::Type{Scenario_dep}, sim::Simulation, scen_args, pars)
 		push!(scen.dep, scen.dep[end] * f)
 	end
 	scen.warmup = args[:warmup]
+	scen.year = args[:year]
 
 	scen
 end
@@ -34,7 +39,7 @@ end
 function update_scenario!(scen::Scenario_dep, sim::Simulation, t)
 	year = t < scen.warmup ? 
 		1 :
-		floor(Int, (t-scen.warmup) / 100) + 2
+		floor(Int, (t-scen.warmup) / scen.year) + 2
 
 	sim.par = Params(sim.par, rate_dep=scen.dep[year])
 end
