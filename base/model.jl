@@ -80,7 +80,7 @@ min_costs(par, min_frict) =
 
 n_arrived(model) = length(model.people) - length(model.migrants)
 
-rate_dep(t, par) = min(t / par.dep_warmup, 1.0) * par.rate_dep + 1.0
+rate_dep(t, par) = par.rate_dep
 
 # TODO this could be way more sophisticated
 #function step_city!(c, step, par)

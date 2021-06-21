@@ -1,7 +1,7 @@
 
 
 @processes RRGraph sim model::Model begin
-	@poisson(rate_dep(RRGraph.time_now(), sim.par))	~
+	@poisson(sim.par.rate_dep)	~
 		true				=>		
 			begin 
 				resch = add_migrant!(model, sim.par)
