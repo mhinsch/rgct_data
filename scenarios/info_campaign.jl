@@ -5,27 +5,43 @@ mutable struct Scenario_ic
 	p_comm_item :: Float64
 	trust :: Float64
 	t_start :: Float64
-	par :: Params
 end
 
-Scenario_ic(a, p) = Scenario_ic(a, [], 0, 0, 0, 0, p)
+Scenario_ic(a) = Scenario_ic(a, [], 0, 0, 0, 0)
 
-function setup_scenario_ic(sim::Simulation, pars) 
-	scen = Scenario_ic(Agent(sim.model.world.exits[1], 0.0), sim.par)
+function setup_scenario(::Type{Scenario_ic}, sim::Simulation, scen_args, pars) 
+	scen = Scenario_ic(Agent(sim.model.world.exits[1], 0.0))
 	scen.gov_agent.info_loc = fill(Unknown, length(sim.model.world.cities))
 	scen.gov_agent.info_link = fill(UnknownLink, length(sim.model.world.links))
 
-	# TODO find a better solution
-	np = length(pars)
-	scen.p_comm = np >= 1 ? parse(Float64, pars[1]) : 0.5
-	scen.p_comm_item = np >= 2 ? parse(Float64, pars[2]) : 0.5
-	scen.trust = np >= 3 ? parse(Float64, pars[3]) : 0.5
-	scen.t_start = np >= 4 ? parse(Float64, pars[4]) : 0
+	as = ArgParseSettings("", autofix_names=true)
+
+	@add_arg_table! as begin
+		"--p-comm"
+			arg_type = Float64
+			default = 0.5
+		"--p-comm-item"
+			arg_type = Float64
+			default = 0.5
+		"--trust"
+			arg_type = Float64
+			default = 0.5
+		"--t-start"
+			arg_type = Float64
+			default = 220.0
+		end
+	
+	args = parse_args(split(scen_args), as, as_symbols=true)
+
+	scen.p_comm = args[:p_comm]
+	scen.p_comm_item = args[:p_comm_item]
+	scen.trust = args[:trust]
+	scen.t_start = args[:t_start]
 
 	scen
 end
 
-function scenario_ic!(scen, sim::Simulation, t)
+function update_scenario!(scen::Scenario_ic, sim::Simulation, t)
 	if t < scen.t_start
 		return
 	end
@@ -33,22 +49,21 @@ function scenario_ic!(scen, sim::Simulation, t)
 	gov_agent = scen.gov_agent
 
 	# setup scenario based on current state of sim
-	if isempty(scen.links)
-		println("starting info campaign scenario: $(scen.p_comm), $(scen.p_comm_item), $(scen.trust)")
+	# risk might change, so redo it every step
+	empty!(scen.links)
 
-		for link in sim.model.world.links
-			if link.risk > sim.par.risk_normal
-				push!(scen.links, link)
+	for link in sim.model.world.links
+		if link.risk > sim.par.risk_normal
+			push!(scen.links, link)
 
-				discover_if_unknown!(gov_agent, link.l1, sim.par)
-				discover_if_unknown!(gov_agent, link.l2, sim.par)
-				if ! knows(gov_agent, link)
-					discover!(gov_agent, link, link.l1, sim.par)
-				end
-				info_link = info(gov_agent, link)
-				info_link.friction = TrustedF(link.friction, 0.999)
-				info_link.risk = TrustedF(link.risk, 0.999)
+			discover_if_unknown!(gov_agent, link.l1, sim.par)
+			discover_if_unknown!(gov_agent, link.l2, sim.par)
+			if ! knows(gov_agent, link)
+				discover!(gov_agent, link, link.l1, sim.par)
 			end
+			info_link = info(gov_agent, link)
+			info_link.friction = TrustedF(link.friction, 0.999)
+			info_link.risk = TrustedF(link.risk, 0.999)
 		end
 	end
 
@@ -63,7 +78,7 @@ function scenario_ic!(scen, sim::Simulation, t)
 				continue
 			end
 
-			print("I")
+	#		print("I")
 			
 			for l in scen.links
 				if rand() > scen.p_comm_item
@@ -79,4 +94,5 @@ function scenario_ic!(scen, sim::Simulation, t)
 	end
 end
 
-(setup_scenario_ic, scenario_ic!)
+
+Scenario_ic
