@@ -8,7 +8,6 @@ struct Trusted{T}
 	trust :: Float64
 
 	function Trusted{T}(v :: T, t :: Float64) where {T}
-		#@assert 0.0 < t < 1.0 "$v, $t: $t out of bounds!"
 		new(v, t)
 	end
 end
@@ -70,7 +69,7 @@ function receive_belief(t, v, t_pcv, v_pcv, ci, ce, cu)
 
 	t_ = 1.0 - max(0.000001, min(d_, 0.99999))
 
-	v_ / t_, t_
+	v_ / (1.0-d_), t_
 end
 
 

@@ -52,6 +52,7 @@ const I = Iterators
 
 	@show "n_migrants"	length(model.migrants)
 	@show "n_arrived" 	(length(model.people) - length(model.migrants))
+	@show "n_dead"		length(model.deaths)
 end
 
 # unused
@@ -82,6 +83,7 @@ end
 	@show "l1"			l.l1.id
 	@show "l2"			l.l2.id
 	@show "friction"	l.friction
+	@show "risk"		l.risk
 	@show "count"		l.count
 	@show "acc"			acc_links_per_link(l, args[:agents])
 end
@@ -95,7 +97,7 @@ function prepare_outfiles(logf, cityf, linkf)
 end
 
 function analyse_log(model, logf)
-	@time print_stats_log(logf, model)
+	print_stats_log(logf, model)
 end
 
 function analyse_world(model, cityf, linkf)

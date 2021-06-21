@@ -1,3 +1,11 @@
+
+info
+----
+
+* different trust levels dependent on source
+* broadcast info on risk
+
+
 * rename friction in info/location (keeps confusing me)
 
 * motivated false info (?)

@@ -12,22 +12,22 @@ const VF = Vector{Float64}
 	rand_seed_world	:: Int		= 123
 
 	"number of cities"
-	n_cities		:: Int		= 300
+	n_cities		:: Int		= 0
 	"maximum distance for link generation"
-	link_thresh		:: Float64	= 0.1
+	link_thresh		:: Float64	= 0
 
 	"number of departures per time step"
 	rate_dep	 	:: Float64	= 20
 	"time for departures to reach full rate"
 	dep_warmup		:: Float64	= 1.0
 	"number of exits"
-	n_exits			:: Int		= 10
+	n_exits			:: Int		= 0
 	"number of starting positions"
 	n_entries		:: Int		= 5
 	"where to start connecting cities to exits"
-	exit_dist		:: Float64	= 0.5
+	exit_dist		:: Float64	= 1.0
 	"where to stop connecting cities to entries"
-	entry_dist		:: Float64	= 0.1
+	entry_dist		:: Float64	= 0.0
 	"how many of the closest cities to connect to an entry"
 	n_nearest_entry	:: Int = 3
 	"how many of the closest cities to connect to an exit"
@@ -42,7 +42,7 @@ const VF = Vector{Float64}
 	res_exit		:: Float64	= 1
 
 	"coordinates of high risk obstacle (rectangle)"
-	obstacle		:: VF		= [0.4, 0.3, 0.6, 0.7]
+	obstacle		:: VF		= [0.0, 0.0, 0.0, 0.0]
 
 	# scale >= 1.0 required, otherwise path finding breaks
 	"how friction scales with distance"
@@ -50,9 +50,9 @@ const VF = Vector{Float64}
 	"stochastic range of friction"
 	frict_range		:: Float64	= 0.5
 	"risk on ordinary links"
-	risk_normal		:: Float64	= 0.002
+	risk_normal		:: Float64	= 0.0
 	"risk on high-risk links"
-	risk_high		:: Float64	= 0.1
+	risk_high		:: Float64	= 0.0
 	"expected risk for newly discovered links"
 	risk_exp		:: Float64	= 0.01
 	"scale between 'safe' and 'survivable'"
@@ -61,7 +61,7 @@ const VF = Vector{Float64}
 	"number of contacts when entering"
 	n_ini_contacts	:: Int		= 10
 	"amount of capital when entering"
-	ini_capital 	:: Float64 	= 2000.0
+	ini_capital 	:: Float64 	= 0.0
 	"set of always unknown cities"
 	p_unknown_city	:: Float64 = 0.0
 	"set of always unknown links"
@@ -69,9 +69,9 @@ const VF = Vector{Float64}
 	"prob. to know a target when entering"
 	p_know_target	:: Float64	= 0.0
 	"prob. to know a city (per city)"
-	p_know_city		:: Float64	= 0.0
+	p_know_city		:: Float64	= 0.1
 	"prob. to know a link (per link)"
-	p_know_link		:: Float64	= 0.0
+	p_know_link		:: Float64	= 0.1
 	"efficiency of exploration for initial knowledge"
 	speed_expl_ini	:: Float64	= 1.0
 
@@ -135,7 +135,7 @@ const VF = Vector{Float64}
 	"min income required to start saving"
 	save_income		:: Float64	= 1.0
 	"movement speed"
-	move_speed		:: Float64	= 0.5
+	move_speed		:: Float64	= 100 * 1/2570
 	"base movement rate"
 	move_rate		:: Float64	= 0.0
 
@@ -145,7 +145,7 @@ const VF = Vector{Float64}
 	weight_traffic	:: Float64	= 0.001
 
 	"effect of proximity to exit on perceived quality"
-	qual_weight_x	:: Float64	= 0.25
+	qual_weight_x	:: Float64	= 0.0
 	"effect of resources on perceived quality"
 	qual_weight_res	:: Float64 	= 0.1
 	"tolerance towards friction when looking for local improvement"

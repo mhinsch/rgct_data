@@ -1,6 +1,6 @@
 module Pathfinding
 
-export path_Astar, path_costs, path_costs_estimate, each_neighbour
+export path_Astar #, path_costs, path_costs_estimate, each_neighbour
 
 
 using DataStructures
@@ -58,6 +58,7 @@ function path_Astar(start, target, path_costs::PCF, path_costs_estimate::PCEF, e
 			costs_thisway = costs_sofar[current] + path_costs(current, c)
 
 			# we might already know a shortcut to c
+			# TODO: shouldn't this be >=?
 			if haskey(costs_sofar, c) && costs_thisway > costs_sofar[c]
 				# no need to explore further since this path is obviously worse
 				continue

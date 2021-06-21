@@ -1,7 +1,7 @@
 
 
 @processes RRGraph sim model::Model begin
-	@poisson(rate_dep(time_now(scheduler(sim)), sim.par))	~
+	@poisson(rate_dep(RRGraph.time_now(), sim.par))	~
 		true				=>		
 			begin 
 				resch = add_migrant!(model, sim.par)
@@ -9,8 +9,10 @@
 			end
 end
 
+start(sim) = RRGraph.spawn(sim.model, sim)
 
-@processes RRGraph sim agent::Agent begin
+
+@add_processes RRGraph sim agent::Agent begin
 	@poisson(sim.par.rate_costs_stay)		~ 
 		! in_transit(agent)					=>		
 			costs_stay!(agent, sim.par)
@@ -55,6 +57,10 @@ end
 
 				resch
 			end
+
+	@poisson(rate_mort(agent, sim.par))		~
+		in_transit(agent)					=>
+			kill!(agent, sim.model, sim.par)
 end
 
 	

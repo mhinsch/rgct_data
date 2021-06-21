@@ -1,5 +1,6 @@
 using GeoGraph
 using Util
+using JSON
 
 
 function setup_city!(loc, par)
@@ -26,6 +27,7 @@ function setup_link!(link, par)
 	link.distance = distance(link.l1, link.l2)
 	link.friction = calc_friction(link, par) * (1.0 + rand() * par.frict_range)
 	@assert link.friction > 0
+	link.risk = par.risk_normal
 end
 
 
@@ -115,7 +117,32 @@ function add_exits!(world, par)
 	println()
 end
 
-		
+
+function set_obstacle!(world, x1, y1, x2, y2, risk)
+	p_tl = Pos(x1, y1)
+	p_br = Pos(x2, y2)
+	p_bl = Pos(p_tl.x, p_br.y)
+	p_tr = Pos(p_br.x, p_tl.y)
+
+
+	for l in world.links
+		if contains(p_tl, p_br, l.l1.pos) ||
+			contains(p_tl, p_br, l.l2.pos) ||
+			intersect(p_tl, p_tr, l.l1.pos, l.l2.pos) ||
+			intersect(p_tl, p_bl, l.l1.pos, l.l2.pos) ||
+			intersect(p_bl, p_br, l.l1.pos, l.l2.pos) ||
+			intersect(p_tr, p_br, l.l1.pos, l.l2.pos)
+			l.risk = risk
+		end
+	end
+end
+
+
+function add_obstacle!(world, par)
+	set_obstacle!(world, par.obstacle..., par.risk_high)
+
+	world
+end
 
 
 function create_world(par)
@@ -123,6 +150,63 @@ function create_world(par)
 	add_cities!(world, par)
 	add_entries!(world, par)
 	add_exits!(world, par)
+	add_obstacle!(world, par)
 
 	world
 end
+
+function setif!(obj, dict, prop)
+	if haskey(dict, string(prop))
+		setfield!(obj, prop, dict[string(prop)])
+	end
+end
+
+
+function load_world(io, par)
+	data = JSON.parse(io)
+
+	world = World()
+
+	for js_city in data["cities"]
+		typ = haskey(js_city, "typ") ? LOC_TYPE(js_city["typ"]) : STD
+		city = Location(Pos(js_city["x"], js_city["y"]), typ, length(world.cities)+1)
+		# default setup
+		setup_city!(city, par)
+		# overwrite with values from file
+		setif!(city, js_city, :resources)
+		setif!(city, js_city, :quality)
+		push!(world.cities, city)
+		if city.typ == EXIT
+			push!(world.exits, city)
+		elseif city.typ == ENTRY
+			push!(world.entries, city)
+		end
+	end
+
+	for js_link in data["links"]
+		i = js_link["i"]
+		j = js_link["j"]
+		# default setup
+		add_link!(world, world.cities[i], world.cities[j], FAST, par)
+		link = world.links[end]
+		# overwrite with values from file
+		setif!(link, js_link, :risk)
+		setif!(link, js_link, :friction)
+		setif!(link, js_link, :distance)
+	end
+	
+	if get(data, "needs entries", false)
+		add_entries!(world, par)
+	end
+
+	if get(data, "needs exits", false)
+		add_exits!(world, par)
+	end
+
+	if get(data, "needs obstacle", false)
+		add_obstacle!(world, par)
+	end
+
+	world
+end
+
