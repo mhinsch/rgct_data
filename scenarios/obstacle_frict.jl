@@ -40,7 +40,7 @@ end
 
 function update_scenario!(scen::Scenario_obstfrict, sim::Simulation, t)
 	if t > scen.start && ! scen.done
-		for l in sim.model.world.links do
+		for l in sim.model.world.links 
 			if intersect(scen.p1, scen.p2, l.l1.pos, l.l2.pos)
 				l.friction = scen.friction
 			end
