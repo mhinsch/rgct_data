@@ -12,7 +12,11 @@ mutable struct Model
 	people :: Vector{Agent}
 	migrants :: Vector{Agent}
 	deaths :: Vector{Agent}
+	departures :: IdDict{Agent, Float64}
 end
+
+Model(world) = Model(world, [], [], [], [], [], Dict())
+
 
 function setup_model(par, map_io = nothing)
 	Random.seed!(par.rand_seed_world)
@@ -23,7 +27,7 @@ function setup_model(par, map_io = nothing)
 		create_world(par)
 	end
 
-	m = Model(world, Location[], Link[], Agent[], Agent[], Agent[])
+	m = Model(world)
 
 	for c in world.cities
 		if rand() < par.p_unknown_city
@@ -99,7 +103,7 @@ function set_risk_pars!(agent, par)
 end
 
 
-function add_migrant!(model::Model, par)
+function add_migrant!(model::Model, t, par)
 	x = 1
 	entry = rand(model.world.entries)
 	# starts as in transit => will explore in first step
@@ -142,6 +146,8 @@ function add_migrant!(model::Model, par)
 	add_agent!(entry, agent)
 	push!(model.people, agent)
 	push!(model.migrants, agent)
+
+	model.departures[agent] = t
 
 	agent
 end

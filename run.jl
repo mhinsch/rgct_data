@@ -19,7 +19,7 @@ function run!(sim, scen_data, p, stop, log_file)
 		# run simulation proper
 		RRGraph.upto!(t + 1.0)
 		t += 1.0
-		analyse_log(sim.model, log_file)
+		analyse_log(sim.model, log_file, RRGraph.time_now())
 		println(t, " ", RRGraph.time_now())
 		flush(stdout)
 	end

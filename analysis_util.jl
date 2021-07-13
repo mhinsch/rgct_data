@@ -64,3 +64,5 @@ function acc_links_per_link(link, agents)
 
 	n>0 ? acc/n : 0.0
 end
+
+travel_time(agent, model, t) = t - model.departures[agent]

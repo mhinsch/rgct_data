@@ -4,7 +4,7 @@
 	@poisson(sim.par.rate_dep)	~
 		true				=>		
 			begin 
-				resch = add_migrant!(model, sim.par)
+				resch = add_migrant!(model, RRGraph.time_now(), sim.par)
 				[model; resch]
 			end
 end
