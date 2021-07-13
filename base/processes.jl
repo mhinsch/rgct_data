@@ -52,7 +52,7 @@ start(sim) = RRGraph.spawn(sim.model, sim)
 				# but removing the agent requires going through the entire
 				# vector anyway, so let's stick to in-model logic
 				if arrived(agent)
-					handle_arrivals!(sim.model)
+					handle_arrivals!(sim.model, RRGraph.time_now())
 				end
 
 				resch

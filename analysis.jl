@@ -30,7 +30,7 @@ const I = Iterators
 		@stat("freq_plan", 	MV, MM) <| Float64(a.planned / (length(a.path) + 0.00001))
 		@stat("acc_c", 		MV, MM) <| acc_cities_per_agent(a, model.world)
 		@stat("acc_l", 		MV, MM) <| acc_links_per_agent(a, model.world)
-		@stat("time",		MV, MM) <| travel_time(a, model, args[:time])
+		@stat("time",		MV, MM) <| model.times[a]
 	end
 
 	# only migrants can have a plan
@@ -97,8 +97,8 @@ function prepare_outfiles(logf, cityf, linkf)
 	print_header_final_link(linkf)
 end
 
-function analyse_log(model, logf, t)
-	print_stats_log(logf, model, time=t)
+function analyse_log(model, logf)
+	print_stats_log(logf, model)
 end
 
 function analyse_world(model, cityf, linkf)

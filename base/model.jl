@@ -12,7 +12,7 @@ mutable struct Model
 	people :: Vector{Agent}
 	migrants :: Vector{Agent}
 	deaths :: Vector{Agent}
-	departures :: IdDict{Agent, Float64}
+	times :: IdDict{Agent, Float64}
 end
 
 Model(world) = Model(world, [], [], [], [], [], Dict())
@@ -147,17 +147,18 @@ function add_migrant!(model::Model, t, par)
 	push!(model.people, agent)
 	push!(model.migrants, agent)
 
-	model.departures[agent] = t
+	model.times[agent] = t
 
 	agent
 end
 
 
 # all agents at target get removed from world (but remain in network)
-function handle_arrivals!(model::Model)
+function handle_arrivals!(model::Model, t)
 	for i in length(model.migrants):-1:1
 		if arrived(model.migrants[i])
 			agent = model.migrants[i]
+			model.times[agent] = t - model.times[agent]
 			drop_at!(model.migrants, i)
 			remove_agent!(model.world, agent)
 		end
