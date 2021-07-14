@@ -8,50 +8,50 @@ include("base/args.jl")
 
 include("run_utils.jl")
 
-function run!(sim, scen_data, p, stop, log_file) 
+function run!(run) 
 	t = 0.0
-	RRGraph.spawn(sim.model, sim)
-	while t < stop
+	logt = 0.0
+	dumpt = -1.0	# dump c/l at 49, 99, ...
+	logf = 1.0
+	dumpf = 50.0
+
+	RRGraph.spawn(run.sim.model, run.sim)
+	while t < run.t_stop
 		# run scenario update functions
-		for dat in scen_data
-			update_scenario!(dat, sim, t)
+		for scen in run.scenarios
+			update_scenario!(scen, run.sim, t)
 		end
 		# run simulation proper
 		RRGraph.upto!(t + 1.0)
+
+		if t - logt >= logf
+			analyse_log(run.sim.model, run.logf)
+			logt = t
+		end
+
+		if t - dumpt >= dumpf
+			analyse_world(run.sim.model, run.cityf, run.linkf, t)
+			dumpt = t
+		end
+
 		t += 1.0
-		analyse_log(sim.model, log_file)
 		println(t, " ", RRGraph.time_now())
 		flush(stdout)
 	end
 
-	sim
+	for scen in run.scenarios
+		finish_scenario!(scen, run.sim)
+	end
+
+	run.sim
 end
 
 	
-const args, p = process_parameters()
+include("run_utils.jl")
 
-const t_stop = args[:stop_time] 
 
-const scenarios = load_scenarios(args[:scenario_dir], args[:scenario])
+const run = setup_run()
 
-const map = args[:map]
+run!(run)
 
-const sim, scen_data = setup_simulation(p, scenarios, map)
-
-const logf = open(args[:log_file], "w")
-const cityf = open(args[:city_out_file], "w")
-const linkf = open(args[:link_out_file], "w")
-
-prepare_outfiles(logf, cityf, linkf)
-
-run!(sim, scen_data, p, t_stop, logf)
-
-analyse_world(sim.model, cityf, linkf)
-
-for dat in scen_data
-	finish_scenario!(dat, sim)
-end
-
-close(logf)
-close(cityf)
-close(linkf)
+cleanup_run(run)

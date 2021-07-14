@@ -91,3 +91,30 @@ function setup_simulation(p, scenarios, map_fname)
 
 	sim, scen_data
 end
+
+
+function setup_run()
+	args, parameters = process_parameters()
+
+	t_stop = args[:stop_time] 
+
+	scen_inis = load_scenarios(args[:scenario_dir], args[:scenario])
+
+	mapf = args[:map]
+
+	sim, scenarios = setup_simulation(parameters, scen_inis, mapf)
+
+	logf = open(args[:log_file], "w")
+	cityf = open(args[:city_out_file], "w")
+	linkf = open(args[:link_out_file], "w")
+	prepare_outfiles(logf, cityf, linkf)
+
+	(; args, parameters, scenarios, sim, t_stop, logf, cityf, linkf )
+end
+
+
+function cleanup_run(run)
+	close(run.logf)
+	close(run.cityf)
+	close(run.linkf)
+end

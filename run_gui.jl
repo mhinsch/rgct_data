@@ -5,8 +5,6 @@ push!(LOAD_PATH, pwd())
 using SSDL
 using SimpleGui
 
-include("run_utils.jl")
-
 
 function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 	copyto!(gui.canvas, gui.canvas_bg)
@@ -30,10 +28,16 @@ function draw(model, par, gui, focus_agent, scales, k_draw_mode, clear=false)
 end
 
 
-function run!(sim, scen_data, parameters, gui, t_stop, scales)
-	t = 1.0
+function run!(run, gui, scales)
+	t = 0.0
 	step = 1.0
-	start(sim)
+	
+	logt = 0.0
+	dumpt = -1.0	# dump c/l at 49, 99, ...
+	logf = 1.0
+	dumpf = 50.0
+
+	start(run.sim)
 
 	focus_agent = nothing
 	k_draw_mode = ACCURACY
@@ -48,12 +52,11 @@ function run!(sim, scen_data, parameters, gui, t_stop, scales)
 			sleep(0.03)
 		else
 			# run scenario update functions
-			for dat in scen_data
-				update_scenario!(dat, sim, t)
+			for scen in run.scenarios
+				update_scenario!(scen, run.sim, t)
 			end
 			t1 = time()
 			RRGraph.upto!(t)
-			t += step
 			dt = time() - t1
 
 			if dt > 0.1
@@ -62,14 +65,25 @@ function run!(sim, scen_data, parameters, gui, t_stop, scales)
 				step *= 1.1
 			end
 
-			if t_stop > 0 && t >= t_stop
+			if t - logt >= logf
+				analyse_log(run.sim.model, run.logf)
+				logt = t
+			end
+
+			if t - dumpt >= dumpf
+				analyse_world(run.sim.model, run.cityf, run.linkf, t)
+				dumpt = t
+			end
+
+			n_m = length(run.sim.model.migrants)
+			n_p = length(run.sim.model.people)
+			n_d = length(run.sim.model.deaths)
+			println(t, " #migrants: ", n_m, " #arrived: ", n_p - n_m, " #deaths: ", n_d)
+
+			t += step
+			if run.t_stop > 0 && t >= run.t_stop
 				break
 			end
- 
-			n_m = length(sim.model.migrants)
-			n_p = length(sim.model.people)
-			n_d = length(sim.model.deaths)
-			println(t, " #migrants: ", n_m, " #arrived: ", n_p - n_m, " #deaths: ", n_d)
 		end
 		
 		while (ev = SDL2.event()) != nothing
@@ -87,10 +101,10 @@ function run!(sim, scen_data, parameters, gui, t_stop, scales)
 						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + n_modes - 1) % n_modes)
 						println("setting knowledge draw mode: ", k_draw_mode)
 						redraw_bg = true
-					elseif key == SDL2.SDLK_r && length(sim.model.migrants) > 0
-						focus_agent = rand(sim.model.migrants)
-					elseif key == SDL2.SDLK_e && length(sim.model.migrants) > 0
-						focus_agent = sim.model.people[end]
+					elseif key == SDL2.SDLK_r && length(run.sim.model.migrants) > 0
+						focus_agent = rand(run.sim.model.migrants)
+					elseif key == SDL2.SDLK_e && length(run.sim.model.migrants) > 0
+						focus_agent = run.sim.model.people[end]
 					elseif key == SDL2.SDLK_d && focus_agent != nothing
 						open("agent.txt", "w") do file
 							dump(file, focus_agent)
@@ -103,8 +117,8 @@ function run!(sim, scen_data, parameters, gui, t_stop, scales)
 		end
 
 		if (focus_agent == nothing || arrived(focus_agent) || dead(focus_agent)) 
-			if length(sim.model.migrants) > 0
-				focus_agent = sim.model.people[end]
+			if length(run.sim.model.migrants) > 0
+				focus_agent = run.sim.model.people[end]
 			else
 				focus_agent = nothing
 			end
@@ -112,14 +126,18 @@ function run!(sim, scen_data, parameters, gui, t_stop, scales)
 
 		t1 = time()
 		if redraw_bg
-			draw_bg!(gui.canvas_bg, sim.model, scales, parameters, k_draw_mode)
+			draw_bg!(gui.canvas_bg, run.sim.model, scales, run.parameters, k_draw_mode)
 			redraw_bg = false
 		end
-		draw(sim.model, sim.par, gui, focus_agent, scales, k_draw_mode, count==1)
+		draw(run.sim.model, run.parameters, gui, focus_agent, scales, k_draw_mode, count==1)
 		count = count % 10 + 1
 		#println("dt: ", time() - t1)
 		render!(gui)
 		#println("dt2: ", time() - t1)
+	end
+
+	for scen in run.scenarios
+		finish_scenario!(scen, run.sim)
 	end
 end
 
@@ -129,46 +147,16 @@ include("base/simulation.jl")
 include("base/draw.jl")
 include("base/args.jl")
 
+include("run_utils.jl")
+include("run_gui_utils.jl")
 
-const args, parameters = process_parameters()
 
-const t_stop = args[:stop_time] 
+const run = setup_run()
 
-const scenarios = load_scenarios(args[:scenario_dir], args[:scenario])
+const gui, scales = setup_run_gui(run)
 
-const mapf = args[:map]
+run!(run, gui, scales)
 
-const sim, scen_data = setup_simulation(parameters, scenarios, mapf)
-
-const gui = setup_Gui("risk&rumours", 1024, 1024, 2, 2)
-
-clear!(gui.canvas_bg)
-const rf_limits = r_frict_limits(sim.model)
-const scales = prop_scales(frict_limits(sim.model)..., rf_limits...,
-	qual_limits(sim.model, parameters)..., risk_limits(sim.model)...,
-	min_costs(parameters, rf_limits[2]), max_costs(parameters, rf_limits[1]))
-
-println("max(f): ", scales.max_f, "\t min(f): ", scales.min_f)
-println("max(real f): ", scales.max_rf, "\t min(real f): ", scales.min_rf)
-println("max(q): ", scales.max_q, "\t min(q): ", scales.min_q)
-println("max(r): ", scales.max_r, "\t min(r): ", scales.min_r)
-println("max(c): ", scales.max_c, "\t min(c): ", scales.min_c)
-
-const logf = open(args[:log_file], "w")
-const cityf = open(args[:city_out_file], "w")
-const linkf = open(args[:link_out_file], "w")
-prepare_outfiles(logf, cityf, linkf)
-
-run!(sim, scen_data, parameters, gui, t_stop, scales)
-
-analyse_world(sim.model, cityf, linkf)
-
-for dat in scen_data
-	finish_scenario!(dat, sim)
-end
-
-close(logf)
-close(cityf)
-close(linkf)
+cleanup_run(run)
 
 SDL2.Quit()

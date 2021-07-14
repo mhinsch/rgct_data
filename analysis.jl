@@ -65,7 +65,8 @@ end
 #	end
 #end
 
-@observe final_city c begin
+@observe dump_city c begin
+	@show "time"	args[:time]
 	@show "id" 		c.id
 	@show "x"		c.pos.x
 	@show "y"		c.pos.y
@@ -78,7 +79,8 @@ end
 end
 
 
-@observe final_link l begin
+@observe dump_link l begin
+	@show "time"		args[:time]
 	@show "id" 			l.id
 	@show "type"		l.typ
 	@show "l1"			l.l1.id
@@ -93,26 +95,26 @@ end
 function prepare_outfiles(logf, cityf, linkf)
 	print_header_log(logf)
 #	print_header_final_model(modelf)
-	print_header_final_city(cityf)
-	print_header_final_link(linkf)
+	print_header_dump_city(cityf)
+	print_header_dump_link(linkf)
 end
 
 function analyse_log(model, logf)
 	print_stats_log(logf, model)
 end
 
-function analyse_world(model, cityf, linkf)
+function analyse_world(model, cityf, linkf, t)
 #	print_stats_final_model(modelf, model)
 
 	# lazy iterator
 	test_agents = I.take(I.filter(ag->arrived(ag), I.reverse(model.people)), 1000)
 
 	for c in model.world.cities
-		print_stats_final_city(cityf, c, agents=test_agents) 
+		print_stats_dump_city(cityf, c, agents=test_agents, time=t) 
 	end
 
 	for l in model.world.links
-		print_stats_final_link(linkf, l, agents=test_agents)
+		print_stats_dump_link(linkf, l, agents=test_agents, time=t)
 	end
 end
 
