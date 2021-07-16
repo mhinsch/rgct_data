@@ -85,7 +85,7 @@ function setup_simulation(p, scenarios, map_fname)
 	scen_data = []
 	# setup scenarios
 	for (scen_type, pars) in scenarios
-		dat = setup_scenario(scen_type, sim, pars, p)
+		dat = Base.@invokelatest setup_scenario(scen_type, sim, pars, p)
 		push!(scen_data, dat)
 	end
 
