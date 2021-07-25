@@ -1,9 +1,8 @@
 using Params2Args
 using ArgParse
 
-function process_parameters(argv = ARGS)
-	include(get_parfile(argv))
-	
+
+function create_params(argv, par_type)
 	arg_settings = ArgParseSettings("run simulation", autofix_names=true)
 
 	@add_arg_table! arg_settings begin
@@ -36,11 +35,19 @@ function process_parameters(argv = ARGS)
 	end
 
 	add_arg_group!(arg_settings, "simulation parameters")
-	fields_as_args!(arg_settings, Params)
+	fields_as_args!(arg_settings, par_type)
 
 	args = parse_args(argv, arg_settings, as_symbols=true)
-	p = @create_from_args(args, Params)
+	p = @create_from_args(args, par_type)
 
+	args, p
+end
+
+
+function process_parameters(argv = ARGS)
+	include(get_parfile(argv))
+	
+	args, p = create_params(argv, Params)
 
 	save_params(args[:par_out_file], p)
 
