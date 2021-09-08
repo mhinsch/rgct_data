@@ -22,6 +22,9 @@ export fields_as_args!, fields_as_cmdl, create_from_args, @create_from_args
 using ArgParse
 using REPL
 
+# TODO
+# * use explicit types
+# * use flag for Bool
 
 "add all fields of a type to the command line syntax"
 function fields_as_args!(arg_settings, t :: Type)

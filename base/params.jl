@@ -20,8 +20,12 @@ const VF = Vector{Float64}
 	rate_dep	 	:: Float64	= 20
 	"number of exits"
 	n_exits			:: Int		= 10
+	"distribute exits evenly?"
+	regular_exits	:: Bool		= false
 	"number of starting positions"
 	n_entries		:: Int		= 5
+	"distribute entries evenly?"
+	regular_entries	:: Bool		= false
 	"where to start connecting cities to exits"
 	exit_dist		:: Float64	= 0.5
 	"where to stop connecting cities to entries"

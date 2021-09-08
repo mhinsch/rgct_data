@@ -61,7 +61,11 @@ function add_entries!(world, par)
 	cities = copy(world.cities)
 
 	for i in 1:par.n_entries
-		y = rand()
+		if par.regular_entries
+			y = (i-0.5) / par.n_entries
+		else
+			y = rand()
+		end
 		x = 0
 		push!(world.entries, Location(Pos(x, y), ENTRY, length(world.cities)+1))
 		n_entry = world.entries[end]
@@ -93,7 +97,11 @@ function add_exits!(world, par)
 	cities = copy(world.cities)
 
 	for i in 1:par.n_exits
-		y = rand()
+		if par.regular_exits
+			y = (i-0.5) / par.n_exits
+		else
+			y = rand()
+		end
 		x = 0.99 
 		push!(world.exits, Location(Pos(x, y), EXIT, length(world.cities)+1))
 		n_exit = world.exits[end]
