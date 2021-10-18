@@ -1,0 +1,3183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/xhtml-math11-f.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="GENERATOR" content="LyX 2.3.6.1" />
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+<title>The Routes &amp; Rumours Model </title>
+<style type='text/css'>
+/* LyX Provided Styles */
+div.bibtexentry { margin-left: 2em; text-indent: -2em; }
+span.bibtexlabel:before{ content: "["; }
+span.bibtexlabel:after{ content: "] "; }
+
+/* Layout-provided Styles */
+del.strikeout {
+  text-decoration: line-through;
+}
+h1.title {
+font-size: x-large;
+margin-bottom: 1ex;
+text-align: center;
+
+}
+div.author {
+font-size: large;
+margin-top: 1.3ex;
+margin-bottom: 0.7ex;
+text-align: center;
+
+}
+div.standard {
+	margin-bottom: 2ex;
+}
+h2.section {
+font-weight: bold;
+font-size: x-large;
+margin-top: 1.3ex;
+margin-bottom: 0.7ex;
+text-align: left;
+
+}
+h3.subsection_ {
+font-weight: bold;
+font-size: large;
+margin-top: 0.9ex;
+margin-bottom: 0.5ex;
+text-align: left;
+
+}
+div.plain_layout {
+text-align: left;
+
+}
+h3.subsection {
+font-weight: bold;
+font-size: large;
+margin-top: 0.9ex;
+margin-bottom: 0.5ex;
+text-align: left;
+
+}
+h5.paragraph {
+font-weight: bold;
+font-size: medium;
+margin-top: 0.4ex;
+text-align: left;
+
+}
+h5.paragraph_ {
+font-weight: bold;
+font-size: medium;
+margin-top: 0.4ex;
+text-align: left;
+
+}
+h4.subsubsection_ {
+font-weight: bold;
+font-size: medium;
+margin-top: 0.7ex;
+margin-bottom: 0.4ex;
+text-align: left;
+
+}
+h2.section_ {
+font-weight: bold;
+font-size: x-large;
+margin-top: 1.3ex;
+margin-bottom: 0.7ex;
+text-align: left;
+
+}
+div.toc {
+  margin: 2em 0em;
+  border-style: solid;
+  border-width: 2px 0px;
+  padding: 1em 0em;
+}
+h2.tochead { font-size: x-large; font-weight: bold; }
+div.lyxtoc-0 {
+  margin: 2em 0em 0em 0em;
+  font-size: xx-large;
+  font-weight: bold;
+}
+div.lyxtoc-1 {
+  margin: 1em 0em 0em 0em;
+  font-size: x-large;
+  font-weight: bold;
+}
+div.lyxtoc-2 {
+  margin: 0em 0.1em 0em 1em;
+  font-size: large;
+  font-weight: normal;
+}
+div.lyxtoc-3 { margin: 0em 0.1em 0em 0.5em; font-size: medium; }
+div.lyxtoc-4 { margin: 0em 0.1em 0em 0.5em; }
+div.lyxtoc-5 { margin: 0em 0.1em 0em 0.5em; }
+div.lyxtoc-6 { margin: 0em 0.1em 0em 0.5em; }
+a.tocentry {
+  text-decoration: none;
+  color: black;
+}
+a.tocentry:visited { color: black; }
+div.marginal {
+	border: 2px solid black;
+	padding: 1ex;
+	margin: 1ex;
+	background-color: #F0F0F0;
+	float:right;
+	font-size: small;
+	font-weight: medium;
+	font-family: serif;
+	font-variant: normal;
+	font-style: normal;
+}
+div.float {
+	border: 2px solid black;
+	text-align: center;
+}
+div.float-caption {
+	text-align: center;
+	border: 2px solid black;
+	padding: 1ex;
+	margin: 1ex;
+}
+table {
+	border-collapse: collapse;
+	display: inline-block;
+}
+td {
+	border: 1px solid black;
+	padding: 0.5ex;
+}
+
+
+</style>
+</head>
+<body dir="auto">
+<h1 class="title" id='magicparlabel-1'>The Routes &amp; Rumours Model </h1>
+<div class="author" id='magicparlabel-2'>Martin Hinsch, Jakub Bijak</div>
+<div class="standard" style='text-align: center;' id='magicparlabel-12586'><span style='font-size:small;'>model version 0.1.0, document version 1.0</span></div>
+
+
+<div class='toc'><h2 class='tochead section'>Table of Contents</h2>
+
+
+<div class='lyxtoc-1'><div class='lyxtoc-2'><a href='#magicparlabel-5' class='tocentry'>1 Introduction</a>
+
+
+<div class='lyxtoc-3'><a href='#magicparlabel-9' class='tocentry'>Scope</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-15' class='tocentry'>A note on notation</a>
+</div>
+</div>
+
+<div class='lyxtoc-2'><a href='#magicparlabel-19' class='tocentry'>2 Entities</a>
+
+
+<div class='lyxtoc-3'><a href='#magicparlabel-36' class='tocentry'>2.1 Agents</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-46' class='tocentry'>2.2 Cities</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-48' class='tocentry'>2.3 Links</a>
+</div>
+</div>
+
+<div class='lyxtoc-2'><a href='#magicparlabel-50' class='tocentry'>3 Setup</a>
+
+
+<div class='lyxtoc-3'><a href='#magicparlabel-55' class='tocentry'>3.1 Map</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-64' class='tocentry'>3.2 Agents</a>
+</div>
+</div>
+
+<div class='lyxtoc-2'><a href='#magicparlabel-77' class='tocentry'>4 Processes</a>
+
+
+<div class='lyxtoc-3'><a href='#magicparlabel-84' class='tocentry'>4.1 Events</a>
+</div>
+</div>
+
+<div class='lyxtoc-2'><a href='#magicparlabel-350' class='tocentry'>5 Information and decisions</a>
+
+
+<div class='lyxtoc-3'><a href='#magicparlabel-352' class='tocentry'>5.1 Belief Dynamics</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-418' class='tocentry'>5.2 Information Exchange</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-425' class='tocentry'>5.3 Exploration</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-433' class='tocentry'>5.4 Travel Decisions</a>
+</div>
+
+<div class='lyxtoc-3'><a href='#magicparlabel-453' class='tocentry'>5.5 Perceived risk</a>
+</div>
+</div>
+
+<div class='lyxtoc-2'><a href='#magicparlabel-22298' class='tocentry'>Acknowledgements</a>
+</div>
+
+
+
+
+<div class='lyxtoc-2'><a href='#magicparlabel-458' class='tocentry'>A Model parameters</a>
+</div>
+</div>
+</div>
+
+
+<div class="standard" id='magicparlabel-4'><br />
+</div>
+<h2 class="section" id='magicparlabel-5'><span class="section_label">1</span> Introduction</h2>
+<div class="standard" id='magicparlabel-6'>We model the formation of migration routes and how it is affected by the availability and exchange of information. In our model agents attempt to traverse a - for them - mostly unknown landscape, having to rely on either local exploration or communication with other agents to find the best path across.</div>
+
+<div class="standard" id='magicparlabel-7'>This document describes the full version of the model, including in particular <u>risk</u> and <u>resources</u>. Both of these aspects of the model remain unused in some of the publications that are based on it. Since they can be switched off completely (using model parameters) only the active parts of the model are documented in publications outside of this document.</div>
+
+<div class="standard" id='magicparlabel-8'>We deliberately restrict this documentation to a technical description of the working of the model itself. This is very much a qualitative, not a predictive model (and should not be treated as such). Consequently purpose, parameterisation and analysis depend to a large degree on the context in which the model is used (<a href='#LyXCite-hinschbijakprinciplesInPress'><span class="bib-abbrvciteauthor">Hinsch and Bijak</span>, <span class="bib-year">In Press</span></a>). For a number of different applications of versions of the model see <a href='#LyXCite-bijakbayesianInPress'><span class="bib-abbrvciteauthor">Bijak</span></a> (<span class="bib-year">In Press</span>).</div>
+<h3 class="subsection_" id='magicparlabel-9'>Scope</h3>
+<div class="standard" id='magicparlabel-10'>Any documentation of a computational model has to make a trade-off between accuracy and accessibility. A fully accurate and complete document will necessarily be as complex as the source code it describes and therefore at best only slightly easier to read. </div>
+
+<div class="standard" id='magicparlabel-11'>Documentation therefore has to simplify. This can happen in two ways. One, by leaving out &ldquo;obvious&rdquo; details, that is by not describing technical implementation details that can be expected to be inferred by a reasonably competent reader. For example when we write that all cities that are closer than a given distance will be connected by a link we implicitly assume that the reader understands that this means that - if they were to replicate the model - they needed to implement a loop over all combinations of cities, calculate their Euclidean distance, test if that distance is lower than the given threshold, then, if so, create a new link object, initialise it accordingly, add the link to both cities, and so on. This does not necessarily mean that there is only one possible implementation of the mechanism we describe und the implicit assumption is that any implementation will produce the same result.</div>
+
+<div class="standard" id='magicparlabel-12'>The second way to &ldquo;abbreviate&rdquo; is to not specify semantic details of the model itself that we assume will not affect its behaviour. We do for example not specify which random number generator we are using. Similarly we do not describe for each calculation the exact steps we are performing and their order. In both cases different interpretations will lead to different numerical results (due to different algorithms and different rounding errors, respectively), however, we assume that these are irrelevant for the behaviour of the model.</div>
+
+<div class="standard" id='magicparlabel-13'>Ideally, this documentation should therefore be the minimum of information that would be required to recreate the model (without having access to the source code) while producing sufficiently similar results that the same conclusions would be reached as based on the original. In practice, even with best efforts, documentation of software is very rarely fully complete and accurate, ultimately making the source code the authoritative reference. </div>
+
+<div class="standard" id='magicparlabel-14'>This leads us to the other purpose of documenting a model, which is to make the source code more accessible. Reading and understanding somebody else's program code is generally not easy, but knowing beforehand what the code is supposed to do can help substantially. To reduce the hurdle even further we have attempted to use a notation, layed out in the next section, that makes connections between description and implementation as obvious as possible.</div>
+<h3 class="subsection_" id='magicparlabel-15'>A note on notation</h3>
+<div class="standard" id='magicparlabel-16'>Most of the time mathematical expressions are more concise and more accessible to a broader audience than program code. We therefore defaulted to using mathematical formulae as a formalism for expressing calculations in the model. On the other hand, the large number of variables and parameters in the model makes the mathematical convention to use single letter variable names unviable. Since we also wanted to make it as easy as possible to find and understand the source code belonging to a part of the documentation, we therefore attempted to use names exactly as they occur in the code wherever possible. To further clarify the relation between the text and the source code we use the following conventions.</div>
+
+<div class="standard" id='magicparlabel-17'>Variable, type and function names that are copied verbatim from the source code are shown in <span style='font-family:sans-serif;'>sans serif font</span> in mathematical formulae as well as in the text. Where the name is also a model parameter we additionally set it in <b><span style='font-family:sans-serif;'>bold face</span></b> in the text (a full list of parameters also appears in the Appendix). Names that are used only in the documentation (for clarity or as abbreviations) are shown in <em>italics</em> in the text as well as in mathematical expressions, as are helper variables. Important model concepts are set in the standard font but <u>underlined</u> when mentioned for the first time or for emphasis. For example, there is a difference if we talk about the concept of an <u>agent</u> or the type <span style='font-family:sans-serif;'>Agent</span> in the program code. Similarly we have to distinguish between the concept of an <u>obstacle</u> in the simulated landscape and the model parameter <b><span style='font-family:sans-serif;'>obstacle</span></b>. </div>
+
+<div class="standard" id='magicparlabel-18'>Source files or modules that contain the implementation of a given section are referenced in margin notes next to the section headings.</div>
+<h2 class="section" id='magicparlabel-19'><span class="section_label">2</span> Entities<div class="marginal"><div class="plain_layout" id='magicparlabel-23'><span style='font-family:monospace;'><span style='font-size:x-small;'>base/entities.jl</span></span></div>
+</div></h2>
+<div class="standard" id='magicparlabel-24'>Entities directly represented in the model are <u>agents</u>, <u>cities</u> and <u>transport<b> </b>links</u>.</div>
+
+
+<div class='float-figure'><div class="plain_layout" id='magicparlabel-29'><img style='width:100%;' src='0_home_martin_Science_southampton_publish_model_docs_model_full.png' alt='image: 0_home_martin_Science_southampton_publish_model_docs_model_full.png' />
+</div>
+
+<div class="plain_layout" id='magicparlabel-30'><span class='float-caption-Standard float-caption float-caption-standard'>Figure 1:  Types of entities in the model and their relationships.</span></div>
+
+
+</div>
+
+<h3 class="subsection" id='magicparlabel-36'><span class="subsection_label">2.1</span> Agents</h3>
+<div class="standard" id='magicparlabel-37'>At any time agents are either present at a city or a transport link or they have arrived at an <u>exit</u>. </div>
+<h5 class="paragraph" id='magicparlabel-38'><span class="paragraph_label"></span> Contacts</h5>
+<div class="standard" id='magicparlabel-39'>Each agent has a list of other agents that it stands in contact and can exchange information with (see Section <a href="#subsec_Information_Exchange">5.2</a>).</div>
+<h5 class="paragraph" id='magicparlabel-40'><span class="paragraph_label"></span> Knowledge</h5>
+<div class="standard" id='magicparlabel-41'>Each agent has a potentially incomplete and inaccurate set of <u>knowledge items</u> concerning the world. Each item describes the properties and topology (i.e. connections to other entities) of a city or a transport link.</div>
+<h5 class="paragraph_" id='magicparlabel-42'>Plan</h5>
+<div class="standard" id='magicparlabel-43'>Agents maintain a list of cities they plan to move to on their way to the exit.</div>
+<h5 class="paragraph_" id='magicparlabel-44'>Risk</h5>
+<div class="standard" id='magicparlabel-45'>Each agent has properties <span style='font-family:sans-serif;'>slope</span> and <span style='font-family:sans-serif;'>int</span> that determine slope and intercept, respectively of its reaction to risk.</div>
+<h3 class="subsection" id='magicparlabel-46'><span class="subsection_label">2.2</span> Cities</h3>
+<div class="standard" id='magicparlabel-47'>Cities are located at a specific position on the map and differ in <span style='font-family:sans-serif;'>quality</span> and <span style='font-family:sans-serif;'>resources</span>. Cities are connected amongst each other by randomly generated transport links (see Section <a href="#sec_Setup">3</a>). There are a number of designated <u>entry</u> and <u>exit</u> cities at which agents arrive and leave the world, respectively.</div>
+<h3 class="subsection" id='magicparlabel-48'><span class="subsection_label">2.3</span> Links</h3>
+<div class="standard" id='magicparlabel-49'>Links always connect two cities. In the basic version of the model the only property of links is <span style='font-family:sans-serif;'>friction</span> which represents a combination of distance and difficulty of travel. In the risk version of the model links also have <span style='font-family:sans-serif;'>risk</span> associated which is used to calculate the probability for an agent to die when crossing that link.</div>
+<h2 class="section" id='magicparlabel-50'><span class="section_label">3</span> <a id="sec_Setup" />
+Setup<div class="marginal"><div class="plain_layout" id='magicparlabel-54'><span style='font-family:monospace;'><span style='font-size:x-small;'>base/setup.jl</span></span></div>
+</div></h2>
+<h3 class="subsection" id='magicparlabel-55'><span class="subsection_label">3.1</span> <a id="subsec_Map" />
+Map</h3>
+<div class="standard" id='magicparlabel-56'>Before the start of the simulation a map of cities and links is generated and their property values assigned. To generate the default topology we use a random geometric graph: <b><span style='font-family:sans-serif;'>n_cities</span></b> cities are placed at random positions, then cities that are closer than a given threshold <b><span style='font-family:sans-serif;'>link_thresh</span></b> are connected with a transport link. In addition we place a fixed number of <b><span style='font-family:sans-serif;'>n_entry</span></b> (or <b><span style='font-family:sans-serif;'>n_exit</span></b> respectively) <u>entry</u> and <u>exit</u> cities at the respective edge of the map (either at random positions or spaced out regularly - parameters <b><span style='font-family:sans-serif;'>regular_entries</span></b>, <b><span style='font-family:sans-serif;'>regular_exits</span></b>). Entries and exits are connected with the <b><span style='font-family:sans-serif;'>n_nearest_entry</span></b> (<b><span style='font-family:sans-serif;'>n_nearest_exit</span></b>) nearest &ldquo;regular&rdquo; cities. Furthermore, entries (exits) connect to all cities that are closer than <b><span style='font-family:sans-serif;'>entry_dist</span></b> (<b><span style='font-family:sans-serif;'>exit_dist</span></b>) to the entry (exit) edge of the map, but using <u>slow links</u> (see below).</div>
+
+<div class="standard" id='magicparlabel-57'>Cities as well as links differ with respect to whether agents can have knowledge about them before they start their journey. Belonging to either category is determined by <b><span style='font-family:sans-serif;'>p_unknown_city</span></b> and <b><span style='font-family:sans-serif;'>p_unknown_link</span></b>, respectively.</div>
+<h4 class="subsubsection_" id='magicparlabel-58'>Links</h4>
+<div class="standard" id='magicparlabel-59'>Links come in two types (<span style='font-family:sans-serif;'>typ</span>). Links that connect randomly generated cities as well as those that are generated in a fixed number per entry and exit, respectively, are <u>fast</u> (i.e.&nbsp;have low <span style='font-family:sans-serif;'>friction</span>). Links that are generated to connect entries and exits to all cities within a certain range of the respective edge of the map are <u>slow</u> (i.e.&nbsp;have high <span style='font-family:sans-serif;'>friction</span>).</div>
+
+<div class="standard" id='magicparlabel-60'>The parameter <b><span style='font-family:sans-serif;'>dist_scale</span></b> determines how the length of a link (<span style='font-family:sans-serif;'>distance</span>)<span style='font-family:sans-serif;'> </span>scales to friction for both types. Given random value <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi> &nu; </mi><mo> &sim; </mo>
+   <msub>
+    <mrow>
+     <mstyle mathvariant='script'><mi>U</mi>
+     </mstyle>
+    </mrow>
+    <mrow>
+     <mrow><mo>[</mo><mn>0</mn><mo>,</mo>
+      <mstyle mathvariant='sans-serif'>
+       <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi>_<mi>r</mi><mi>a</mi><mi>n</mi><mi>g</mi><mi>e</mi><mo>]</mo>
+       </mrow>
+      </mstyle>
+     </mrow>
+    </mrow>
+   </msub>
+  </mrow>
+ </mrow></math> (parameter <b><span style='font-family:sans-serif;'>frict_range</span></b>), the friction of links is calculated as <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi>
+    </mrow>
+   </mstyle><mo>=</mo>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>a</mi><mi>n</mi><mi>c</mi><mi>e</mi>
+    </mrow>
+   </mstyle><mo> &sdot; </mo>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>t</mi>_<mi>s</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>e</mi>
+    </mrow>
+   </mstyle><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>t</mi><mi>y</mi><mi>p</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+<mo> &sdot; </mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow><mn>1</mn><mo>+</mo><mi> &nu; </mi>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+  </mrow>
+ </mrow></math>.</div>
+
+<div class="standard" id='magicparlabel-61'>Links' <span style='font-family:sans-serif;'>risk </span>value is set to <b><span style='font-family:sans-serif;'>risk_normal</span></b> unless they intersect a rectangle whose coordinates are given by <b><span style='font-family:sans-serif;'>obstacle</span></b> in which case risk is set to <b><span style='font-family:sans-serif;'>risk_high</span></b>.</div>
+<h4 class="subsubsection_" id='magicparlabel-62'>Cities</h4>
+<div class="standard" id='magicparlabel-63'>Cities' <span style='font-family:sans-serif;'>quality</span> and <span style='font-family:sans-serif;'>resources</span> are both set to random values out of <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow>
+    <mstyle mathvariant='script'><mi>U</mi>
+    </mstyle>
+   </mrow>
+   <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+    <mrow><mn>0</mn><mo>,</mo><mn>1</mn>
+    </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+   </mrow>
+  </msub>
+ </mrow></math>. The values of both properties for entries and exits are set by the parameters <b><span style='font-family:sans-serif;'>qual_entry</span></b>, <b><span style='font-family:sans-serif;'>res_entry</span></b>, <b><span style='font-family:sans-serif;'>qual_exit</span></b> and <b><span style='font-family:sans-serif;'>res_exit</span></b>.</div>
+<h3 class="subsection" id='magicparlabel-64'><span class="subsection_label">3.2</span> <a id="subsec_Agents" />
+Agents<div class="marginal"><div class="plain_layout" id='magicparlabel-68'><span style='font-family:monospace;'><span style='font-size:x-small;'>base/model.jl</span></span></div>
+</div></h3>
+<div class="standard" id='magicparlabel-69'>At the beginning of the simulation no agents are present. Agents are created by the <u>create agents process</u> and added to a randomly selected entry point. </div>
+<h4 class="subsubsection_" id='magicparlabel-70'>Risk</h4>
+<div class="standard" id='magicparlabel-71'>Agent properties <span style='font-family:sans-serif;'>int</span> and <span style='font-family:sans-serif;'>slope</span> are determined by drawing from bivariate normal distributions with configurable variance-covariance matrix and mean values: <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mtable>
+  <mtr>
+   <mtd><mo> &Sigma; </mo>
+   </mtd>
+   <mtd>
+    <mrow><mo>=</mo><mo form='prefix' fence='true' stretchy='true' symmetric='true' lspace='thinmathspace'>[</mo>
+     <mtable>
+      <mtr>
+       <mtd>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>s</mi><mi>d</mi>_<mi>i</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mtd>
+       <mtd>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>c</mi><mi>o</mi><mi>v</mi>_<mi>i</mi>_<mi>s</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mtd>
+      </mtr>
+      <mtr>
+       <mtd>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>c</mi><mi>o</mi><mi>v</mi>_<mi>i</mi>_<mi>s</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mtd>
+       <mtd>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>s</mi><mi>d</mi>_<mi>s</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mtd>
+      </mtr>
+     </mtable><mo form='postfix' fence='true' stretchy='true' symmetric='true' lspace='thinmathspace'>]</mo>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd><mi> &mu; </mi>
+   </mtd>
+   <mtd>
+    <mrow><mo>=</mo><mo form='prefix' fence='true' stretchy='true' symmetric='true' lspace='thinmathspace'>(</mo>
+     <mtable>
+      <mtr>
+       <mtd>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>i</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mtd>
+      </mtr>
+      <mtr>
+       <mtd>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>s</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mtd>
+      </mtr>
+     </mtable><mo form='postfix' fence='true' stretchy='true' symmetric='true' lspace='thinmathspace'>)</mo>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd>
+    <mrow>
+     <mstyle mathvariant='bold'>
+      <mstyle mathvariant='italic'>
+       <mstyle mathvariant='sans-serif'>
+        <mrow><mi>i</mi><mi>n</mi><mi>t</mi>
+        </mrow>
+       </mstyle>
+      </mstyle>
+     </mstyle><mo>,</mo>
+     <mstyle mathvariant='bold'>
+      <mstyle mathvariant='italic'>
+       <mstyle mathvariant='sans-serif'>
+        <mrow><mi>s</mi><mi>l</mi><mi>o</mi><mi>p</mi><mi>e</mi>
+        </mrow>
+       </mstyle>
+      </mstyle>
+     </mstyle>
+    </mrow>
+   </mtd>
+   <mtd>
+    <mrow><mo> &sim; </mo>
+     <mstyle mathvariant='script'><mi>N</mi>
+     </mstyle><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+     <mrow><mi> &mu; </mi><mo>,</mo><mo> &Sigma; </mo>
+     </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+    </mrow>
+   </mtd>
+  </mtr>
+ </mtable></math></div>
+<h4 class="subsubsection_" id='magicparlabel-72'>Contacts</h4>
+<div class="standard" id='magicparlabel-73'>The number of initial contacts an agent has is determined as<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi>n</mi><mo>=</mo><mo> min </mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow>
+    <mstyle mathvariant='normal'>
+     <mstyle mathvariant='italic'>
+      <mrow>#<mi>a</mi><mi>g</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>s</mi>
+      </mrow>
+     </mstyle>
+    </mstyle><mo>/</mo><mn>10</mn><mo>,</mo>
+    <mstyle mathvariant='bold'>
+     <mstyle mathvariant='sans-serif'>
+      <mrow><mi>n</mi>_<mi>i</mi><mi>n</mi><mi>i</mi>_<mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>s</mi>
+      </mrow>
+     </mstyle>
+    </mstyle>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mn>.</mn>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-74'>Contacts are picked at random from the entire population (including arrived agents, but excluding dead ones).</div>
+<h4 class="subsubsection_" id='magicparlabel-75'>Knowledge</h4>
+<div class="standard" id='magicparlabel-76'>Newly created agents explore their current location with speed <b><span style='font-family:sans-serif;'>speed_expl_stay</span></b> and <u>indirect discovery</u> (see Section <a href="#subsec_Exploration">5.3</a>). They know exit cities with probability <b><span style='font-family:sans-serif;'>p_know_target</span></b> and regular cities/links (out of those that can be known to agents before setting off, see map creation above) with a probability <b><span style='font-family:sans-serif;'>p_know_city</span></b> and <b><span style='font-family:sans-serif;'>p_know_link</span></b>, respectively. They explore each known city using exploration speed <b><span style='font-family:sans-serif;'>speed_expl_ini</span></b> and no indirect discovery. Finally they explore known links if they already know one of the end points (also with speed <b><span style='font-family:sans-serif;'>speed_expl_init</span></b>).</div>
+<h2 class="section" id='magicparlabel-77'><span class="section_label">4</span> <a id="sec_Processes" />
+Processes<div class="marginal"><div class="plain_layout" id='magicparlabel-81'><span style='font-family:monospace;'><span style='font-size:x-small;'>base/model_agents.jl</span></span></div>
+</div></h2>
+<div class="standard" id='magicparlabel-82'>The model is implemented as an event-based simulation. That means that updates to the model state do not happen in discrete time steps but instead as a result of asynchronous events (see Table <a href="#tab_Events__their_effects">1</a>). All events in the model are assumed to be Poisson processes in continuous time (<a href='#LyXCite-gillespiegeneral1976'><span class="bib-abbrvciteauthor">Gillespie</span>, <span class="bib-year">1976</span></a>). </div>
+
+<div class="standard" id='magicparlabel-83'>With the exception of the creation of new agents all changes of model state are the result of the actions of agents which are also the only entitites that change state. Which actions an agent can perform and their rates of occurence depends on its state, in particular on whether it is currently travelling on a link or staying in a city. Agents can exchange information with other agents either in their contact list or present at the same location as they are. They can travel along transport links and collect information on their current and neighbouring cities. </div>
+<h3 class="subsection" id='magicparlabel-84'><span class="subsection_label">4.1</span> Events<div class="marginal"><div class="plain_layout" id='magicparlabel-88'><span style='font-family:monospace;'><span style='font-size:x-small;'>base/processes.jl</span></span></div>
+</div></h3>
+<div class="standard" id='magicparlabel-89'>Most processes are changes of state in single agents. Whether they can apply is usually dependent on whether an agent is travelling (= present at a transport link) or not (= present at a city). It is important to note that <em>every agent</em> in the population at any time that it fulfills the respective conditions can potentially experience the event in question. </div>
+
+
+<div class='float-table'><div class="plain_layout" id='magicparlabel-94'><span class='float-caption-Standard float-caption float-caption-standard'>Table 1:  <a id="tab_Events__their_effects" />
+Events, their effects and rates.</span><div style='height:3ex'></div></div>
+
+
+
+<div class="plain_layout" id='magicparlabel-99'><table><tbody><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-166'><em>event</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-169'><em>entity</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-172'><em>condition</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-175'><em>rate</em> <em>depends on</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-178'><em>affects</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-181'>create agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-184'>world</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-187'>always</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-190'>constant</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-193'>number of agents</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-196'>plan</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-199'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-202'>at city</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-205'>up to date inf.</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-208'>plan</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-211'>explore</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-214'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-217'>at city</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-220'>constant</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-223'>information</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-226'>add contact</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-229'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-232'>at city</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-235'>#local agents</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-238'>contacts</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-241'>forget contact</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-244'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-247'>always</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-250'>#contacts</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-253'>contacts</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-256'>exchange information</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-259'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-262'>always</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-265'>#contacts</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-268'>information</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-271'>depart</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-274'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-277'>at city</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-280'>constant</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-283'>location</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-286'>arrive</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-289'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-292'>travelling</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-295'><span style='font-family:sans-serif;'>friction</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-298'>location</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-301'>die</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-304'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-307'>travelling</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-310'><span style='font-family:sans-serif;'>friction</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-313'>number of agents</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-316'>costs</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-319'>agent</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-322'>at city</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-325'>constant</div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-328'><span style='font-family:sans-serif;'>capital</span></div>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+
+<h4 class="subsubsection_" id='magicparlabel-329'>Create agents </h4>
+<div class="standard" id='magicparlabel-330'>Agents are created with rate <b><span style='font-family:sans-serif;'>rate_dep</span></b>. They enter the world at a randomly selected departure location. For details see Section <a href="#sec_Setup">3</a>.</div>
+<h4 class="subsubsection_" id='magicparlabel-331'>Plan </h4>
+<div class="standard" id='magicparlabel-332'>During planning an agent decides where to go next, depending on its current knowledge. Agents plan with a rate <b><span style='font-family:sans-serif;'>rate_plan</span></b> if their knowledge about the world has changed and 0 otherwise. During planning agents decide on where to go next, either based on local optimization or on finding the best route to an exit (see section <a href="#subsec_Travel_Decisions">5.4</a> for details).</div>
+<h4 class="subsubsection_" id='magicparlabel-333'>Explore </h4>
+<div class="standard" id='magicparlabel-334'>An exploring agent gains new knowledge about closeby cities and links. Agents that do not travel explore their current location at a fixed rate <b><span style='font-family:sans-serif;'>rate_explore_stay</span></b>, using speed <b><span style='font-family:sans-serif;'>speed_expl_stay</span></b> and employing indirect discovery (see Section <a href="#subsec_Exploration">5.3</a> for details).</div>
+<h4 class="subsubsection_" id='magicparlabel-335'>Add contact</h4>
+<div class="standard" id='magicparlabel-336'>An agent adds a new agent that is currently situated in the same city to its list of contacts. Agents meet new contacts at a rate <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>#
+   <mstyle mathvariant='italic'>
+    <mrow><mi>o</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>r</mi><mspace width="6px" /><mi>a</mi><mi>g</mi><mi>e</mi><mi>n</mi><mi>t</mi><mi>s</mi>
+    </mrow>
+   </mstyle><mo> &sdot; </mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>p</mi>_<mi>k</mi><mi>e</mi><mi>e</mi><mi>p</mi>_<mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>c</mi><mi>t</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math> if their current number of contacts is below <b><span style='font-family:sans-serif;'>n_contacts_max</span></b>. A randomly selected agent from the focal agent's current location is added to the contact list. If the other agent has space in its contact list as well the contact becomes mutual. Then both agents exchange information (see Section <a href="#subsec_Information_Exchange">5.2</a>).</div>
+<h4 class="subsubsection_" id='magicparlabel-337'>Forget contact</h4>
+<div class="standard" id='magicparlabel-338'>Agents lose contacts at a rate of <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>#
+   <mstyle mathvariant='normal'>
+    <mstyle mathvariant='italic'>
+     <mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo> &sdot; </mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>p</mi>_<mi>d</mi><mi>r</mi><mi>o</mi><mi>p</mi>_<mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>c</mi><mi>t</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math>. Forgotten contacts are only removed unilaterally, that is the other agents will keep its contact.</div>
+<h4 class="subsubsection_" id='magicparlabel-339'>Exchange information </h4>
+<div class="standard" id='magicparlabel-340'>An agent communicates with one of its contacts and exchanges information about the world topology, i.e. the existence and connectedness of cities and links, as well as their properties. Agents communicate at rate <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>#
+   <mstyle mathvariant='normal'>
+    <mstyle mathvariant='italic'>
+     <mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo> &sdot; </mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>p</mi>_<mi>i</mi><mi>n</mi><mi>f</mi><mi>o</mi>_<mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>a</mi><mi>c</mi><mi>t</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math>. See Section <a href="#subsec_Information_Exchange">5.2</a> for details.</div>
+<h4 class="subsubsection_" id='magicparlabel-341'>Depart from a location </h4>
+<div class="standard" id='magicparlabel-342'>An agent departs from its current location and starts travelling to the next location in its plan. Departure rate is 1 unless the agents capital is lower than <b><span style='font-family:sans-serif;'>save_thresh</span></b> and its expected income is greater than <b><span style='font-family:sans-serif;'>save_income</span></b>.</div>
+
+<div class="standard" id='magicparlabel-343'>On departure an agent leaves its current location and is now located on the link to the next location. It immediately explores the link with speed <b><span style='font-family:sans-serif;'>speed_expl_move</span></b> (see Section <a href="#subsec_Exploration">5.3</a>). It also loses <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mstyle mathvariant='bold'>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mi>s</mi>_<mi>m</mi><mi>o</mi><mi>v</mi><mi>e</mi>
+     </mrow>
+    </mstyle>
+   </mstyle></mstyle><mo> &sdot; </mo>
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math> resources which are substracted from its <span style='font-family:sans-serif;'>capital</span>.</div>
+<h4 class="subsubsection_" id='magicparlabel-344'>Arrive at a destination</h4>
+<div class="standard" id='magicparlabel-345'>A travelling agent arrives at its destination. Agents arrive at a rate <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>m</mi><mi>o</mi><mi>v</mi><mi>e</mi>_<mi>r</mi><mi>a</mi><mi>t</mi><mi>e</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo>+</mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>m</mi><mi>o</mi><mi>v</mi><mi>e</mi>_<mi>s</mi><mi>p</mi><mi>e</mi><mi>e</mi><mi>d</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo>/</mo>
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math>. Arrived agents change their location to the destination.</div>
+<h4 class="subsubsection_" id='magicparlabel-346'>Die</h4>
+<div class="standard" id='magicparlabel-347'>Agents travelling on links can die. For a link with arrival rate <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>r</mi>
+   </mrow>
+   <mrow><mi>a</mi>
+   </mrow>
+  </msub>
+ </mrow></math> the mortality rate of agents travelling on that link is <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>r</mi>
+    </mrow>
+    <mrow><mi>a</mi>
+    </mrow>
+   </msub>
+   <mfrac>
+    <mrow>
+     <mstyle mathvariant='italic'>
+      <mstyle mathvariant='sans-serif'>
+       <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>
+       </mrow>
+      </mstyle>
+     </mstyle>
+    </mrow>
+    <mrow>
+     <mrow><mn>1</mn><mo>-</mo>
+      <mstyle mathvariant='italic'>
+       <mstyle mathvariant='sans-serif'>
+        <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>
+        </mrow>
+       </mstyle>
+      </mstyle>
+     </mrow>
+    </mrow>
+   </mfrac>
+  </mrow>
+ </mrow></math>. Therefore the probability for an agent to die before arrival is just the risk value associated with the link. Deaths can affect the perceived risk of other agents (see Section <a href="#subsec_Perceived_risk">5.5</a> for details).</div>
+<h4 class="subsubsection_" id='magicparlabel-348'>Income/costs</h4>
+<div class="standard" id='magicparlabel-349'>When staying at a location agents can lose or gain resources. The change in resources happens at a rate <b><span style='font-family:sans-serif;'>rate_costs_stay</span></b> and is calculated as <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>b</mi><mi>e</mi><mi>n</mi>_<mi>r</mi><mi>e</mi><mi>s</mi><mi>o</mi><mi>u</mi><mi>r</mi><mi>c</mi><mi>e</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo> &sdot; </mo>
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>o</mi><mi>u</mi><mi>r</mi><mi>c</mi><mi>e</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo>-</mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>r</mi><mi>a</mi><mi>t</mi><mi>e</mi>_<mi>c</mi><mi>o</mi><mi>s</mi><mi>t</mi><mi>s</mi>_<mi>s</mi><mi>t</mi><mi>a</mi><mi>y</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math> (with <span style='font-family:sans-serif;'>resources</span> the resource availability at the current location).</div>
+<h2 class="section" id='magicparlabel-350'><span class="section_label">5</span> <a id="sec_Information_and_decisions" />
+Information and decisions</h2>
+<div class="standard" id='magicparlabel-351'>Information is a crucial part of the model. Agents have subjective - i.e.&nbsp;potentially wrong and incomplete - information about the world. They obtain that knowledge either by exploration or by communicating with other agents. Nearly all decisions agents make are based on their subjective knowledge.</div>
+<h3 class="subsection" id='magicparlabel-352'><span class="subsection_label">5.1</span> <a id="subsec_Belief_Dynamics" />
+Belief Dynamics<div class="marginal"><div class="plain_layout" id='magicparlabel-356'><span style='font-family:monospace;'><span style='font-size:x-small;'>Beliefs</span></span></div>
+</div></h3>
+<div class="standard" id='magicparlabel-357'>Each item of knowledge an agent has - for example the <span style='font-family:sans-serif;'>quality</span> of a specific city - is described by a <u>value estimate</u> (called <span style='font-family:sans-serif;'>value </span>in the model) and a <u>certainty</u> (<span style='font-family:sans-serif;'>trust</span>). That is, an agent has an idea of the numerical value of a given property and how certain it is that the value is correct. For a given agent these numbers change either when the agent explores its environment or when it exchanges information with other agents. When collecting information from the environment the estimate becomes more accurate while the certainty increases. Information exchange is a bit more complicated. Generally speaking the more certain an agent is (i.e.&nbsp;the higher its certainty value) the stronger the effect on the other agent's estimate. At the same time agents with similar beliefs (i.e.&nbsp;similar value estimates) will reinforce each other and their certainty will increase while for very dissimilar beliefs certainty can decrease. </div>
+
+<div class="standard" id='magicparlabel-358'>In the following we give a general description of the belief dynamics sub-model. Since some of the expressions are quite long we have - for the sake of readability - kept to mathematical notation in this case. Names of the corresponding variables in the source code are given in parentheses. </div>
+
+<div class="standard" id='magicparlabel-359'>We based our information model on the well-known mass action dynamics. To understand the model it is best to imagine that an agent's belief consists of two &ldquo;substances&rdquo;, certainty and doubt, in proportions <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>t</mi>
+ </mrow></math> (<span style='font-family:sans-serif;'>trust</span>)<span style='font-family:sans-serif;'> </span>and <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi>d</mi><mo>=</mo><mn>1</mn><mo>-</mo><mi>t</mi>
+  </mrow>
+ </mrow></math>, respectively. When two agents interact a &ldquo;reaction&rdquo; between their respective belief components takes place, potentially transforming them (see Table <a href="#tab_Interactions_between_certainty">2</a>). Doubt reacting with doubt produces doubt. Certainty of one agent interacting with the other agent's doubt can &ldquo;convince&rdquo; the latter, changing parts of its doubt into certainty. Depending on the difference in estimate certainty interacting with certainty can lead to confusion and increased doubt or just change the estimate.</div>
+
+
+<div class='float-table'><div class="plain_layout" id='magicparlabel-364'><span class='float-caption-Standard float-caption float-caption-standard'>Table 2:  <a id="tab_Interactions_between_certainty" />
+Interactions between certainty and doubt of two communicating agents.</span><div style='height:3ex'></div></div>
+
+
+
+<div class="plain_layout" id='magicparlabel-369'><table><tbody><tr><td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-388'>interacting with</div>
+</td>
+<td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-391'><em>doubt</em></div>
+</td>
+<td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-394'><em>certainty</em></div>
+</td>
+</tr><tr><td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-397'><em>doubt</em></div>
+</td>
+<td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-400'>doubt</div>
+</td>
+<td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-403'>-</div>
+</td>
+</tr><tr><td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-406'><em>certainty</em></div>
+</td>
+<td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-409'>certainty</div>
+</td>
+<td align='center' valign='top'>
+<div class="plain_layout" id='magicparlabel-412'>doubt+certainty</div>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+
+
+<div class="standard" id='magicparlabel-413'>More formally, for an interaction between agents <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>A</mi>
+ </mrow></math> and <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>B</mi>
+ </mrow></math> with an estimate <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>v</mi>
+   </mrow>
+   <mrow><mo> &sdot; </mo>
+   </mrow>
+  </msub>
+ </mrow></math> (<span style='font-family:sans-serif;'>value</span>) we define difference in estimate as<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi> &delta; </mi>
+    </mrow>
+    <mrow><mi>v</mi>
+    </mrow>
+   </msub><mo>:</mo><mo>=</mo>
+   <mfrac>
+    <mrow>
+     <mrow><mo>|</mo>
+      <msub>
+       <mrow><mi>v</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub><mo>-</mo>
+      <msub>
+       <mrow><mi>v</mi>
+       </mrow>
+       <mrow><mi>B</mi>
+       </mrow>
+      </msub><mo>|</mo>
+     </mrow>
+    </mrow>
+    <mrow>
+     <mrow>
+      <msub>
+       <mrow><mi>v</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub><mo>+</mo>
+      <msub>
+       <mrow><mi>v</mi>
+       </mrow>
+       <mrow><mi>B</mi>
+       </mrow>
+      </msub>
+     </mrow>
+    </mrow>
+   </mfrac><mn>.</mn>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-414'>Using parameters <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>c</mi>
+   </mrow>
+   <mrow><mi>i</mi>
+   </mrow>
+  </msub>
+ </mrow></math> (<b><span style='font-family:sans-serif;'>convince</span></b>), <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>c</mi>
+   </mrow>
+   <mrow><mi>u</mi>
+   </mrow>
+  </msub>
+ </mrow></math> (<b><span style='font-family:sans-serif;'>confuse</span></b>) and <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>c</mi>
+   </mrow>
+   <mrow><mi>e</mi>
+   </mrow>
+  </msub>
+ </mrow></math> (<b><span style='font-family:sans-serif;'>convert</span></b>) we then calculate the new doubt value <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>d</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub><mo>'</mo>
+  </mrow>
+ </mrow></math> based on the previous values of certainty <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>t</mi>
+   </mrow>
+   <mrow><mo> &sdot; </mo>
+   </mrow>
+  </msub>
+ </mrow></math> and doubt <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>d</mi>
+   </mrow>
+   <mrow><mo> &sdot; </mo>
+   </mrow>
+  </msub>
+ </mrow></math> as<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>d</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub><mo>'</mo><mo>=</mo>
+   <msub>
+    <mrow><mi>d</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi>d</mi>
+    </mrow>
+    <mrow><mi>B</mi>
+    </mrow>
+   </msub><mo>+</mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow><mn>1</mn><mo>-</mo>
+    <msub>
+     <mrow><mi>c</mi>
+     </mrow>
+     <mrow><mi>i</mi>
+     </mrow>
+    </msub>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+   <msub>
+    <mrow><mi>d</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi>t</mi>
+    </mrow>
+    <mrow><mi>B</mi>
+    </mrow>
+   </msub><mo>+</mo>
+   <msub>
+    <mrow><mi>c</mi>
+    </mrow>
+    <mrow><mi>u</mi>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi>t</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi>t</mi>
+    </mrow>
+    <mrow><mi>B</mi>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi> &delta; </mi>
+    </mrow>
+    <mrow><mi>v</mi>
+    </mrow>
+   </msub><mn>.</mn>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-415'>The estimate <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>v</mi>
+   </mrow>
+   <mrow><mi>A</mi>
+   </mrow>
+  </msub>
+ </mrow></math> changes accordingly:<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>v</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub><mo>'</mo><mo>=</mo>
+   <mfrac>
+    <mrow>
+     <mrow>
+      <msub>
+       <mrow><mi>t</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub>
+      <msub>
+       <mrow><mi>d</mi>
+       </mrow>
+       <mrow><mi>B</mi>
+       </mrow>
+      </msub>
+      <msub>
+       <mrow><mi>v</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub><mo>+</mo>
+      <msub>
+       <mrow><mi>c</mi>
+       </mrow>
+       <mrow><mi>i</mi>
+       </mrow>
+      </msub>
+      <msub>
+       <mrow><mi>d</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub>
+      <msub>
+       <mrow><mi>t</mi>
+       </mrow>
+       <mrow><mi>B</mi>
+       </mrow>
+      </msub>
+      <msub>
+       <mrow><mi>v</mi>
+       </mrow>
+       <mrow><mi>B</mi>
+       </mrow>
+      </msub><mo>+</mo>
+      <msub>
+       <mrow><mi>t</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub>
+      <msub>
+       <mrow><mi>t</mi>
+       </mrow>
+       <mrow><mi>B</mi>
+       </mrow>
+      </msub><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+      <mrow><mn>1</mn><mo>-</mo>
+       <msub>
+        <mrow><mi>c</mi>
+        </mrow>
+        <mrow><mi>u</mi>
+        </mrow>
+       </msub>
+       <msub>
+        <mrow><mi> &delta; </mi>
+        </mrow>
+        <mrow><mi>v</mi>
+        </mrow>
+       </msub>
+      </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+      <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+       <mrow><mn>1</mn><mo>-</mo>
+        <msub>
+         <mrow><mi>c</mi>
+         </mrow>
+         <mrow><mi>e</mi>
+         </mrow>
+        </msub>
+       </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+       <msub>
+        <mrow><mi>v</mi>
+        </mrow>
+        <mrow><mi>A</mi>
+        </mrow>
+       </msub><mo>+</mo>
+       <msub>
+        <mrow><mi>c</mi>
+        </mrow>
+        <mrow><mi>e</mi>
+        </mrow>
+       </msub>
+       <msub>
+        <mrow><mi>v</mi>
+        </mrow>
+        <mrow><mi>B</mi>
+        </mrow>
+       </msub>
+      </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+     </mrow>
+    </mrow>
+    <mrow>
+     <mrow><mn>1</mn><mo>-</mo>
+      <msub>
+       <mrow><mi>d</mi>
+       </mrow>
+       <mrow><mi>A</mi>
+       </mrow>
+      </msub><mo>'</mo>
+     </mrow>
+    </mrow>
+   </mfrac>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-416'>As we can see, if different opinions do not lead to doubt, i.e.&nbsp;<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>c</mi>
+    </mrow>
+    <mrow><mi>u</mi>
+    </mrow>
+   </msub><mo>=</mo><mn>0</mn>
+  </mrow>
+ </mrow></math>, doubt will disappear, i.e.&nbsp;<math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>d</mi>
+ </mrow></math> will approach <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mn>0</mn>
+ </mrow></math> (as long as <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>c</mi>
+    </mrow>
+    <mrow><mi>i</mi>
+    </mrow>
+   </msub><mo>&gt;</mo><mn>0</mn><mo>)</mo>
+  </mrow>
+ </mrow></math>, and the model reverts to a simple weighted mean [citations for eqv models]:<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>v</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub><mo>'</mo><mo>=</mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow><mn>1</mn><mo>-</mo>
+    <msub>
+     <mrow><mi>c</mi>
+     </mrow>
+     <mrow><mi>e</mi>
+     </mrow>
+    </msub>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+   <msub>
+    <mrow><mi>v</mi>
+    </mrow>
+    <mrow><mi>A</mi>
+    </mrow>
+   </msub><mo>+</mo>
+   <msub>
+    <mrow><mi>c</mi>
+    </mrow>
+    <mrow><mi>e</mi>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi>v</mi>
+    </mrow>
+    <mrow><mi>B</mi>
+    </mrow>
+   </msub>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-417'>Following common programming language convention we will use dot notation to denote the respective properties of an estimate (e.g. <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>
+    </mrow>
+   </mstyle><mn>.</mn>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>s</mi><mi>t</mi>
+    </mrow>
+   </mstyle>
+  </mrow>
+ </mrow></math>). In some cases we are interested in the &ldquo;discounted&rdquo; estimate which we define as <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <mstyle mathvariant='normal'>
+    <mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>c</mi>
+    </mrow>
+   </mstyle><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+<mi>x</mi>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo>:</mo><mo>=</mo><mi>x</mi><mn>.</mn>
+   <mstyle mathvariant='normal'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo> &sdot; </mo><mi>x</mi><mn>.</mn>
+   <mstyle mathvariant='normal'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>s</mi><mi>t</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mn>.</mn>
+  </mrow>
+ </mrow></math></div>
+<h3 class="subsection" id='magicparlabel-418'><span class="subsection_label">5.2</span> <a id="subsec_Information_Exchange" />
+Information Exchange</h3>
+<div class="standard" id='magicparlabel-419'>In a single communication event, information about each information item known by at least one of the participants is exchanged with probability <b>p_transfer_info</b>. Arrived agents generally do not receive information and do not learn about links or cities unknown to them, so if one of the participants has already arrived then items that are unknown to that participant will be skipped. Otherwise information items with default values are added accordingly (for exchanges that take place) so that both participants know the item in question prior to the actual exchange of information.</div>
+
+<div class="standard" id='magicparlabel-420'>During the exchange of information, beliefs about all properties of the item in question (i.e. friction and risk for links and quality and resources for cities) are exchanged as described in Belief Dynamics. Depending on parameter values, two additional effects can apply compared to the basic model described earlier:</div>
+<h4 class="subsubsection_" id='magicparlabel-421'>Errors </h4>
+<div class="standard" id='magicparlabel-422'>Communication can be configured to be noisy. Each agent perceives the <span style='font-family:sans-serif;'>value</span> and the <span style='font-family:sans-serif;'>trust</span> component of the communicated property with an added error <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi> &epsi; </mi><mo> &sim; </mo>
+   <msub>
+    <mrow>
+     <mstyle mathvariant='script'><mi>U</mi>
+     </mstyle>
+    </mrow>
+    <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+     <mrow><mo>-</mo><mi> &delta; </mi><mo>,</mo><mi> &delta; </mi>
+     </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+    </mrow>
+   </msub>
+  </mrow>
+ </mrow></math> (with <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi> &delta; </mi>
+ </mrow></math> being <b><span style='font-family:sans-serif;'>error_frict</span></b> for the friction value, <b><span style='font-family:sans-serif;'>error_risk</span></b> for the risk value and <b><span style='font-family:sans-serif;'>error</span></b> otherwise).</div>
+<h4 class="subsubsection_" id='magicparlabel-423'>Success bias</h4>
+<div class="standard" id='magicparlabel-424'>Agents that have arrived can confer increased authority when communicating their experience. Agents interacting with an arrived agent use modified values for <b><span style='font-family:sans-serif;'>convince</span></b> and <b><span style='font-family:sans-serif;'>convert</span></b> (with parameter <b><span style='font-family:sans-serif;'>weight_arr</span></b>):<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mtable>
+  <mtr>
+   <mtd>
+    <msub>
+     <mrow><mi>c</mi>
+     </mrow>
+     <mrow><mi>i</mi>
+     </mrow>
+    </msub>
+   </mtd>
+   <mtd>
+    <mrow><mo>=</mo>
+     <msup>
+      <mrow>
+       <mstyle mathvariant='bold'>
+        <mstyle mathvariant='monospace'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>v</mi><mi>i</mi><mi>n</mi><mi>c</mi><mi>e</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mstyle>
+      </mrow>
+      <mrow>
+       <mrow><mn>1</mn><mo>/</mo>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='monospace'>
+          <mstyle mathvariant='sans-serif'>
+           <mrow><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi>_<mi>a</mi><mi>r</mi><mi>r</mi>
+           </mrow>
+          </mstyle>
+         </mstyle>
+        </mstyle>
+       </mrow>
+      </mrow>
+     </msup>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd>
+    <msub>
+     <mrow><mi>c</mi>
+     </mrow>
+     <mrow><mi>o</mi>
+     </mrow>
+    </msub>
+   </mtd>
+   <mtd>
+    <mrow><mo>=</mo>
+     <msup>
+      <mrow>
+       <mstyle mathvariant='bold'>
+        <mstyle mathvariant='monospace'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>c</mi><mi>o</mi><mi>n</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>t</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mstyle>
+      </mrow>
+      <mrow>
+       <mrow><mn>1</mn><mo>/</mo>
+        <mstyle mathvariant='bold'>
+         <mstyle mathvariant='monospace'>
+          <mstyle mathvariant='sans-serif'>
+           <mrow><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi>_<mi>a</mi><mi>r</mi><mi>r</mi>
+           </mrow>
+          </mstyle>
+         </mstyle>
+        </mstyle>
+       </mrow>
+      </mrow>
+     </msup>
+    </mrow>
+   </mtd>
+  </mtr>
+ </mtable></math></div>
+<h3 class="subsection" id='magicparlabel-425'><span class="subsection_label">5.3</span> <a id="subsec_Exploration" />
+Exploration</h3>
+<div class="standard" id='magicparlabel-426'>During exploration agents discover new cities and links and refine their knowledge about those they are already aware of. There are several situations in the model that let agents explore their environment (see Section <a href="#sec_Processes">4</a>), the basic mechanics are identical, however.</div>
+
+<div class="standard" id='magicparlabel-427'>Unless mentioned otherwise the properties of newly discovered links and cities are initialized with &ldquo;expected&rdquo; default values <b><span style='font-family:sans-serif;'>risk_exp</span></b>, <b><span style='font-family:sans-serif;'>res_exp</span></b>, etc.</div>
+<h4 class="subsubsection_" id='magicparlabel-428'>Update</h4>
+<div class="standard" id='magicparlabel-429'>When exploring links or cities an agent always improves its estimate of the respective entities' properties. An agent's belief is updated by calculating the new <span style='font-family:sans-serif;'>value</span> <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi>v</mi><mo>'</mo>
+  </mrow>
+ </mrow></math> and <span style='font-family:sans-serif;'>trust</span> <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi>t</mi><mo>'</mo>
+  </mrow>
+ </mrow></math> as simple weighted means using a learning speed <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>s</mi>
+ </mrow></math> (which can differ dependent on situation) and target or true value <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>v</mi>
+   </mrow>
+   <mrow><mi>t</mi>
+   </mrow>
+  </msub>
+ </mrow></math> (the target value for <span style='font-family:sans-serif;'>trust</span> is <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mn>1</mn>
+ </mrow></math>): </div>
+
+<div class="standard" id='magicparlabel-430'><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mtable>
+  <mtr>
+   <mtd>
+    <mrow><mi>v</mi><mo>'</mo>
+    </mrow>
+   </mtd>
+   <mtd>
+    <mrow><mo>=</mo><mi>v</mi><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+     <mrow><mn>1</mn><mo>-</mo><mi>s</mi>
+     </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo>+</mo>
+     <msub>
+      <mrow><mi>v</mi>
+      </mrow>
+      <mrow><mi>t</mi>
+      </mrow>
+     </msub><mi>s</mi>
+    </mrow>
+   </mtd>
+  </mtr>
+  <mtr>
+   <mtd>
+    <mrow><mi>t</mi><mo>'</mo>
+    </mrow>
+   </mtd>
+   <mtd>
+    <mrow><mo>=</mo><mi>t</mi><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+     <mrow><mn>1</mn><mo>-</mo><mi>s</mi>
+     </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo>+</mo><mi>s</mi>
+    </mrow>
+   </mtd>
+  </mtr>
+ </mtable></math></div>
+<h4 class="subsubsection_" id='magicparlabel-431'>Indirect discovery</h4>
+<div class="standard" id='magicparlabel-432'>When exploring a city with indirect discovery enabled then it finds and immediately explores links connected to that city with a probability <b>p_find_links</b>. Neighbouring cities connected through these links are always discovered (i.e. known and properties set to default values) and with a probability <b>p_find_dest</b> also explored (with half learning speed and no indirect discovery enabled).</div>
+<h3 class="subsection" id='magicparlabel-433'><span class="subsection_label">5.4</span> <a id="subsec_Travel_Decisions" />
+Travel Decisions</h3>
+<div class="standard" id='magicparlabel-434'>Agents start out at entry cities at one edge of the map and attempt to reach exit cities at the other edge. Agents decide if and where to go purely based on the subjective information they have available. Travel decisions are made in one of two ways. If an agent has enough topological information to be able to find a fully connected route from its current city to an exit, it will plan a path and follow it. Otherwise it will select a destination among all immediately accessible cities.</div>
+<h4 class="subsubsection_" id='magicparlabel-435'>Properties affecting the decisions</h4>
+<div class="standard" id='magicparlabel-436'>In both cases the decision is affected by a number of properties of the cities and links involved.</div>
+<h5 class="paragraph_" id='magicparlabel-437'>attractiveness</h5>
+<div class="standard" id='magicparlabel-438'>The attractiveness of a location is calculated as a weighted sum of its quality and the amount of resources it provides (parameter <b><span style='font-family:sans-serif;'>qual_weight_res</span></b>):</div>
+
+<div class="standard" id='magicparlabel-439'><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi>a</mi><mo>=</mo>
+   <mstyle mathvariant='normal'>
+    <mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>c</mi>
+    </mrow>
+   </mstyle><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo> &sdot; </mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow><mn>1</mn><mo>-</mo>
+    <mstyle mathvariant='bold'>
+     <mstyle mathvariant='sans-serif'>
+      <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi>_<mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi>_<mi>r</mi><mi>e</mi><mi>s</mi>
+      </mrow>
+     </mstyle>
+    </mstyle>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo>+</mo>
+   <mstyle mathvariant='normal'>
+    <mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>c</mi>
+    </mrow>
+   </mstyle><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>o</mi><mi>u</mi><mi>r</mi><mi>c</mi><mi>e</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mo> &sdot; </mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi>_<mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi>_<mi>r</mi><mi>e</mi><mi>s</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+  </mrow>
+ </mrow></math></div>
+<h5 class="paragraph_" id='magicparlabel-440'>effective friction</h5>
+<div class="standard" id='magicparlabel-441'>As trust in an agents's estimate of friction decreases the effective value of friction, on which decisions are based increases:<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>f</mi>
+    </mrow>
+    <mrow>
+     <mstyle mathvariant='normal'>
+      <mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+      </mrow>
+     </mstyle>
+    </mrow>
+   </msub><mo>=</mo>
+   <mstyle mathvariant='italic'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mn>.</mn>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi>
+    </mrow>
+   </mstyle><mo>+</mo>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi>
+    </mrow>
+   </mstyle><mn>.</mn>
+   <mstyle mathvariant='sans-serif'>
+    <mrow><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi>
+    </mrow>
+   </mstyle><mo> &sdot; </mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow><mn>1</mn><mo>-</mo>
+    <mstyle mathvariant='italic'>
+     <mstyle mathvariant='sans-serif'>
+      <mrow><mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi>
+      </mrow>
+     </mstyle>
+    </mstyle><mn>.</mn>
+    <mstyle mathvariant='normal'>
+     <mstyle mathvariant='sans-serif'>
+      <mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>s</mi><mi>t</mi>
+      </mrow>
+     </mstyle>
+    </mstyle>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mn>.</mn>
+  </mrow>
+ </mrow></math></div>
+<h5 class="paragraph_" id='magicparlabel-442'>perceived safety</h5>
+<div class="standard" id='magicparlabel-443'>Risk is perceived and communicated in the same way as other properties of cities and links. However, the way risk influences decisions is not as straightforward, as we used the results of an empirical study to calibrate the effects of perceived risk on travel decisions. First we derive the agent's perceived probability to be safe from the raw risk <span style='font-family:sans-serif;'>risk.value</span>:<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>p</mi>
+    </mrow>
+    <mrow><mi>s</mi>
+    </mrow>
+   </msub><mo>=</mo>
+   <mstyle mathvariant='normal'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi><mn>.</mn><mi>t</mi><mi>r</mi><mi>u</mi><mi>s</mi><mi>t</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo> &sdot; </mo><mo>(</mo><mn>1</mn><mo>-</mo>
+   <mstyle mathvariant='normal'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi><mn>.</mn><mi>v</mi><mi>a</mi><mi>l</mi><mi>u</mi><mi>e</mi>
+     </mrow>
+    </mstyle>
+   </mstyle>
+   <msup>
+    <mrow><mo>)</mo>
+    </mrow>
+    <mrow>
+     <mstyle mathvariant='italic'>
+      <mstyle mathvariant='bold'>
+       <mstyle mathvariant='sans-serif'>
+        <mrow><mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>_<mi>s</mi><mi>c</mi><mi>a</mi><mi>l</mi><mi>e</mi>
+        </mrow>
+       </mstyle>
+      </mstyle>
+     </mstyle>
+    </mrow>
+   </msup>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-444'>Here, <b>risk_scale</b> is a parameter that determines how objective risk of dying scales to a general subjective perception to be safe. As with other subjective properties the safety estimate is discounted by the trust an agent has in the quality of the estimate.</div>
+
+<div class="standard" id='magicparlabel-445'>Using agent-specific parameters <span style='font-family:sans-serif;'>int</span> and <span style='font-family:sans-serif;'>slope</span> (see Section <a href="#subsec_Agents">3.2</a>) we can then calculate a safety score <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>s</mi>
+ </mrow></math> (strictly speaking the probability for an agent to decide in favour of a potentially unsafe action):<math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mi>s</mi><mo>=</mo>
+   <mfrac>
+    <mrow>
+     <msup>
+      <mrow><mi>e</mi>
+      </mrow>
+      <mrow>
+       <mrow>
+        <mstyle mathvariant='italic'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>i</mi><mi>n</mi><mi>t</mi>
+          </mrow>
+         </mstyle>
+        </mstyle><mo>+</mo><mn>100</mn>
+        <msub>
+         <mrow><mi>p</mi>
+         </mrow>
+         <mrow><mi>s</mi>
+         </mrow>
+        </msub>
+        <mstyle mathvariant='italic'>
+         <mstyle mathvariant='sans-serif'>
+          <mrow><mi>s</mi><mi>l</mi><mi>o</mi><mi>p</mi><mi>e</mi>
+          </mrow>
+         </mstyle>
+        </mstyle>
+       </mrow>
+      </mrow>
+     </msup>
+    </mrow>
+    <mrow>
+     <mrow><mn>1</mn><mo>+</mo>
+      <msup>
+       <mrow><mi>e</mi>
+       </mrow>
+       <mrow>
+        <mrow>
+         <mstyle mathvariant='italic'>
+          <mstyle mathvariant='sans-serif'>
+           <mrow><mi>i</mi><mi>n</mi><mi>t</mi>
+           </mrow>
+          </mstyle>
+         </mstyle><mo>+</mo><mn>100</mn>
+         <msub>
+          <mrow><mi>p</mi>
+          </mrow>
+          <mrow><mi>s</mi>
+          </mrow>
+         </msub>
+         <mstyle mathvariant='italic'>
+          <mstyle mathvariant='sans-serif'>
+           <mrow><mi>s</mi><mi>l</mi><mi>o</mi><mi>p</mi><mi>e</mi>
+           </mrow>
+          </mstyle>
+         </mstyle>
+        </mrow>
+       </mrow>
+      </msup>
+     </mrow>
+    </mrow>
+   </mfrac>
+  </mrow>
+ </mrow></math></div>
+<h4 class="subsubsection_" id='magicparlabel-446'>Local travel</h4>
+<div class="standard" id='magicparlabel-447'>If agents are not able to find a route to an exit they will pick a destination at random from all immediately reachable cities (i.e.&nbsp;the current location and all its known neighbours). The probability to pick a location <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>i</mi>
+ </mrow></math>, <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>p</mi>
+   </mrow>
+   <mrow><mi>i</mi>
+   </mrow>
+  </msub>
+ </mrow></math> is its relative suitability modified by <b><span style='font-family:sans-serif;'>qual_bias</span></b>: <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>p</mi>
+    </mrow>
+    <mrow><mi>i</mi>
+    </mrow>
+   </msub><mo>=</mo><mo>(</mo>
+   <msub>
+    <mrow><mi>l</mi>
+    </mrow>
+    <mrow><mi>i</mi>
+    </mrow>
+   </msub><mo>/</mo><mo> &sum; </mo><mi>l</mi>
+   <msup>
+    <mrow><mo>)</mo>
+    </mrow>
+    <mrow>
+     <mstyle mathvariant='sans-serif'>
+      <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi>_<mi>b</mi><mi>i</mi><mi>a</mi><mi>s</mi>
+      </mrow>
+     </mstyle>
+    </mrow>
+   </msup>
+  </mrow>
+ </mrow></math>. Suitability of a location <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>j</mi>
+ </mrow></math>, reachable by link <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>i</mi>
+ </mrow></math> depends on proximity to the exit <span style='font-family:sans-serif;'>x</span>, attractiveness <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>a</mi>
+ </mrow></math> and the difficulty of reaching it due to friction and risk (both of which are assumed to be <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mn>0</mn>
+ </mrow></math> for the current location):</div>
+
+<div class="standard" id='magicparlabel-448'><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>l</mi>
+    </mrow>
+    <mrow><mi>j</mi>
+    </mrow>
+   </msub><mo>=</mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow>
+    <mstyle mathvariant='bold'>
+     <mstyle mathvariant='sans-serif'>
+      <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi>_<mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi>_<mi>x</mi>
+      </mrow>
+     </mstyle>
+    </mstyle><mo> &sdot; </mo>
+    <msub>
+     <mrow>
+      <mstyle mathvariant='sans-serif'><mi>x</mi>
+      </mstyle>
+     </mrow>
+     <mrow><mi>j</mi>
+     </mrow>
+    </msub><mo>+</mo>
+    <msub>
+     <mrow><mi>a</mi>
+     </mrow>
+     <mrow><mi>j</mi>
+     </mrow>
+    </msub>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+
+   <mfrac>
+    <mrow>
+     <mstyle mathvariant='bold'>
+      <mstyle mathvariant='sans-serif'>
+       <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi>_<mi>t</mi><mi>o</mi><mi>l</mi>_<mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi>
+       </mrow>
+      </mstyle>
+     </mstyle>
+    </mrow>
+    <mrow>
+     <mrow>
+      <mstyle mathvariant='bold'>
+       <mstyle mathvariant='sans-serif'>
+        <mrow><mi>q</mi><mi>u</mi><mi>a</mi><mi>l</mi>_<mi>t</mi><mi>o</mi><mi>l</mi>_<mi>f</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>t</mi>
+        </mrow>
+       </mstyle>
+      </mstyle><mo>+</mo>
+      <msub>
+       <mrow><mi>f</mi>
+       </mrow>
+       <mrow>
+        <mrow>
+         <mstyle mathvariant='normal'>
+          <mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+          </mrow>
+         </mstyle><mo>,</mo><mi>i</mi>
+        </mrow>
+       </mrow>
+      </msub>
+     </mrow>
+    </mrow>
+   </mfrac>
+   <msub>
+    <mrow><mi>s</mi>
+    </mrow>
+    <mrow><mi>i</mi>
+    </mrow>
+   </msub>
+  </mrow>
+ </mrow></math></div>
+<h4 class="subsubsection_" id='magicparlabel-449'>Path planning</h4>
+<div class="standard" id='magicparlabel-450'>If an agent knows enough to find a complete route it will attempt to travel the route with the lowest costs. The cost of a route is simply the sum of the costs of all its segments which again are a function of travel effort and properties of the waypoints. Specifically, the costs of a segment consisting of a link <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>i</mi>
+ </mrow></math> leading to a city <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>j</mi>
+ </mrow></math> are calculated from effective friction <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <msub>
+   <mrow><mi>f</mi>
+   </mrow>
+   <mrow>
+    <mstyle mathvariant='normal'>
+     <mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+     </mrow>
+    </mstyle>
+   </mrow>
+  </msub>
+ </mrow></math> and safety score <math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mi>s</mi>
+ </mrow></math> of the link (see above), and (quality dependent) cost of the destination as <math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>e</mi>
+    </mrow>
+    <mrow><mi>i</mi>
+    </mrow>
+   </msub><mo>=</mo>
+   <msub>
+    <mrow><mi>f</mi>
+    </mrow>
+    <mrow>
+     <mrow>
+      <mstyle mathvariant='normal'>
+       <mrow><mi>e</mi><mi>f</mi><mi>f</mi>
+       </mrow>
+      </mstyle><mo>,</mo><mi>i</mi>
+     </mrow>
+    </mrow>
+   </msub>
+   <msub>
+    <mrow><mi>e</mi>
+    </mrow>
+    <mrow>
+     <mrow><mi>q</mi><mo>,</mo><mi>j</mi>
+     </mrow>
+    </mrow>
+   </msub><mo>+</mo>
+   <mstyle mathvariant='bold'>
+    <mstyle mathvariant='sans-serif'>
+     <mrow><mi>p</mi><mi>a</mi><mi>t</mi><mi>h</mi>_<mi>p</mi><mi>e</mi><mi>n</mi><mi>a</mi><mi>l</mi><mi>t</mi><mi>y</mi>_<mi>r</mi><mi>i</mi><mi>s</mi><mi>k</mi>
+     </mrow>
+    </mstyle>
+   </mstyle><mo> &sdot; </mo><mo form='prefix' fence='true' stretchy='true' symmetric='true'>(</mo>
+
+   <mrow><mn>1</mn><mo>-</mo>
+    <msub>
+     <mrow><mi>s</mi>
+     </mrow>
+     <mrow><mi>i</mi>
+     </mrow>
+    </msub>
+   </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>)</mo>
+<mn>.</mn>
+  </mrow>
+ </mrow></math></div>
+
+<div class="standard" id='magicparlabel-451'>The cost of a waypoint then decreases with increasing attractiveness:</div>
+
+<div class="standard" id='magicparlabel-452'><math display="block" xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>
+   <msub>
+    <mrow><mi>e</mi>
+    </mrow>
+    <mrow>
+     <mrow><mi>q</mi><mo>,</mo><mi>j</mi>
+     </mrow>
+    </mrow>
+   </msub><mo>=</mo>
+   <mfrac>
+    <mrow>
+     <mrow><mn>1</mn><mo>+</mo>
+      <mstyle mathvariant='bold'>
+       <mstyle mathvariant='sans-serif'>
+        <mrow><mi>p</mi><mi>a</mi><mi>t</mi><mi>h</mi>_<mi>p</mi><mi>e</mi><mi>n</mi><mi>a</mi><mi>l</mi><mi>t</mi><mi>y</mi>_<mi>l</mi><mi>o</mi><mi>c</mi>
+        </mrow>
+       </mstyle>
+      </mstyle>
+     </mrow>
+    </mrow>
+    <mrow>
+     <mrow><mn>1</mn><mo>+</mo>
+      <mstyle mathvariant='sans-serif'>
+       <mrow><mi>p</mi><mi>a</mi><mi>t</mi><mi>h</mi>_<mi>p</mi><mi>e</mi><mi>n</mi><mi>a</mi><mi>l</mi><mi>t</mi><mi>y</mi>_<mi>l</mi><mi>o</mi><mi>c</mi>
+       </mrow>
+      </mstyle><mo> &sdot; </mo>
+      <msub>
+       <mrow><mi>a</mi>
+       </mrow>
+       <mrow><mi>j</mi>
+       </mrow>
+      </msub>
+     </mrow>
+    </mrow>
+   </mfrac>
+  </mrow>
+ </mrow></math></div>
+<h3 class="subsection" id='magicparlabel-453'><span class="subsection_label">5.5</span> <a id="subsec_Perceived_risk" />
+Perceived risk</h3>
+<div class="standard" id='magicparlabel-454'>Travel in the model can be risky and agents can perceive and react to that risk. Risk is perceived and communicated by agents in the same way as other properties of the world. In addition, however, perceived <span style='font-family:sans-serif;'>risk</span> can be directly affected by deaths either of contacts or by nearby agents. Every death has a chance of being noticed by contacts of the dead agent as well as agents travelling on the same link with probabilities <b><span style='font-family:sans-serif;'>p_notice_death_c</span></b> and <b><span style='font-family:sans-serif;'>p_notice_death_o</span></b>, respectively. If an agent noticing a death knows the link it has occured on, it adjusts its risk estimate for that link towards 1 with learning speeds <b><span style='font-family:sans-serif;'>speed_risk_obs</span></b> and <b><span style='font-family:sans-serif;'>speed_risk_indir</span></b> (for direct observation and contacts, respectively), following the same rules as knowledge updates during exploration (see Section <a href="#subsec_Exploration">5.3</a>).</div>
+
+<div class="standard" id='magicparlabel-455'>For the effects of risk on decision making see Section <a href="#subsec_Travel_Decisions">5.4</a>.</div>
+<h2 class="section_" id='magicparlabel-22298'>Acknowledgements</h2>
+
+
+<div class="standard" id='magicparlabel-22302'>This work was funded by the European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant no. 725232) for 2017-2022, and executed by the University of Southampton, with the University of Rostock.</div>
+
+<div class="standard" id='magicparlabel-456'><h2 class='bibtex'>References</h2><div class='bibtex'><div class='bibtexentry' id='LyXCite-bijakbayesianInPress'><span class='bibtexlabel'>Bijak In Press</span><span class='bibtexinfo'><span class="bib-fullnames:author">Bijak, Jakub</span>, <i><span class="bib-title">Towards Bayesian Model-Based Demography: Agency, Complexity and Uncertainty in Migration Studies</span></i> vol. <span class="bib-volume">17</span>,  (<span class="bib-address">Dordrecht</span>: <span class="bib-publisher">Springer</span>, <span class="bib-year">In Press</span>).</span></div>
+<div class='bibtexentry' id='LyXCite-gillespiegeneral1976'><span class='bibtexlabel'>Gillespie 1976</span><span class='bibtexinfo'><span class="bib-fullnames:author">Gillespie, Daniel T</span>, "<span class="bib-title">A General Method for Numerically Simulating the Stochastic Time Evolution of Coupled Chemical Reactions</span>", <i><span class="bib-journal">Journal of Computational Physics</span></i>  <span class="bib-volume">22</span>, <span class="bib-number">4</span> (<span class="bib-year">1976</span>), pp. <span class="bib-pages">403--434</span>.</span></div>
+<div class='bibtexentry' id='LyXCite-hinschbijakprinciplesInPress'><span class='bibtexlabel'>Hinsch and Bijak In Press</span><span class='bibtexinfo'><span class="bib-fullnames:author">Hinsch, Martin and Bijak, Jakub</span>, "<span class="bib-title">Principles and State of the Art of Agent-Based Migration Modelling</span>", in <i><span class="bib-booktitle">Towards Bayesian Model-Based Demography: Agency, Complexity and Uncertainty in Migration Studies</span></i> (<span class="bib-address">Dordrecht</span>: <span class="bib-publisher">Springer</span>, <span class="bib-year">In Press</span>).</span></div>
+</div></div>
+
+<div class="standard" id='magicparlabel-457'><br />
+</div>
+<h2 class="section" id='magicparlabel-458'><span class="section_label">A</span> Model parameters<div class="marginal"><div class="plain_layout" id='magicparlabel-462'><span style='font-family:monospace;'><span style='font-size:x-small;'>base/params.jl</span></span></div>
+</div></h2>
+
+
+
+<div class="standard" id='magicparlabel-463'><div class='longtable' style='text-align: center;'><table><tbody><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-740'><b>World setup</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-749'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-752'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-755'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-758'><span style='font-family:sans-serif;'>n_cities</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-761'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>1</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-764'>number of (regular) cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-767'><span style='font-family:sans-serif;'>link_thresh</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-770'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>]</mo><mn>0.0</mn><mo>,</mo><mn>1.0</mn><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-773'>maximum distance to connect two cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-776'><span style='font-family:sans-serif;'>n_exits</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-779'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>1</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-782'>number of exit cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-785'><span style='font-family:sans-serif;'>regular_exits</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-788'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>{
+   <mstyle mathvariant='normal'>
+    <mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi>
+    </mrow>
+   </mstyle><mo>,</mo>
+   <mstyle mathvariant='normal'>
+    <mrow><mi>f</mi><mi>a</mi><mi>l</mi><mi>s</mi><mi>e</mi>
+    </mrow>
+   </mstyle>}
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-791'>whether to space exits out regularly</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-794'><span style='font-family:sans-serif;'>n_entries</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-797'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>1</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-800'>number of entry cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-803'><span style='font-family:sans-serif;'>regular_entries</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-806'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow>{
+   <mstyle mathvariant='normal'>
+    <mrow><mi>t</mi><mi>r</mi><mi>u</mi><mi>e</mi>
+    </mrow>
+   </mstyle><mo>,</mo>
+   <mstyle mathvariant='normal'>
+    <mrow><mi>f</mi><mi>a</mi><mi>l</mi><mi>s</mi><mi>e</mi>
+    </mrow>
+   </mstyle>}
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-809'>whether to space entries out regularly</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-812'><span style='font-family:sans-serif;'>exit_dist</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-815'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-818'>minimum distance to entry to connect city to all exist</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-821'><span style='font-family:sans-serif;'>entry_dist</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-824'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-827'>maximum distance to entry to connect city to all entries</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-830'><span style='font-family:sans-serif;'>n_nearest_entry</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-833'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-836'>number of nearest cities to connect each entry to</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-839'><span style='font-family:sans-serif;'>n_nearest_exit</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-842'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-845'>number of nearest cities to connect each exit to</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-848'><span style='font-family:sans-serif;'>qual_entry</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-851'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-854'><span style='font-family:sans-serif;'>quality</span> of entry cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-857'><span style='font-family:sans-serif;'>res_entry</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-860'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-863'><span style='font-family:sans-serif;'>resources</span> of entry cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-866'><span style='font-family:sans-serif;'>qual_exit</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-869'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-872'><span style='font-family:sans-serif;'>quality</span> of exit cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-875'><span style='font-family:sans-serif;'>res_exit</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-878'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-881'><span style='font-family:sans-serif;'>resources</span> of exit cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-884'><span style='font-family:sans-serif;'>obstacle</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-887'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+   <msup>
+    <mrow><mo>]</mo>
+    </mrow>
+    <mrow><mn>4</mn>
+    </mrow>
+   </msup>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-890'>position of obstacle rectangle (x1, y1, x2, y2)</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-893'><span style='font-family:sans-serif;'>dist_scale</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-896'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>1.0</mn><mo>,</mo><mi> &infin; </mi>
+   <msup>
+    <mrow><mo>[</mo>
+    </mrow>
+    <mrow><mn>2</mn>
+    </mrow>
+   </msup>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-899'>scale between distance and <span style='font-family:sans-serif;'>friction</span> (fast, slow)</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-902'><span style='font-family:sans-serif;'>frict_range</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-905'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-908'>maximum stochastic increase of <span style='font-family:sans-serif;'>friction</span></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-911'><span style='font-family:sans-serif;'>risk_normal</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-914'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-917'><span style='font-family:sans-serif;'>risk</span> on normal links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-920'><span style='font-family:sans-serif;'>risk_high</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-923'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-926'>r<span style='font-family:sans-serif;'>isk</span> on obstacle links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-929'><span style='font-family:sans-serif;'>p_unkown_city</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-932'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-935'>probability for a city to be unknown to all starting agents</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-938'><span style='font-family:sans-serif;'>p_unknown_link</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-941'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-944'>probability for a link to be unknown to all starting agents</div>
+</td>
+</tr><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-947'><b>Agent setup</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-956'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-959'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-962'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-965'><span style='font-family:sans-serif;'>n_ini_contacts</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-968'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-971'>number of initial <span style='font-family:sans-serif;'>contacts</span></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-974'><span style='font-family:sans-serif;'>ini_capital</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-977'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-980'>amount of initial <span style='font-family:sans-serif;'>capital</span></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-983'><span style='font-family:sans-serif;'>p_know_target</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-986'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-989'>probability for a starting agent to already know a given exit</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-992'><span style='font-family:sans-serif;'>p_know_city</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-995'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-998'>probability for a starting agent to already know a given city</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1001'><span style='font-family:sans-serif;'>p_know_link</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1004'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1007'>probability for a starting agent to already know a given link</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1010'><span style='font-family:sans-serif;'>speed_expl_ini</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1013'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1016'>learning speed during initial setup</div>
+</td>
+</tr><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-1019'><b>Process rates</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1028'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1031'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1034'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1037'><span style='font-family:sans-serif;'>rate_dep</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1040'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1043'>rate at which new agents are created</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1046'><span style='font-family:sans-serif;'>rate_costs_stay</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1049'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1052'>rate at which agents accrue costs while not travelling</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1055'><span style='font-family:sans-serif;'>rate_explore_stay</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1058'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1061'>rate at which agents explore while not travelling</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1064'><span style='font-family:sans-serif;'>move_rate</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1067'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1070'>base rate at which agents cross links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1073'><span style='font-family:sans-serif;'>move_speed</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1076'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1079'>movement speed while crossing links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1082'><span style='font-family:sans-serif;'>p_keep_contact</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1085'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1088'>rate (per co-located agent) at which agents acquire new contacts</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1091'><span style='font-family:sans-serif;'>p_drop_contact</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1094'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1097'>rate (per contact) at which agents lose contacts</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1100'><span style='font-family:sans-serif;'>p_info_contacts</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1103'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1106'>rate (per contact) at which agents initiate communication</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1109'><span style='font-family:sans-serif;'>rate_plan</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1112'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1115'>rate at which agents revise their planned route</div>
+</td>
+</tr><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-1118'><b>Exploration</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1127'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1130'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1133'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1136'><span style='font-family:sans-serif;'>res_exp</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1139'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1142'>expected value of <span style='font-family:sans-serif;'>resources</span> for newly discovered cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1145'><span style='font-family:sans-serif;'>qual_exp</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1148'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1151'>expected value of <span style='font-family:sans-serif;'>quality</span> for newly discovered cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1154'><span style='font-family:sans-serif;'>frict_exp</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1157'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>1.0</mn><mo>,</mo><mi> &infin; </mi>
+   <msup>
+    <mrow><mo>[</mo>
+    </mrow>
+    <mrow><mn>2</mn>
+    </mrow>
+   </msup>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1160'>expected value of <span style='font-family:sans-serif;'>friction</span> for newly discovered links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1163'><span style='font-family:sans-serif;'>risk_exp</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1166'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1169'>expected value of <span style='font-family:sans-serif;'>risk</span> for newly discovered links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1172'><span style='font-family:sans-serif;'>p_find_links</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1175'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1178'>probability to find links connected to newly explored cities</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1181'><span style='font-family:sans-serif;'>p_find_dests</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1184'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1187'>probability to explore cities on the other side of found links</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1190'><span style='font-family:sans-serif;'>speed_expl_stay</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1193'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1196'>learning speed while not travelling</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1199'><span style='font-family:sans-serif;'>speed_expl_move</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1202'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1205'>learning speed while travelling</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1208'><span style='font-family:sans-serif;'>p_notice_death_c</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1211'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1214'>probability contacts become aware of an agent's death</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1217'><span style='font-family:sans-serif;'>p_notice_death_o</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1220'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1223'>probability co-located agents become aware of an agent's death</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1226'><span style='font-family:sans-serif;'>speed_risk_indir</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1229'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1232'>speed of learning a link's <span style='font-family:sans-serif;'>risk</span> from death of contact</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1235'><span style='font-family:sans-serif;'>speed_risk_obs</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1238'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1241'>speed of learning a link's <span style='font-family:sans-serif;'>risk</span> from observed death</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1244'><span style='font-family:sans-serif;'>speed_expl_risk</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1247'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1250'>learning speed for <span style='font-family:sans-serif;'>risk</span></div>
+</td>
+</tr><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-1253'><b>Resources</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1262'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1265'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1268'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1271'><span style='font-family:sans-serif;'>costs_stay</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1274'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1277'>resource costs while staying</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1280'><span style='font-family:sans-serif;'>ben_resources</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1283'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1286'>effect of a city's <span style='font-family:sans-serif;'>resources</span> on income</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1289'><span style='font-family:sans-serif;'>costs_move</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1292'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1295'>resource costs while moving</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1298'><span style='font-family:sans-serif;'>save_thresh</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1301'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1304'>minimum <span style='font-family:sans-serif;'>capital</span> an agent needs to travel</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1307'><span style='font-family:sans-serif;'>save_income</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1310'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1313'>minimum income an agent needs to stop travelling</div>
+</td>
+</tr><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-1316'><b>Decisions</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1325'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1328'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1331'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1334'><span style='font-family:sans-serif;'>qual_weight_x</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1337'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1340'>effect of geographical location on (local) attractiveness of a city</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1343'><span style='font-family:sans-serif;'>qual_weight_res</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1346'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1349'>weight of <span style='font-family:sans-serif;'>resources</span> relative to <span style='font-family:sans-serif;'>quality</span> for attractiveness of a city</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1352'><span style='font-family:sans-serif;'>qual_tol_frict</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1355'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1358'>insensitivity of (local) attractiveness of a city against <span style='font-family:sans-serif;'>friction</span></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1361'><span style='font-family:sans-serif;'>qual_bias</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1364'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1367'>bias towards higher (local) attractiveness</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1370'><span style='font-family:sans-serif;'>path_penalty_loc</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1373'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1376'>reduction in path costs by city attractiveness</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1379'><span style='font-family:sans-serif;'>path_penalty_risk</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1382'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1385'>effect of <span style='font-family:sans-serif;'>risk</span> on path costs</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1388'><span style='font-family:sans-serif;'>risk_scale</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1391'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1394'>how real probability to survive scales to perceived safety</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1397'><span style='font-family:sans-serif;'>risk_i</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1400'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>]</mo><mo>-</mo><mi> &infin; </mi><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1403'>intercept of map from perceived safety to decision</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1406'><span style='font-family:sans-serif;'>risk_s</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1409'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>]</mo><mo>-</mo><mi> &infin; </mi><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1412'>slope of map from perceived safety to decision</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1415'><span style='font-family:sans-serif;'>risk_sd_i</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1418'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1421'>standard deviation of intercept</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1424'><span style='font-family:sans-serif;'>risk_sd_s</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1427'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0.0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1430'>standard deviation of slope</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1433'><span style='font-family:sans-serif;'>risk_cov_i_s</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1436'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>]</mo><mo>-</mo><mi> &infin; </mi><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1439'>covariance between intercept and slope</div>
+</td>
+</tr><tr><td align='center' valign='top' colspan='3'>
+<div class="plain_layout" id='magicparlabel-1442'><b>Information exchange</b></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1451'><em>parameter</em></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1454'><em>range</em></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1457'><em>explanation</em></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1460'><span style='font-family:sans-serif;'>n_contacts_max</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1463'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>[</mo><mn>0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1466'>maximum number of contacts an agent can have</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1469'><span style='font-family:sans-serif;'>p_transfer_info</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1472'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1475'>probability for an information item to be exchanged during communication</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1478'><span style='font-family:sans-serif;'>convince</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1481'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1484'>effect of certainty on doubt, resulting in certainty</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1487'><span style='font-family:sans-serif;'>convert</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1490'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1493'>effect of certainty on certainty, resulting in certainty</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1496'><span style='font-family:sans-serif;'>confuse</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1499'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1502'>effect of certainty on certainty, resulting in doubt</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1505'><span style='font-family:sans-serif;'>error</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1508'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1511'>communication error</div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1514'><span style='font-family:sans-serif;'>error_risk</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1517'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1520'>communication error for <span style='font-family:sans-serif;'>risk</span></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1523'><span style='font-family:sans-serif;'>error_frict</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1526'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow><mo form='prefix' fence='true' stretchy='true' symmetric='true'>[</mo>
+
+  <mrow><mn>0.0</mn><mo>,</mo><mn>1.0</mn>
+  </mrow>
+<mo form='postfix' fence='true' stretchy='true' symmetric='true'>]</mo>
+
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1529'>communication error for <span style='font-family:sans-serif;'>friction</span></div>
+</td>
+</tr><tr><td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1532'><span style='font-family:sans-serif;'>weight_arr</span></div>
+</td>
+<td align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1535'><math xmlns="http://www.w3.org/1998/Math/MathML">
+ <mrow>
+  <mrow><mo>]</mo><mn>0</mn><mo>,</mo><mi> &infin; </mi><mo>[</mo>
+  </mrow>
+ </mrow></math></div>
+</td>
+<td style ="width: 60%;" align='left' valign='top'>
+<div class="plain_layout" id='magicparlabel-1538'>weight of opinion of arrived agents during communication</div>
+</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+</body>
+</html>
