@@ -14,7 +14,7 @@ simulate migration route dynamics dependent on spread of information
 
 optional (GUI):
 
-* SimpleDirectMediaLayer 
+* SimpleDirectMediaLayer  (>= 0.3.0)
 
 
 ## Running the simulation

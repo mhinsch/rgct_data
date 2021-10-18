@@ -1,5 +1,4 @@
-using SimpleDirectMediaLayer
-const SDL2 = SimpleDirectMediaLayer 
+using SimpleDirectMediaLayer.LibSDL2
 
 push!(LOAD_PATH, pwd())
 using SSDL
@@ -86,34 +85,41 @@ function run!(run, gui, scales)
 			end
 		end
 		
-		while (ev = SDL2.event()) != nothing
-			if typeof(ev) <: SDL2.KeyboardEvent #|| typeof(ev) <: SDL2.QuitEvent
-				if ev._type == SDL2.KEYDOWN
-					key = ev.keysym.sym
-					if key == SDL2.SDLK_ESCAPE || key == SDL2.SDLK_q
-						quit = true
-						break;
-					elseif key == SDL2.SDLK_k
-						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + 1) % n_modes)
-						println("setting knowledge draw mode: ", k_draw_mode)
-						redraw_bg = true
-					elseif key == SDL2.SDLK_j
-						k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + n_modes - 1) % n_modes)
-						println("setting knowledge draw mode: ", k_draw_mode)
-						redraw_bg = true
-					elseif key == SDL2.SDLK_r && length(run.sim.model.migrants) > 0
-						focus_agent = rand(run.sim.model.migrants)
-					elseif key == SDL2.SDLK_e && length(run.sim.model.migrants) > 0
-						focus_agent = run.sim.model.people[end]
-					elseif key == SDL2.SDLK_d && focus_agent != nothing
-						open("agent.txt", "w") do file
-							dump(file, focus_agent)
-						end
-					elseif key == SDL2.SDLK_p || key == SDL2.SDLK_SPACE
-						pause = ! pause
+		event_ref = Ref{SDL_Event}()
+        while Bool(SDL_PollEvent(event_ref))
+            evt = event_ref[]
+            evt_ty = evt.type
+			if evt_ty == SDL_QUIT
+                quit = true
+                break
+            elseif evt_ty == SDL_KEYDOWN
+                scan_code = evt.key.keysym.scancode
+                if scan_code == SDL_SCANCODE_ESCAPE || scan_code == SDL_SCANCODE_Q
+					quit = true
+					break
+				elseif scan_code == SDL_SCANCODE_K
+					k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + 1) % n_modes)
+					println("setting knowledge draw mode: ", k_draw_mode)
+					redraw_bg = true
+				elseif scan_code == SDL_SCANCODE_J
+					k_draw_mode = KNOWL_DRAW_MODE((Int(k_draw_mode) + n_modes - 1) % n_modes)
+					println("setting knowledge draw mode: ", k_draw_mode)
+					redraw_bg = true
+				elseif scan_code == SDL_SCANCODE_R && length(run.sim.model.migrants) > 0
+					focus_agent = rand(run.sim.model.migrants)
+				elseif scan_code == SDL_SCANCODE_E && length(run.sim.model.migrants) > 0
+					focus_agent = run.sim.model.people[end]
+				elseif scan_code == SDL_SCANCODE_D && focus_agent != nothing
+					open("agent.txt", "w") do file
+						dump(file, focus_agent)
 					end
-				end
-			end
+                elseif scan_code == SDL_SCANCODE_P || scan_code == SDL_SCANCODE_SPACE
+					pause = !pause
+                    break
+                else
+                    break
+                end
+            end
 		end
 
 		if (focus_agent == nothing || arrived(focus_agent) || dead(focus_agent)) 
@@ -159,4 +165,4 @@ run!(run, gui, scales)
 
 cleanup_run(run)
 
-SDL2.Quit()
+SDL_Quit()
