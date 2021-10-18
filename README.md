@@ -3,18 +3,18 @@ simulate migration route dynamics dependent on spread of information
 
 ## Requirements
 
-* Julia >= 1.x (?)
-* Distributions.jl
-* Parameters.jl
-* ArgParse.jl
+* Julia >= 1.x 
+* Distributions
+* Parameters
+* ArgParse
 * JSON
-* DataStructures.jl
-* MacroTools.jl
-* StaticArrays.jl
+* DataStructures
+* MacroTools
+* StaticArrays
 
 optional (GUI):
 
-* SimpleDirectMediaLayer.jl 
+* SimpleDirectMediaLayer 
 
 
 ## Running the simulation
@@ -45,7 +45,7 @@ Maps in JSON format can be loaded using `-m <map file>`. Where `<map file>` is t
 
 ### Scenarios
 
-Scenarios can be loaded using `-s <scenario> [options]`. `<scenario>` in this case is the name of the scenario file *including relative paths but without the .jl file ending*. I know that that's stupid but there were good reasons to do it like that at some point.
+Scenarios can be loaded using `-s <scenario> [options]`. `<scenario>` in this case is the name of the scenario file *including relative paths but without the .jl file ending* (there were good reasons to do it like that at some point...).
 
 Scenarios can take parameters. These have to follow the scenario name and *have to be given as a single string*.
 
