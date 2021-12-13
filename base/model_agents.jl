@@ -60,13 +60,44 @@ end
 
 function make_plan!(agent, par)
 	# no plan if we don't know any targets
-	agent.plan, count =
-		if agent.info_target == []
-			[], 0
-		else
-			Pathfinding.path_Astar(info_current(agent), agent.info_target, 
-				(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
-		end
+	if isempty(agent.info_target)
+		agent.plan = []
+		return
+	end
+
+	# get the least cost plan
+	best_plan, count, costs = Pathfinding.path_Astar(info_current(agent), agent.info_target, 
+			(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
+	
+	# no path found
+	if isempty(best_plan)
+		agent.plan = []
+		return
+	end
+
+	info_pref_target = info(agent, agent.pref_target)
+	# we don't know our pref target anyway, so take the best route
+	if info_pref_target == Unknown ||
+		# we know our pref target, maybe the best route goes there
+		best_plan[1] == info_pref_target
+		agent.plan = best_plan
+		return
+	end
+
+	# we know our pref target, but the best plan doesn't go there
+	# let's see how good the route to the pref target is
+
+	pref_plan, count, pref_costs = 
+		Pathfinding.path_Astar(info_current(agent), info_pref_target, 
+			(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
+	
+	if isempty(pref_plan) || pref_costs > par.pref_target * costs
+		agent.plan = best_plan
+	else
+		agent.plan = pref_plan
+	end
+
+	return
 end
 
 

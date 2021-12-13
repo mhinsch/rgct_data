@@ -31,6 +31,7 @@ const I = Iterators
 		@stat("acc_c", 		MV, MM) <| acc_cities_per_agent(a, model.world)
 		@stat("acc_l", 		MV, MM) <| acc_links_per_agent(a, model.world)
 		@stat("time",		MV, MM) <| model.times[a]
+		@stat("target",		MV) 	<| Float64(a.pref_target == a.loc)
 	end
 
 	# only migrants can have a plan

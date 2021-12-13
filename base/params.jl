@@ -158,6 +158,8 @@ const VF = Vector{Float64}
 	path_penalty_loc :: Float64 = 1.0
 	"effect of risk on path costs"
 	path_penalty_risk:: Float64 = 5
+	"preference for chosen destination"
+	pref_target		:: Float64 = 1.0
 
 	"prob. to add an agent to contacts"
 	p_keep_contact 	:: Float64 	= 0.1

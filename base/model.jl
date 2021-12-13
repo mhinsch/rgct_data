@@ -110,6 +110,8 @@ function add_migrant!(model::Model, t, par)
 	agent = Agent(entry, par.ini_capital)
 	set_risk_pars!(agent, par)
 
+	agent.pref_target = rand(model.world.exits)
+
 	agent.info_loc = fill(Unknown, length(model.world.cities))
 	agent.info_link = fill(UnknownLink, length(model.world.links))
 	# explore once
