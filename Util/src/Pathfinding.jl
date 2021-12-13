@@ -31,11 +31,12 @@ function path_Astar(start, target, path_costs::PCF, path_costs_estimate::PCEF, e
 	count = 0
 
 	current = start
+	costs = 0.0
 	found = false
 
 	while length(known) > 0
 		# get the next node with the least (estimated) cost
-		current = dequeue!(known)
+		current, costs = dequeue_pair!(known)
 
 		# we are already there
 		if matches(current, target)
@@ -76,7 +77,7 @@ function path_Astar(start, target, path_costs::PCF, path_costs_estimate::PCEF, e
 	path = ELType[]
 
 	if ! found
-		return path, count
+		return path, count, 0.0
 	end
 
 	n = current # == found target
@@ -87,7 +88,7 @@ function path_Astar(start, target, path_costs::PCF, path_costs_estimate::PCEF, e
 		n = previous[n]
 	end
 
-	path, count
+	path, count, costs
 end	
 
 
