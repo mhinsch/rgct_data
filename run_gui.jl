@@ -31,10 +31,7 @@ function run!(run, gui, scales)
 	t = 0.0
 	step = 1.0
 	
-	logt = 0.0
-	dumpt = -1.0	# dump c/l at 49, 99, ...
-	logf = 1.0
-	dumpf = 50.0
+	logs = setup_logs()
 
 	start(run.sim)
 
@@ -51,9 +48,8 @@ function run!(run, gui, scales)
 			sleep(0.03)
 		else
 			# run scenario update functions
-			for scen in run.scenarios
-				update_scenario!(scen, run.sim, t)
-			end
+			run_scenarios!(run, t)
+
 			t1 = time()
 			RRGraph.upto!(t)
 			dt = time() - t1
@@ -64,15 +60,8 @@ function run!(run, gui, scales)
 				step *= 1.1
 			end
 
-			if t - logt >= logf
-				analyse_log(run.sim.model, run.logf)
-				logt = t
-			end
-
-			if t - dumpt >= dumpf
-				analyse_world(run.sim.model, run.cityf, run.linkf, t)
-				dumpt = t
-			end
+			# write logs
+			run_logs(logs, t, run)
 
 			n_m = length(run.sim.model.migrants)
 			n_p = length(run.sim.model.people)

@@ -10,31 +10,20 @@ include("run_utils.jl")
 
 function run!(run) 
 	t = 0.0
-	logt = 0.0
-	dumpt = -1.0	# dump c/l at 49, 99, ...
-	logf = 1.0
-	dumpf = 50.0
+
+	logs = setup_logs()
 
 	RRGraph.spawn(run.sim.model, run.sim)
 	while t < run.t_stop
 		# run scenario update functions
-		for scen in run.scenarios
-			update_scenario!(scen, run.sim, t)
-		end
+		run_scenarios!(run, t)
 		# run simulation proper
 		RRGraph.upto!(t + 1.0)
-
-		if t - logt >= logf
-			analyse_log(run.sim.model, run.logf)
-			logt = t
-		end
-
-		if t - dumpt >= dumpf
-			analyse_world(run.sim.model, run.cityf, run.linkf, t)
-			dumpt = t
-		end
+		# write logs
+		run_logs(logs, t, run)
 
 		t += 1.0
+
 		println(t, " ", RRGraph.time_now())
 		flush(stdout)
 	end

@@ -76,6 +76,46 @@ function load_scenarios(scen_dir, scen_args)
 	scenarios
 end
 
+function run_scenarios!(run, t)
+	for scen in run.scenarios
+		update_scenario!(scen, run.sim, t)
+	end
+end
+
+mutable struct RunEvery
+	last :: Float64
+	freq :: Float64
+	fun :: Function
+end
+
+RunEvery(f :: Function, l :: Float64, fr :: Float64) = RunEvery(l, fr, f)
+
+function run_every(re, t, args...)
+	if t - re.last >= re.freq
+		re.fun(t, args...)
+		re.last = t
+	end
+
+	re.last
+end
+
+function setup_logs()
+	[ 
+		RunEvery(0.0, 1.0) do t, run
+			analyse_log(run.sim.model, run.logf)
+		end
+
+		RunEvery(-1.0, 50.0) do t, run
+			analyse_world(run.sim.model, run.cityf, run.linkf, t)
+		end
+	]
+end
+
+function run_logs(logs, t, run)
+	for l in logs
+		run_every(l, t, run)
+	end
+end
 
 function setup_simulation(p, scenarios, map_fname)
 	world = 
@@ -100,8 +140,8 @@ function setup_simulation(p, scenarios, map_fname)
 end
 
 
-function setup_run()
-	args, parameters = process_parameters()
+function setup_run(argv = ARGS)
+	args, parameters = process_parameters(argv)
 
 	t_stop = args[:stop_time] 
 
