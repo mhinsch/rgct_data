@@ -78,6 +78,8 @@ function make_plan!(agent, par)
 	info_pref_target = info(agent, agent.pref_target)
 	# we don't know our pref target anyway, so take the best route
 	if info_pref_target == Unknown ||
+		# pref < 1 means we alway select best
+		par.pref_target <= 1.0 ||
 		# we know our pref target, maybe the best route goes there
 		best_plan[1] == info_pref_target
 		agent.plan = best_plan

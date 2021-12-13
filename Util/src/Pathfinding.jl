@@ -47,6 +47,8 @@ function path_Astar(start, target, path_costs::PCF, path_costs_estimate::PCEF, e
 		# no need to check the current one again
 		push!(done, current)
 
+		costs_current = costs_sofar[current]
+
 		# check all connected nodes
 		for c in each_neighbour(current)
 			# checked this one already
@@ -56,11 +58,10 @@ function path_Astar(start, target, path_costs::PCF, path_costs_estimate::PCEF, e
 
 			count += 1
 
-			costs_thisway = costs_sofar[current] + path_costs(current, c)
+			costs_thisway = costs_current + path_costs(current, c)
 
 			# we might already know a shortcut to c
-			# TODO: shouldn't this be >=?
-			if haskey(costs_sofar, c) && costs_thisway > costs_sofar[c]
+			if haskey(costs_sofar, c) && costs_thisway >= costs_sofar[c]
 				# no need to explore further since this path is obviously worse
 				continue
 			end
