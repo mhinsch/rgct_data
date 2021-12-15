@@ -32,14 +32,14 @@ const UnknownLink = InfoLink(0, Unknown, Unknown, TrustedF(0.0), TrustedF(0.0))
 
 #resources(l :: InfoLocation) = l.resources.value
 #quality(l :: InfoLocation) = l.quality.value
-friction(l :: InfoLink) = l.friction.value
-risk(l :: InfoLink) = l.risk.value
+@inline friction(l :: InfoLink) = l.friction.value
+@inline risk(l :: InfoLink) = l.risk.value
 
 
-otherside(link, loc) = loc == link.l1 ? link.l2 : link.l1
+@inline otherside(link, loc) = loc == link.l1 ? link.l2 : link.l1
 
 # no check for validity etc.
-add_link!(loc, link) = push!(loc.links, link)
+@inline add_link!(loc, link) = push!(loc.links, link)
 
 
 # migrants
@@ -66,10 +66,10 @@ mutable struct AgentT{LOC, LINK}
 	planned :: Int
 end
 
-knows_target(agent) = length(agent.info_target) > 0 
-target(agent) = knows_target(agent) ? agent.info_target[1] : Unknown
+@inline knows_target(agent) = length(agent.info_target) > 0 
+@inline target(agent) = knows_target(agent) ? agent.info_target[1] : Unknown
 
-arrived(agent) = agent.loc.typ == EXIT
+@inline arrived(agent) = agent.loc.typ == EXIT
 
 
 function add_info!(agent, info :: InfoLocation, typ = STD) 
@@ -115,7 +115,7 @@ mutable struct LocationT{L}
 end
 
 
-distance(l1, l2) = distance(l1.pos, l2.pos)
+@inline distance(l1, l2) = distance(l1.pos, l2.pos)
 
 @enum LINK_TYPE FAST=1 SLOW
 
@@ -147,44 +147,44 @@ const Agent = AgentT{Location, Link}
 
 Agent(loc::Location, c :: Float64) = Agent(loc, NoLink, 0, [], [], NoLoc, 0, [], 1.0, 0.0, [], [loc], 1.0, c, [], 0)
 
-in_transit(a :: Agent) = a.link != NoLink
+@inline in_transit(a :: Agent) = a.link != NoLink
 
-function start_transit!(a :: Agent, l :: Link)
+@inline function start_transit!(a :: Agent, l :: Link)
 	a.link = l
 end
 
-function end_transit!(a :: Agent, l :: Location)
+@inline function end_transit!(a :: Agent, l :: Location)
 	a.link = NoLink
 	a.loc = l
 	push!(a.path, a.loc)
 end
 
-position(agent) = in_transit(agent) ? mid(agent.link.l1.pos, agent.link.l2.pos) : agent.loc.pos
+@inline position(agent) = in_transit(agent) ? mid(agent.link.l1.pos, agent.link.l2.pos) : agent.loc.pos
 
-dead(a) = !in_transit(a) && (a.loc == NoLoc)
+@inline dead(a) = !in_transit(a) && (a.loc == NoLoc)
 
 function set_dead!(a)
 	a.loc = NoLoc
 	a.link = NoLink
 end
 
-active(agent) = !dead(agent) && !arrived(agent)
+@inline active(agent) = !dead(agent) && !arrived(agent)
 
 
 # get the agent's info on a location
-info(agent, l::Location) = agent.info_loc[l.id]
+@inline info(agent, l::Location) = agent.info_loc[l.id]
 # get the agent's info on its current location
-info_current(agent) = info(agent, agent.loc)
+@inline info_current(agent) = info(agent, agent.loc)
 # get the agent's info on a link
-info(agent, l::Link) = agent.info_link[l.id]
+@inline info(agent, l::Link) = agent.info_link[l.id]
 
-known(l::InfoLocation) = l != Unknown
-known(l::InfoLink) = l != UnknownLink
+@inline known(l::InfoLocation) = l != Unknown
+@inline known(l::InfoLink) = l != UnknownLink
 
 # get the agent's info on a location
-knows(agent, l::Location) = known(info(agent, l))
+@inline knows(agent, l::Location) = known(info(agent, l))
 # get the agent's info on a link
-knows(agent, l::Link) = known(info(agent, l))
+@inline knows(agent, l::Link) = known(info(agent, l))
 
 function find_link(from, to)
 	for l in from.links
@@ -223,8 +223,8 @@ end
 remove_agent!(world::World, agent) = remove_agent!((in_transit(agent) ? agent.link : agent.loc), agent)
 
 
-info2real(l::InfoLocation, world) = world.cities[l.id]
-info2real(l::InfoLink, world) = world.links[l.id]
+@inline info2real(l::InfoLocation, world) = world.cities[l.id]
+@inline info2real(l::InfoLink, world) = world.links[l.id]
 
 
 # connect loc and link (if not already connected)
@@ -248,15 +248,15 @@ function connect!(loc :: InfoLocation, link :: InfoLink)
 end
 
 
-dist_eucl(x1, y1, x2, y2) = sqrt((x2-x1)^2 + (y2-y1)^2)
+@inline dist_eucl(x1, y1, x2, y2) = sqrt((x2-x1)^2 + (y2-y1)^2)
 
 
 # TODO: should accuracy be discounted by trust value?
 
-accuracy(li::InfoLocation, lr::Location) = 
+@inline accuracy(li::InfoLocation, lr::Location) = 
 	1.0 - dist_eucl(li.quality.value, li.resources.value, lr.quality, lr.resources)
 
-accuracy(li::InfoLink, lr::Link) = sqrt(
+@inline accuracy(li::InfoLink, lr::Link) = sqrt(
 	(1.0 - abs(li.friction.value - lr.friction)/lr.distance)^2 + 
 	(li.risk.value - lr.risk)^2)
 

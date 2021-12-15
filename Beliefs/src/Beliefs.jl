@@ -20,13 +20,13 @@ end
 const TrustedF = Trusted{Float64}
 
 
-discounted(t :: Trusted{T}) where {T} = t.value * t.trust
+@inline discounted(t :: Trusted{T}) where {T} = t.value * t.trust
 
 
-update(t :: TrustedF, val, speed) = average(t, TrustedF(val, 1.0-eps(1.0)), speed)
+@inline update(t :: TrustedF, val, speed) = average(t, TrustedF(val, 1.0-eps(1.0)), speed)
 
 
-average(val :: TrustedF, target :: TrustedF, weight = 0.5) =
+@inline average(val :: TrustedF, target :: TrustedF, weight = 0.5) =
 	TrustedF(val.value * (1.0-weight) + target.value * weight, 
 		val.trust * (1.0-weight) + target.trust * weight)
 
@@ -38,7 +38,7 @@ struct BeliefPars
 end
 
 
-receive_belief(self::TrustedF, other::TrustedF, par) = 
+@inline receive_belief(self::TrustedF, other::TrustedF, par) = 
 	TrustedF(
 		receive_belief(
 			self.trust, self.value, 

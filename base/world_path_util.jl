@@ -11,7 +11,7 @@ end
 
 function Base.iterate(n :: IL_NeighIter, i=1)
 	while i <= length(n.l.links)
-		o = otherside(n.l.links[i], n.l)
+		@inbounds o = otherside(n.l.links[i], n.l)
 		if !known(o)
 			i += 1
 			continue
@@ -34,7 +34,7 @@ function path_costs(l1 :: InfoLocation, l2 :: InfoLocation)
 end
 
 
-path_costs_estimate(l1 :: InfoLocation, l2 :: InfoLocation) = distance(l1.pos, l2.pos)
+@inline path_costs_estimate(l1 :: InfoLocation, l2 :: InfoLocation) = distance(l1.pos, l2.pos)
 
 function path_costs_estimate(l1 :: InfoLocation, l2 :: Vector{InfoLocation})
 	est = path_costs_estimate(l1, l2[1])

@@ -7,31 +7,31 @@ include("world_path_util.jl")
 # *********
 
 # quality, resources
-qual(quality, res, weight) = quality * (1 - weight) + res * weight
+@inline qual(quality, res, weight) = quality * (1 - weight) + res * weight
 
-qual(quality::T, res::T, weight) where {T<:Trusted} = 
+@inline qual(quality::T, res::T, weight) where {T<:Trusted} = 
 	qual(discounted(quality), discounted(res), weight)
 
 
 # costs from quality [1:1+p]   (1/penalty + 1) / (1/penalty + quality)
-costs_qual(penalty, quality) = (1.0 + penalty) / (1.0 + penalty*quality)
+@inline costs_qual(penalty, quality) = (1.0 + penalty) / (1.0 + penalty*quality)
 
 # costs including friction and safety
-costs_qual_sf(frict, c_qual, penalty, safe) = 
+@inline costs_qual_sf(frict, c_qual, penalty, safe) = 
 	frict * c_qual + penalty * (1-safe)
 
 
-disc_friction(frict) = 2 * frict.value - discounted(frict)
+@inline disc_friction(frict) = 2 * frict.value - discounted(frict)
 
 
 "Quality of location `loc` for global planning (no effect of x)."
-quality(loc, par) = qual(loc.quality, loc.resources, par.qual_weight_res) # [0:1]
+@inline quality(loc, par) = qual(loc.quality, loc.resources, par.qual_weight_res) # [0:1]
 
 # used for model and GUI
-costs_quality(loc, par)  = costs_qual(par.path_penalty_loc, quality(loc, par)) # [1:1+pp]
+@inline costs_quality(loc, par)  = costs_qual(par.path_penalty_loc, quality(loc, par)) # [1:1+pp]
 
 
-function safety_score(agent, link, par) # [0:1]
+@inline function safety_score(agent, link, par) # [0:1]
 	# convert to prob. of safety
 	likely_safe = link.risk.trust * (1.0 - link.risk.value)^par.risk_scale
 	# parameterised to percentage 
@@ -41,19 +41,19 @@ function safety_score(agent, link, par) # [0:1]
 end
 
 # [frict : 2*frict*(1+pen) + pen_r]
-function costs_quality(link :: InfoLink, loc :: InfoLocation, agent, par)
+@inline function costs_quality(link :: InfoLink, loc :: InfoLocation, agent, par)
 	costs_qual_sf(disc_friction(link.friction), costs_quality(loc, par), 
 		par.path_penalty_risk, safety_score(agent, link, par))
 end
 
 "Movement costs from `l1` to `l2`, taking into account `l2`'s quality."
-function costs_quality(l1::InfoLocation, l2::InfoLocation, agent, par)
+@inline function costs_quality(l1::InfoLocation, l2::InfoLocation, agent, par)
 	link = find_link(l1, l2)
 	costs_quality(link, l2, agent, par)
 end
 
 "Quality when looking for local improvement."
-function local_quality(loc :: InfoLocation, par)
+@inline function local_quality(loc :: InfoLocation, par)
 	par.qual_weight_x * loc.pos.x + quality(loc, par)
 end
 
