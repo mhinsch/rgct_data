@@ -258,7 +258,7 @@ end
 
 @inline accuracy(li::InfoLink, lr::Link) = sqrt(
 	(1.0 - abs(li.friction.value - lr.friction)/lr.distance)^2 + 
-	(li.risk.value - lr.risk)^2)
+	(1.0 - abs(li.risk.value - lr.risk))^2)
 
 
 function dump(file, agent)
