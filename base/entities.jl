@@ -262,8 +262,9 @@ end
 
 
 function dump(file, agent)
+	dont_print = [:loc, :link, :pref_target]
 	for n in fieldnames(typeof(agent))
-		if n == :loc || n == :link || typeof(getproperty(agent, n)) <: Array
+		if n in dont_print || typeof(getproperty(agent, n)) <: Array
 			continue
 		end
 		println(file, string(n), ": ", getproperty(agent, n))
@@ -272,14 +273,15 @@ function dump(file, agent)
 
 	println(file, "loc:\t", agent.loc.id)
 	println(file, "link:\t", agent.link.id)
-	println(file, "n_locs:\t", agent.n_locs)
+	println(file, "pref:\t", agent.pref_target.id)
 	println(file, "info_loc:")
 	for l in agent.info_loc
 		if !known(l)
 			println(file, "\tUNKNOWN")
 			continue
 		end
-		println(file, "\t", l.id, "\t", l.quality.value, "\t", l.quality.trust)
+		println(file, "\t", l.id, "\t", l.quality.value, "\t", l.quality.trust, 
+			"\t", l.resources.value, "\t", l.resources.trust)
 	end
 	println(file, "info_link")
 	for l in agent.info_link
