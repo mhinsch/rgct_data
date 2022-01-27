@@ -107,8 +107,10 @@ const VF = Vector{Float64}
 	trust_travelled	:: Float64	= 0.8
 	"efficiency of exploration while staying"
 	speed_expl_stay :: Float64	= 1.0
-	"efficiency  of exploration while moving"
+	"efficiency of exploration while moving"
 	speed_expl_move :: Float64	= 1.0
+	"reduction in expl speed for newly found links/locs"
+	speed_expl_red	:: Float64	= 0.33
 	"rate (frequency) of exploration while staying"
 	rate_explore_stay :: Float64	= 1.0
 

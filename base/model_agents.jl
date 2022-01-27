@@ -169,6 +169,21 @@ end
 #function current_quality(loc :: Location, par)  
 #	(loc.quality + loc.traffic * par.weight_traffic) / (1.0 + loc.traffic * par.weight_traffic)
 #end
+function explore_at!(agent, world, link :: Link, from :: Location, speed, par)
+	# knowledge
+	inf = info(agent, link)
+
+	if !known(inf)
+		inf = discover!(agent, link, from, par)
+	end
+
+	# gain information on local properties
+	inf.friction = update(inf.friction, link.friction, speed)
+	inf.risk = update(inf.risk, link.risk, speed * par.speed_expl_risk)
+
+	inf, link
+end
+
 
 function explore_at!(agent, world, loc :: Location, speed, allow_indirect, par)
 	# knowledge
@@ -194,41 +209,27 @@ function explore_at!(agent, world, loc :: Location, speed, allow_indirect, par)
 	for link in loc.links
 		info_link = info(agent, link)
 
+		# find new links
 		if !known(info_link) && rand() < par.p_find_links
 			info_link = discover!(agent, link, loc, par)
 
-			#info_link.friction = TrustedF(link.friction, par.trust_found_links)
-			info_link.friction = update(info_link.friction, link.friction, speed)
-			info_link.risk = update(info_link.risk, link.risk, speed * par.speed_expl_risk)
-			
-			# no info, but position is known
-			explore_at!(agent, world, otherside(link, loc), 0.0, false, par)
+			os = otherside(link, loc)
+			# other side is always at least discovered
+			if !knows(agent, os)
+				discover!(agent, os, par)
+			end
 		end
 
-		# we might get info on connected location
+		# we might get info on link and connected location
 		if known(info_link) && rand() < par.p_find_dests
-			explore_at!(agent, world, otherside(link, loc), 0.5 * speed, false, par)
+			explore_at!(agent, world, link, loc, par.speed_expl_red * speed, par)
+			explore_at!(agent, world, otherside(link, loc), par.speed_expl_red * speed, false, par)
 		end
 	end
 
 	inf, loc
 end
 
-
-function explore_at!(agent, world, link :: Link, from :: Location, speed, par)
-	# knowledge
-	inf = info(agent, link)
-
-	if !known(inf)
-		inf = discover!(agent, link, from, par)
-	end
-
-	# gain information on local properties
-	inf.friction = update(inf.friction, link.friction, speed)
-	inf.risk = update(inf.risk, link.risk, speed * par.speed_expl_risk)
-
-	inf, link
-end
 
 # ********************
 # information exchange
