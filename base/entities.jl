@@ -254,11 +254,11 @@ end
 # TODO: should accuracy be discounted by trust value?
 
 @inline accuracy(li::InfoLocation, lr::Location) = 
-	1.0 - dist_eucl(li.quality.value, li.resources.value, lr.quality, lr.resources)
+	1.0 - dist_eucl(li.quality.value, li.resources.value, lr.quality, lr.resources)/sqrt(2.0)
 
-@inline accuracy(li::InfoLink, lr::Link) = sqrt(
-	(1.0 - abs(li.friction.value - lr.friction)/lr.distance)^2 + 
-	(1.0 - abs(li.risk.value - lr.risk))^2)
+@inline accuracy(li::InfoLink, lr::Link) = 1.0 - sqrt(
+	((li.friction.value - lr.friction)/lr.distance)^2 / 2 + 
+	(li.risk.value - lr.risk)^2 / 2)
 
 
 function dump(file, agent)
