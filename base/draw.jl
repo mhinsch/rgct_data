@@ -191,7 +191,7 @@ function draw_rand_knowledge!(canvas, model, par, scales, agent=nothing, mode=AC
 	for c in agent.plan
 		draw_city!(canvas, c, 2, WHITE)
 		if known(prev)
-			draw_link!(canvas, find_link(prev, c), WHITE)
+			draw_link!(canvas, find_link(prev, c), rgb(100, 100, 255))
 		end
 		prev = c
 	end

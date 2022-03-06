@@ -69,7 +69,7 @@ alpha(x::F) where {F<:AbstractFloat} = alpha(floor(UInt32, x))
 red(x) = UInt32(x<<16)
 red(x::F) where {F<:AbstractFloat} = red(floor(UInt32, x))
 
-green(x) = Int32(x<<8)
+green(x) = UInt32(x<<8)
 green(x::F) where {F<:AbstractFloat}  = green(floor(UInt32, x))
 
 blue(x) = UInt32(x)

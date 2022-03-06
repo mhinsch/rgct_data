@@ -121,6 +121,7 @@ function run!(run, gui, scales)
 
 		t1 = time()
 		if redraw_bg
+			scales = calc_scales(run.sim.model, run.parameters)
 			draw_bg!(gui.canvas_bg, run.sim.model, scales, run.parameters, k_draw_mode)
 			redraw_bg = false
 		end
