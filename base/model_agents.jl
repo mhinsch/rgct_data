@@ -57,49 +57,47 @@ end
 	par.qual_weight_x * loc.pos.x + quality(loc, par)
 end
 
-
-function make_plan!(agent, par)
+function find_plan(info_current, info_targets, info_pref, par)
+	empty_plan = similar(info_targets, 0)
 	# no plan if we don't know any targets
-	if isempty(agent.info_target)
-		agent.plan = []
-		return
+	if isempty(info_target)
+		return empty_plan
 	end
 
 	# get the least cost plan
-	best_plan, count, costs = Pathfinding.path_Astar(info_current(agent), agent.info_target, 
+	best_plan, count, costs = Pathfinding.path_Astar(info_current, info_targets, 
 			(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
 	
 	# no path found
 	if isempty(best_plan)
-		agent.plan = []
-		return
+		return empty_plan
 	end
 
-	info_pref_target = info(agent, agent.pref_target)
 	# we don't know our pref target anyway, so take the best route
-	if info_pref_target == Unknown ||
+	if info_pref == Unknown ||
 		# pref < 1 means we alway select best
 		par.pref_target <= 1.0 ||
 		# we know our pref target, maybe the best route goes there
-		best_plan[1] == info_pref_target
-		agent.plan = best_plan
-		return
+		best_plan[1] == info_pref
+		return best_plan
 	end
 
 	# we know our pref target, but the best plan doesn't go there
 	# let's see how good the route to the pref target is
 
 	pref_plan, count, pref_costs = 
-		Pathfinding.path_Astar(info_current(agent), info_pref_target, 
+		Pathfinding.path_Astar(info_current, info_pref, 
 			(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
 	
 	if isempty(pref_plan) || pref_costs > par.pref_target * costs
-		agent.plan = best_plan
-	else
-		agent.plan = pref_plan
+		return best_plan
 	end
+	
+	return pref_plan
+end
 
-	return
+function make_plan!(agent, par)
+	agent.plan = find_plan(info_current(agent), agent.info_target, agent.pref_target, par)
 end
 
 
