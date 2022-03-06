@@ -64,6 +64,7 @@ mutable struct AgentT{LOC, LINK}
 	# people at home & in target country, other migrants
 	contacts :: Vector{AgentT{LOC, LINK}}
 	planned :: Int
+	max_cost_delta :: Float64
 end
 
 @inline knows_target(agent) = length(agent.info_target) > 0 
@@ -145,7 +146,7 @@ const NoLink = Link(0, FAST, NoLoc, NoLoc)
 
 const Agent = AgentT{Location, Link}
 
-Agent(loc::Location, c :: Float64) = Agent(loc, NoLink, 0, [], [], NoLoc, 0, [], 1.0, 0.0, [], [loc], 1.0, c, [], 0)
+Agent(loc::Location, c :: Float64) = Agent(loc, NoLink, 0, [], [], NoLoc, 0, [], 1.0, 0.0, [], [loc], 1.0, c, [], 0, 0.0)
 
 @inline in_transit(a :: Agent) = a.link != NoLink
 

@@ -13,9 +13,31 @@ mutable struct Model
 	migrants :: Vector{Agent}
 	deaths :: Vector{Agent}
 	times :: IdDict{Agent, Float64}
+	# this is used to cache full world knowledge for use
+	# by best_costs; too inefficient to recreate it every time
+	std_agent :: Agent
 end
 
-Model(world) = Model(world, [], [], [], [], [], Dict())
+Model(world) = Model(world, [], [], [], [], [], Dict(), Agent(NoLoc, 0.0))
+
+
+function setup_std_agent(model, par)
+	a = Agent(NoLoc, 0.0)
+
+	a.info_loc = fill(Unknown, length(model.world.cities))
+	a.info_link = fill(UnknownLink, length(model.world.links))
+
+	for city in model.world.cities
+		explore_at!(a, model.world, city, 1.0, false, par)
+	end
+	
+	# find all links
+	for link in model.world.links
+		explore_at!(a, model.world, link, link.l1, 1.0, par)
+	end
+
+	a
+end
 
 
 function setup_model(par, map_io = nothing)
@@ -42,6 +64,8 @@ function setup_model(par, map_io = nothing)
 		end
 		push!(m.prior_links, l)
 	end
+
+	m.std_agent = setup_std_agent(m, par)
 
 	# TODO: this is ugly
 	Random.seed!(par.rand_seed_sim)
@@ -103,6 +127,23 @@ function set_risk_pars!(agent, par)
 end
 
 
+function best_plan_costs(agent, model, par)
+	# model.std_agent is a dummy agent with full knowledge
+	sagent = model.std_agent
+	sagent.loc = agent.loc
+	sagent.capital = agent.capital
+	sagent.risk_i = agent.risk_i
+	sagent.risk_s = agent.risk_s
+	sagent.pref_target = agent.pref_target
+
+	# best plan if no preference
+	_, costs = find_plan(info_current(sagent), sagent.info_target, Unknown,
+			0.0, sagent.risk_i, sagent.risk_s, par)
+
+	costs
+end
+
+
 function add_migrant!(model::Model, t, par)
 	x = 1
 	entry = rand(model.world.entries)
@@ -144,6 +185,10 @@ function add_migrant!(model::Model, t, par)
 		end
 	end
 
+	# costs of best possible path
+	c = best_plan_costs(agent, model, par)
+	# absolute increase in cost this agent will accept
+	agent.max_cost_delta = (par.pref_target - 1.0) * c
 
 	add_agent!(entry, agent)
 	push!(model.people, agent)

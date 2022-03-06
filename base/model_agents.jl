@@ -57,11 +57,11 @@ end
 	par.qual_weight_x * loc.pos.x + quality(loc, par)
 end
 
-function find_plan(info_current, info_targets, info_pref, risk_i, risk_s, par)
+function find_plan(info_current, info_targets, info_pref, max_c_delta, risk_i, risk_s, par)
 	empty_plan = similar(info_targets, 0)
 	# no plan if we don't know any targets
 	if isempty(info_targets)
-		return empty_plan
+		return empty_plan, 0.0
 	end
 
 	# get the least cost plan
@@ -70,16 +70,16 @@ function find_plan(info_current, info_targets, info_pref, risk_i, risk_s, par)
 	
 	# no path found
 	if isempty(best_plan)
-		return empty_plan
+		return empty_plan, 0.0
 	end
 
 	# we don't know our pref target anyway, so take the best route
 	if info_pref == Unknown ||
 		# pref < 1 means we alway select best
-		par.pref_target <= 1.0 ||
+		max_c_delta <= 0.0 ||
 		# we know our pref target, maybe the best route goes there
 		best_plan[1] == info_pref
-		return best_plan
+		return best_plan, costs
 	end
 
 	# we know our pref target, but the best plan doesn't go there
@@ -90,16 +90,19 @@ function find_plan(info_current, info_targets, info_pref, risk_i, risk_s, par)
 			(l1, l2)->costs_quality(l1, l2, risk_i, risk_s, par), 
 				path_costs_estimate, each_neighbour)
 	
-	if isempty(pref_plan) || pref_costs > par.pref_target * costs
-		return best_plan
+	if isempty(pref_plan) || pref_costs > costs + max_c_delta
+		return best_plan, costs
 	end
 	
-	return pref_plan
+	pref_plan, pref_costs
 end
 
 function make_plan!(agent, par)
-	agent.plan = find_plan(info_current(agent), agent.info_target, info(agent, agent.pref_target), 
-		agent.risk_i, agent.risk_s, par)
+	agent.plan, costs = 
+		find_plan(info_current(agent), agent.info_target, info(agent, agent.pref_target), 
+			agent.max_cost_delta, agent.risk_i, agent.risk_s, par)
+
+	costs
 end
 
 
