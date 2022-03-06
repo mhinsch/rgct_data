@@ -158,12 +158,12 @@ function draw_rand_knowledge!(canvas, model, par, scales, agent=nothing, mode=AC
 				elseif mode == R_FRICTION
 				 	limit(0.0, (l.friction.value - scales.min_rf) / (scales.max_rf - scales.min_rf), 1.0)
 				elseif mode == RISK
-					safety_score(agent, l, par)
+					safety_score(l, agent.risk_i, agent.risk_s, par)
 					#limit(0.0, (l.risk.value - scales.min_r) / (scales.max_r - scales.min_r), 1.0)
 				elseif mode == COSTS
 					loc = l.l1
 					limit(0.0, 
-						(costs_quality(l, loc, agent, par) - scales.min_c) / 
+						(costs_quality(l, loc, agent.risk_i, agent.risk_s, par) - scales.min_c) / 
 							(scales.max_c - scales.min_c), 
 						1.0)
 				end

@@ -31,25 +31,25 @@ include("world_path_util.jl")
 @inline costs_quality(loc, par)  = costs_qual(par.path_penalty_loc, quality(loc, par)) # [1:1+pp]
 
 
-@inline function safety_score(agent, link, par) # [0:1]
+@inline function safety_score(link, risk_i, risk_s, par) # [0:1]
 	# convert to prob. of safety
 	likely_safe = link.risk.trust * (1.0 - link.risk.value)^par.risk_scale
 	# parameterised to percentage 
-	ex = exp(agent.risk_i + agent.risk_s * likely_safe * 100.0)
+	ex = exp(risk_i + risk_s * likely_safe * 100.0)
 
 	ex / (1.0 + ex)
 end
 
 # [frict : 2*frict*(1+pen) + pen_r]
-@inline function costs_quality(link :: InfoLink, loc :: InfoLocation, agent, par)
+@inline function costs_quality(link :: InfoLink, loc :: InfoLocation, risk_i, risk_s, par)
 	costs_qual_sf(disc_friction(link.friction), costs_quality(loc, par), 
-		par.path_penalty_risk, safety_score(agent, link, par))
+		par.path_penalty_risk, safety_score(link, risk_i, risk_s, par))
 end
 
 "Movement costs from `l1` to `l2`, taking into account `l2`'s quality."
-@inline function costs_quality(l1::InfoLocation, l2::InfoLocation, agent, par)
+@inline function costs_quality(l1::InfoLocation, l2::InfoLocation, risk_i, risk_s, par)
 	link = find_link(l1, l2)
-	costs_quality(link, l2, agent, par)
+	costs_quality(link, l2, risk_i, risk_s, par)
 end
 
 "Quality when looking for local improvement."
@@ -57,49 +57,49 @@ end
 	par.qual_weight_x * loc.pos.x + quality(loc, par)
 end
 
-
-function make_plan!(agent, par)
+function find_plan(info_current, info_targets, info_pref, risk_i, risk_s, par)
+	empty_plan = similar(info_targets, 0)
 	# no plan if we don't know any targets
-	if isempty(agent.info_target)
-		agent.plan = []
-		return
+	if isempty(info_targets)
+		return empty_plan
 	end
 
 	# get the least cost plan
-	best_plan, count, costs = Pathfinding.path_Astar(info_current(agent), agent.info_target, 
-			(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
+	best_plan, count, costs = Pathfinding.path_Astar(info_current, info_targets, 
+			(l1, l2)->costs_quality(l1, l2, risk_i, risk_s, par), path_costs_estimate, each_neighbour)
 	
 	# no path found
 	if isempty(best_plan)
-		agent.plan = []
-		return
+		return empty_plan
 	end
 
-	info_pref_target = info(agent, agent.pref_target)
 	# we don't know our pref target anyway, so take the best route
-	if info_pref_target == Unknown ||
+	if info_pref == Unknown ||
 		# pref < 1 means we alway select best
 		par.pref_target <= 1.0 ||
 		# we know our pref target, maybe the best route goes there
-		best_plan[1] == info_pref_target
-		agent.plan = best_plan
-		return
+		best_plan[1] == info_pref
+		return best_plan
 	end
 
 	# we know our pref target, but the best plan doesn't go there
 	# let's see how good the route to the pref target is
 
 	pref_plan, count, pref_costs = 
-		Pathfinding.path_Astar(info_current(agent), info_pref_target, 
-			(l1, l2)->costs_quality(l1, l2, agent, par), path_costs_estimate, each_neighbour)
+		Pathfinding.path_Astar(info_current, info_pref, 
+			(l1, l2)->costs_quality(l1, l2, risk_i, risk_s, par), 
+				path_costs_estimate, each_neighbour)
 	
 	if isempty(pref_plan) || pref_costs > par.pref_target * costs
-		agent.plan = best_plan
-	else
-		agent.plan = pref_plan
+		return best_plan
 	end
+	
+	return pref_plan
+end
 
-	return
+function make_plan!(agent, par)
+	agent.plan = find_plan(info_current(agent), agent.info_target, info(agent, agent.pref_target), 
+		agent.risk_i, agent.risk_s, par)
 end
 
 
@@ -462,7 +462,7 @@ function plan_costs!(agent, par)
 		q = if known(other)
 				local_quality(other, par) * 
 					par.qual_tol_frict / (par.qual_tol_frict + disc_friction(l.friction)) *
-					safety_score(agent, l, par)
+					safety_score(l, agent.risk_i, agent.risk_s, par)
 			else
 				0.0		# Unknown has q<0 since Nowhere == (-1.0, -1.0)
 			end
