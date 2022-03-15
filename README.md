@@ -1,6 +1,8 @@
 # RoutesRumours
 simulate migration route dynamics dependent on spread of information
 
+[model documentation](https://mhinsch.github.io/rgct_data/index.html)
+
 ## Requirements
 
 * Julia >= 1.x 
